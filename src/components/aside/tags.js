@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 import Item from './item'
@@ -30,14 +30,21 @@ const StyledTitle = styled(Title)`
     line-height: 28px;
     font-weight: bold;
 `
-
-const Container = ({className}) => (
-    <ul className={className}>
-        <StyledTitle />
-        <Item iconName="glyphicon glyphicon-tag" text="Tag1" />
-        <Item iconName="glyphicon glyphicon-plus" text="创建新标签" />
-    </ul>
-)
+class Container extends Component {
+    render() {
+        return (
+            <ul className={this.props.className}>
+                <StyledTitle />
+                <Item iconName="glyphicon glyphicon-tag" text="Tag1" />
+                <Item iconName="glyphicon glyphicon-plus" text="创建新标签" />
+            </ul>
+        )
+    }
+    shouldComponentUpdate() {
+        return false
+    }
+}
+// const Container = ({className}) => ()
 const StyledContainer = styled(Container)`
     margin: 20px 0 0 0;
     border-bottom: 1px solid ${COLOR.LINE};
