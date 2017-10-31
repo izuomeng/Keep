@@ -3,6 +3,7 @@ import COLOR from '../static/javascript/color'
 import TAB from '../static/javascript/tab'
 import noteReducer from './reducer/note'
 import tabReducer from './reducer/tab'
+import sidebarReducer from './reducer/sidebar'
 const initState = {
     notes: [
         {
@@ -20,7 +21,8 @@ const initState = {
             deleteTime: new Date()
         }
     ],
-    tab: TAB.NOTE
+    tab: TAB.NOTE,
+    sidebar: true
 }
 
 const win = window,
@@ -28,7 +30,8 @@ const win = window,
 
 const reducer = combineReducers({
     notes: noteReducer,
-    tab: tabReducer
+    tab: tabReducer,
+    sidebar: sidebarReducer
 })
 
 const storeEnhancers = compose(
