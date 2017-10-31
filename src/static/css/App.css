@@ -7,5 +7,24 @@ input:focus{
 	box-shadow: 0 0 5px darkgrey;
 }
 body{
-	min-width: 700px;
+	min-width: 600px;
+	background-color: #E8E8E8;
+}
+li{
+	list-style: none;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #767676; opacity:1; 
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #767676;opacity:1;
+}
+
+input:-ms-input-placeholder{
+    color: #767676;opacity:1;
+}
+
+input::-webkit-input-placeholder{
+    color: #767676;opacity:1;
 }

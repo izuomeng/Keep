@@ -1,16 +1,18 @@
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
-import FONT from '../../static/javascript/font'
 import React, { Component } from 'react'
 import Menu from './menu'
 import Title from './title'
 import Search from './search'
+import Refresh from './refresh'
+import Layer from './layer'
+import Avatar from './avatar'
 
 const Header = styled.header`
     width: 100%;
     background-color: ${COLOR.HEAD};
     padding: 8px;
-    font-size: ${FONT.Title};
+    font-size: 22px;
     line-height: 48px;
     display: flex;
     flex-flow: row nowrap;
@@ -25,6 +27,9 @@ class HeaderContainer extends Component {
                     {this.props.children}
                 </Title>
                 <Search />
+                <Refresh />
+                <Layer />
+                <Avatar />
             </Header>
         )
     }

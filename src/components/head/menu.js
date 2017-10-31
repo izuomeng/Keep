@@ -15,6 +15,7 @@ const StyledMenu = styled(Menu)`
     text-align: center;
     color: ${COLOR.ICON};
     border-radius: 24px;
+    cursor: pointer;
     &:hover{
         background-color: ${COLOR.ICON_HOVER}
     }
