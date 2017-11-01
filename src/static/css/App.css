@@ -6,7 +6,7 @@
 	clear: both;
 	display: block;
 }
-a:hover, a:focus{
+a:hover{
 	text-decoration: none;
 }
 input[type=text]:focus{

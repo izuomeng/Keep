@@ -2,7 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 
-const Input = styled.input`
+const Input = styled.input.attrs({
+    type: 'text'
+})`
     border-radius: 3px;
     background-color: ${COLOR.SEARCH_BG};
     border: 0;
