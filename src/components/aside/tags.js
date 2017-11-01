@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 import Item from './item'
+import {Link} from 'react-router'
 
 const Button = styled.input.attrs({
     type: 'button',
@@ -35,7 +36,9 @@ class Container extends Component {
         return (
             <ul className={this.props.className}>
                 <StyledTitle />
-                <Item iconName="glyphicon glyphicon-tag" text="Tag1" />
+                <Link to='/tags'>
+                    <Item iconName="glyphicon glyphicon-tag" text="Tag1" />
+                </Link>
                 <Item iconName="glyphicon glyphicon-plus" text="创建新标签" />
             </ul>
         )

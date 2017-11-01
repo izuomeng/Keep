@@ -1,6 +1,14 @@
 *{
 	font-family: Helvetica, Tahoma, Arial, STXihei, "华文细黑", Heiti, "黑体", "Microsoft   YaHei", "微软雅黑", SimSun, "宋体", sans-serif;
 }
+.App::after{
+	content: '';
+	clear: both;
+	display: block;
+}
+a:hover, a:focus{
+	text-decoration: none;
+}
 input[type=text]:focus{
 	background-color: white;
 	outline: 0;

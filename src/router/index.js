@@ -11,6 +11,9 @@ const rootRoute = {
     childRoutes: [
         require('./routes/home').default,
         require('./routes/reminders').default,
+        require('./routes/archive').default,
+        require('./routes/tags').default,
+        require('./routes/trash').default,
         require('./routes/search').default,
         require('./routes/404').default
     ]
