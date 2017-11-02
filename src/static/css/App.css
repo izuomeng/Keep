@@ -9,13 +9,12 @@
 a:hover{
 	text-decoration: none;
 }
-input[type=text]:focus{
-	background-color: white;
+input:focus{
 	outline: 0;
-	box-shadow: 0 0 5px darkgrey;
 }
-input[type=button]:focus{
-	outline: 0;
+input[name=search]:focus{
+	background-color: white;
+	box-shadow: 0 0 5px darkgrey;
 }
 body{
 	min-width: 600px;
@@ -25,17 +24,17 @@ li{
 	list-style: none;
 }
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: #767676; opacity:1; 
+    color: #767676; 
 }
 
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: #767676;opacity:1;
+    color: #767676;
 }
 
 input:-ms-input-placeholder{
-    color: #767676;opacity:1;
+    color: #767676;
 }
 
 input::-webkit-input-placeholder{
-    color: #767676;opacity:1;
+    color: #767676;
 }

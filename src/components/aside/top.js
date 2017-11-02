@@ -6,7 +6,7 @@ import {Link} from 'react-router'
 
 const Container = ({className}) => (
     <ul className={className}>
-        <Link to='/home'>
+        <Link to='/'>
             <Item iconName="glyphicon glyphicon-pencil" text="记事" />
         </Link>
         <Link to='/reminders'>

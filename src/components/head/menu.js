@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import React from 'react'
 import COLOR from '../../static/javascript/color'
 import {connect} from 'react-redux'
-import {toggleSidebar} from '../../store/action'
+import {toggleSidebar} from '../../store/action/sidebar'
 
 const Menu = ({className, handleClick}) => (
     <div className={className} onClick={handleClick}>

@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 
 const Input = styled.input.attrs({
-    type: 'text'
+    type: 'text',
+    name: 'search'
 })`
     border-radius: 3px;
     background-color: ${COLOR.SEARCH_BG};

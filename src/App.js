@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './static/css/App.css'
-import Header from './components/head'
-import SideBar from './components/aside'
+import {Header, Sidebar} from './components'
 import styled from 'styled-components'
 
 const Container = ({className, children}) => (
@@ -22,7 +21,7 @@ class App extends Component {
 				<Header>
 					Keep
 				</Header>
-				<SideBar />
+				<Sidebar />
 				<StyledContainer>
 					{this.props.children}
 				</StyledContainer>

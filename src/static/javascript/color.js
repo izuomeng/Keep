@@ -1,6 +1,9 @@
 const color = {
     WHITE: '#FAFAFA',
     HEAD: '#FEBA2C',
+    HEAD_BLUR: 'rgba(254,186,44,0.8)',
+    BLUE_HEAD: '#4053B1',
+    BLUE_HEAD_BLUR: 'rgba(64,83,177,0.8)',
     SEARCH_BG: 'rgba(0,0,0,0.04)',
     SIDEBAR_TEXT: '#767676',
     SIDEBAR_HOVER: '#E1E1E1',
