@@ -1,6 +1,17 @@
 import React from 'react'
+import {authenticate} from '../../store/action/auth'
+import {connect} from 'react-redux'
 import {Container} from '../login'
 
+
+const mapDispatch = (dispatch) => ({
+    handleSubmit(name, pass) {
+        dispatch(authenticate('/register', name, pass))
+    }
+})
+
+const WrapperContainer = connect(null, mapDispatch)(Container)
+
 export default () => (
-    <Container name="注册" />
+    <WrapperContainer name="注册" />
 )

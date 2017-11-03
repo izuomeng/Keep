@@ -1,8 +1,7 @@
 import * as Types from '../actionTypes/user'
 
-export const addUser = (id, name) => ({
+export const addUser = (name) => ({
     type: Types.ADD_USER,
-    id,
     name
 })
 export const removeUser = () => ({

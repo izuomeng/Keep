@@ -1,10 +1,15 @@
-import React from 'react'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 import {Link} from 'react-router'
+import {authenticate} from '../../store/action/auth'
+import {Pop} from '../../components'
+import store from '../../store'
+import { browserHistory } from 'react-router'
 
 const setColor = (colorLogin, colorRegister) => (props) => {
-    if (props.type === 'button') {
+    if (props.type === 'submit') {
         if (props.name === '登陆') return colorLogin
         else if (props.name === '注册') return colorRegister
     }
@@ -13,7 +18,7 @@ const setColor = (colorLogin, colorRegister) => (props) => {
 const Input = styled.input.attrs({
     type: props => props.type,
     placeholder: props => props.type === 'text' ? props.placeholder : '',
-    value: props => props.type === 'button' ? props.name : ''
+    value: props => props.type === 'submit' ? props.name : ''
 })`
     width: 100%;
     line-height: 42px;
@@ -45,15 +50,62 @@ const Question = ({className, name}) => (
     </span>
 )
 
-const Form = ({className, handleSubmit, name}) => (
-    <form className={className} onSubmit={handleSubmit}>
-        <StyledTitle>{name}</StyledTitle>
-        <Input placeholder="输入用户名" type="text" />
-        <Input placeholder="输入密码" type="password" />
-        <Input type="button" name={name}/>
-        <Question name={name} />
-    </form>
-)
+class Form extends Component{
+    constructor(props) {
+        super(props)
+        this.state = {
+            username: '',
+            userpass: '',
+            auth: store.getState()['authenticate']
+        }
+        this.handleNameInput = this.handleNameInput.bind(this)
+        this.handlePassInput = this.handlePassInput.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.unsubscribe = store.subscribe(()=> {
+            this.setState({
+                auth: store.getState()['authenticate']
+            })
+            if (this.state.auth.type === 'info') {
+                browserHistory.push('/')
+            }
+        })
+    }
+    componentWillUnmount() {
+        this.unsubscribe()
+    }
+    handleSubmit(event) {
+        event.preventDefault()
+        const {username, userpass} = this.state
+        if (!username.trim() || !userpass.trim()) {
+            return
+        }
+        this.props.handleSubmit(this.state.username, this.state.userpass)
+        this.setState({username: '', userpass: ''})
+    }
+    handleNameInput(event) {
+        this.setState({username: event.target.value})
+    }
+    handlePassInput(event) {
+        this.setState({userpass: event.target.value})
+    }
+    render() {
+        const {className, name} = this.props,
+            message = this.state.auth.message
+        return (
+            <form className={className} onSubmit={this.handleSubmit}>
+                {message && <Pop>{message}</Pop>}
+                <StyledTitle>{name}</StyledTitle>
+                    <Input placeholder="输入用户名" type="text" 
+                        onChange={this.handleNameInput} value={this.state.username} />
+                    <Input placeholder="输入密码" type="password"
+                        onChange={this.handlePassInput} value={this.state.userpass} />
+                    <Input type="submit" name={name}/>
+                <Question name={name} />
+            </form>
+        )
+    }
+}
+
 const StyledForm = styled(Form)`
     position: absolute;
     left: 0;
@@ -65,9 +117,10 @@ const StyledForm = styled(Form)`
     height: 215px;
     text-align: center;
 `
-const Container = ({className, name}) => (
+
+const Container = ({className, name, handleSubmit}) => (
     <div className={className}>
-        <StyledForm name={name} />
+        <StyledForm name={name} handleSubmit={handleSubmit}/>
     </div>
 )
 const StyledContainer = styled(Container)`
@@ -78,8 +131,15 @@ const StyledContainer = styled(Container)`
     height: 100vh;
     background-color: rgba(232,232,232,0.9);
 `
-export {StyledContainer as Container}
 
+const mapDispatch = (dispatch) => ({
+    handleSubmit(name, pass) {
+        dispatch(authenticate('/login', name, pass))
+    }
+})
+const WrapperContainer = connect(null, mapDispatch)(StyledContainer)
+
+export {StyledContainer as Container}
 export default () => (
-    <StyledContainer name="登陆"/>
+    <WrapperContainer name='登陆'/>
 )

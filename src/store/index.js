@@ -1,13 +1,15 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
 import COLOR from '../static/javascript/color'
 import TAB from '../static/javascript/tab'
-import noteReducer from './reducer/note'
+import noteReducer from './reducer/notes'
 import userReducer from './reducer/user'
 import tabReducer from './reducer/tab'
 import sidebarReducer from './reducer/sidebar'
+import authReducer from './reducer/auth'
+import promiseMiddleware from './middleware/promiseMiddleware'
+
 const initState = {
     user: {
-        id: '',
         name: ''
     },
     notes: [
@@ -41,17 +43,24 @@ const initState = {
         }
     ],
     tab: TAB.NOTE,
-    sidebar: true
+    sidebar: true,
+    authenticate: {
+        type: '',
+        message: ''
+    }
 }
 
 const win = window,
     middlewares = []
 
+middlewares.push(promiseMiddleware)
+
 const reducer = combineReducers({
     notes: noteReducer,
     user: userReducer,
     tab: tabReducer,
-    sidebar: sidebarReducer
+    sidebar: sidebarReducer,
+    authenticate: authReducer
 })
 
 const storeEnhancers = compose(
