@@ -7,7 +7,7 @@ const color = {
     SEARCH_BG: 'rgba(0,0,0,0.04)',
     SIDEBAR_TEXT: '#767676',
     SIDEBAR_HOVER: '#E1E1E1',
-    ICON: '#767676',
+    ICON: '#765614',
     ICON_HOVER: 'rgba(0,0,0,0.071)',
     LABLE: '#E6E6E6',
     BACKGROUND: '#E8E8E8',

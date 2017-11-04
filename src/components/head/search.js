@@ -17,8 +17,13 @@ const Glass = ({className}) => (
     <span className={className + ' glyphicon glyphicon-search'}></span>
 )
 const StyledGlass = styled(Glass)`
-    transform: translateX(40px);
-    color: ${COLOR.ICON};
+    height: 19px;
+    position: absolute;
+    left: 25px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    color: #715313;
     cursor: pointer;
     &:hover{
         color: black;
@@ -26,14 +31,28 @@ const StyledGlass = styled(Glass)`
 `
 const Search = ({className}) => (
     <div className={className}>
-        <StyledGlass /><Input placeholder="搜索"/>
+        <Input placeholder="搜索"/><StyledGlass />
     </div>
 )
 const StyledSearch = styled(Search)`
+    position: relative;
     display: inline-block;
     margin: 0 20px;
     flex: 1;
     font: normal 16px Roboto,sans-serif;
+    & input:focus {
+        background-color: white;
+        box-shadow: 0 0 5px darkgrey;
+    }
+    & input:focus~span {
+        color: #757575;
+    }
+    & ::-webkit-input-placeholder {
+        color: #715313;
+    }
+    & input:focus::-webkit-input-placeholder {
+        color: #757575;
+    }
 `
 
 export default StyledSearch
