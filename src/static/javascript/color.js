@@ -22,7 +22,8 @@ const color = {
     PINK: '#F7BBD0',
     BROWN: '#D7CCC8',
     GREY: '#CFD8DC',
-    LINE: '#DDDDDD'
+    LINE: '#DDDDDD',
+    AVATAR: '#1697A6'
 }
 
 export default color

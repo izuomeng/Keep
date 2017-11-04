@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
+import {connect} from 'react-redux'
 
-const Avatar = ({className}) => (
+const Avatar = ({className, firstName}) => (
     <div className={className}>
-        Z
+        {firstName.toUpperCase()}
     </div>
 )
 const StyledAvatar = styled(Avatar)`
@@ -15,9 +16,13 @@ const StyledAvatar = styled(Avatar)`
     text-align: center;
     color: white;
     cursor: pointer;
-    background-color: ${COLOR.DARK_BLUE};
+    background-color: ${COLOR.AVATAR};
     line-height: 32px;
     font-size: 12px;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: 20px;
 `
-export default StyledAvatar
+const mapState = (state) => ({
+    firstName: state.user.name.slice(0,1)
+})
+export default connect(mapState, null)(StyledAvatar)
