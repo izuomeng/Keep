@@ -6,7 +6,7 @@ import {Link} from 'react-router'
 import {authenticate} from '../../store/action/auth'
 import {Pop} from '../../components'
 import store from '../../store'
-import { browserHistory } from 'react-router'
+import {browserHistory} from 'react-router'
 
 const setColor = (colorLogin, colorRegister) => (props) => {
     if (props.type === 'submit') {
@@ -107,12 +107,7 @@ class Form extends Component{
 }
 
 const StyledForm = styled(Form)`
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
+    margin: 0 auto;
     width: 300px;
     height: 215px;
     text-align: center;
@@ -125,6 +120,7 @@ const Container = ({className, name, handleSubmit}) => (
 )
 const StyledContainer = styled(Container)`
     position: absolute;
+    padding: 40px;
     left: 0;
     top: 0;
     width: 100%;

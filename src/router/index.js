@@ -1,8 +1,5 @@
 import React from 'react'
 import {Router, browserHistory} from 'react-router'
-import store from '../store'
-
-let hasRedirect = false
 
 const rootRoute = {
     path: '/',
@@ -18,21 +15,17 @@ const rootRoute = {
         require('./routes/tags').default,
         require('./routes/trash').default,
         require('./routes/search').default,
+        require('./routes/loading').default,
         require('./routes/login').default,
         require('./routes/register').default,
         require('./routes/404').default
-    ],
-    onEnter(next, replace) {
-        const user = store.getState('user')
-        if (!user.id && !hasRedirect) {
-            hasRedirect = true
-            replace({pathname: '/login'})
-        }
-    }
+    ]
 }
 
 const Routes = () => (
-    <Router history={browserHistory} routes={rootRoute} />
+    <Router history={browserHistory}>
+        {rootRoute}
+    </Router>
 )
 
 export default Routes

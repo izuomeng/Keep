@@ -4,7 +4,7 @@ export default (state = {}, action) => {
     switch (action.type) {
         case Types.ADD_USER:
             return {
-                name: action.name
+                name: action.result.username
             }
         default:
             return state

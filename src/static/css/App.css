@@ -9,8 +9,13 @@
 a:hover{
 	text-decoration: none;
 }
+a:focus{
+	text-decoration: none;
+	outline: 0;
+}
 input:focus{
 	outline: 0;
+	text-decoration: none;
 }
 input[name=search]:focus{
 	background-color: white;

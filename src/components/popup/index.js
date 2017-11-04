@@ -17,7 +17,7 @@ const StyledPop = styled(Pop)`
     padding: 10px;
     color: white;
     position: absolute;
-    top: -30px;
+    top: 10px;
     left: calc(50% - 100px);
 `
 class PopUp extends Component {

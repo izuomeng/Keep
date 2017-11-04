@@ -5,7 +5,7 @@ export default ({dispatch}) => (next) => (action) => {
     if (!isPromise(promise) || !(types && types.length >= 3)) {
         return next(action)
     }
-    const [PENDING, DONE, FAIL, OTHER] = types
+    const [PENDING, DONE, FAIL, ...OTHER] = types
     dispatch({
         type: PENDING,
         ...rest
@@ -15,11 +15,14 @@ export default ({dispatch}) => (next) => (action) => {
             type: DONE,
             result,
             ...rest
-        }, (error) => {
-            dispatch({
-                type: FAIL
-            })
         })
-        dispatch({type: OTHER, result})
+        OTHER.forEach(v => dispatch({
+            type: v,
+            result
+        }))
+    }, (error) => {
+        dispatch({
+            type: FAIL
+        })
     })
 }
