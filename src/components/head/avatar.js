@@ -23,6 +23,6 @@ const StyledAvatar = styled(Avatar)`
     margin-right: 20px;
 `
 const mapState = (state) => ({
-    firstName: state.user.name.slice(0,1)
+    firstName: state.user.name && state.user.name.slice(0,1)
 })
 export default connect(mapState, null)(StyledAvatar)
