@@ -1,2 +1,5 @@
 export const ADD_USER = 'ADD_USER'
 export const REMOVE_USER = 'REMOVE_USER'
+export const LOGOUT_PENDING = 'LOGOUT_PENDING'
+export const LOGOUT_DONE = 'LOGOUT_DONE'
+export const LOGOUT_FAIL = 'LOGOUT_FAIL'

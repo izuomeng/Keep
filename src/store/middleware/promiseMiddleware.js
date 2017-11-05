@@ -22,7 +22,8 @@ export default ({dispatch}) => (next) => (action) => {
         }))
     }, (error) => {
         dispatch({
-            type: FAIL
+            type: FAIL,
+            message: error
         })
     })
 }
