@@ -56,7 +56,7 @@ class Form extends Component{
         this.state = {
             username: '',
             userpass: '',
-            auth: store.getState()['authenticate']
+            auth: store.getState()['authenticate'],
         }
         this.handleNameInput = this.handleNameInput.bind(this)
         this.handlePassInput = this.handlePassInput.bind(this)
@@ -65,7 +65,8 @@ class Form extends Component{
             this.setState({
                 auth: store.getState()['authenticate']
             })
-            if (this.state.auth.type === 'info') {
+            const user = store.getState()['user']
+            if (user.name) {
                 browserHistory.push('/')
             }
         })

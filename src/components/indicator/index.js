@@ -55,5 +55,21 @@ const StyledWrapper = styled(Wrapper)`
     color: ${props => props.color};
     text-align: center;
 `
-
+const FullScreen = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(232,232,232,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
 export default StyledWrapper
+
+export const FullScreenIndicator = () => (
+    <FullScreen>
+        <StyledWrapper size='middle' color='orange'>加载中...</StyledWrapper>
+    </FullScreen>
+)

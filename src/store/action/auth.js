@@ -16,3 +16,6 @@ export const authenticate = (url, name, pass) => ({
         ADD_USER
     ]
 })
+export const clearAuth = () => ({
+    type: Types.AUTH_CLEAR
+})

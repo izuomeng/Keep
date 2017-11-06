@@ -81,7 +81,7 @@ const Container = styled.div`
         display: none;
     }
 `
-export default ({firstName, show, name}) => (
+export default ({firstName, show, name, handleLogout}) => (
     <Container show={show}>
         <TopDiv>
             <StyledAvatar firstName={firstName}/>
@@ -92,7 +92,7 @@ export default ({firstName, show, name}) => (
         </TopDiv>
         <BottomDiv>
             <NormalButton value='切换账号' />
-            <RightButton value='退出' />
+            <RightButton value='退出' onClick={handleLogout}/>
         </BottomDiv>
     </Container>
 )

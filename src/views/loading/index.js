@@ -1,21 +1,8 @@
 import React, {Component} from 'react'
-import {Indicator} from '../../components'
-import styled from 'styled-components'
+import {FullScreenIndicator} from '../../components'
 import store from '../../store'
 import {browserHistory} from 'react-router'
 import {requestNotes} from '../../store/action/notes'
-
-const Container = styled.div`
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(232,232,232,0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
 
 class Loading extends Component {
     constructor(props) {
@@ -39,9 +26,7 @@ class Loading extends Component {
     }
     render() {
         return (
-            <Container>
-                <Indicator size='middle' color='orange'>加载中...</Indicator>
-            </Container>
+            <FullScreenIndicator />
         )
     }
 }
