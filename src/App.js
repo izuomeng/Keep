@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import './static/css/App.css'
 import {Header, Sidebar} from './components'
 import styled from 'styled-components'
+import {FullScreenIndicator as Indicator} from './components'
+import {PopUp} from './components'
 
 const Container = ({className, children}) => (
 	<div className={className}>
@@ -25,6 +27,8 @@ class App extends Component {
 				<StyledContainer>
 					{this.props.children}
 				</StyledContainer>
+				<PopUp />
+				<Indicator />
 			</div>
 		)
 	}

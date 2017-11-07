@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {Component} from 'react'
 import styled, {keyframes} from 'styled-components'
+import emmiter from '../../static/javascript/events'
 
 const rotate = keyframes`
     from{
@@ -24,7 +25,7 @@ const Snake = styled.div`
     margin-bottom: 10px;
 `
 
-const Wrapper = ({className, size, color = 'white', children}) => {
+const Wrapper = ({className, size = 'middle', color = 'white', children}) => {
     switch (size) {
         case 'large':
             size = '60px'
@@ -48,7 +49,6 @@ const Wrapper = ({className, size, color = 'white', children}) => {
 }
 
 const StyledWrapper = styled(Wrapper)`
-    display: inline-block;
     padding: 15px 25px;
     background-color: rgba(0,0,0,0.7);
     border-radius: 5px;
@@ -62,14 +62,34 @@ const FullScreen = styled.div`
     width: 100%;
     height: 100vh;
     background-color: rgba(232,232,232,0.9);
-    display: flex;
-    align-items: center;
+    display: ${props => props.show ? 'flex' : 'none'};
     justify-content: center;
+    align-items: center;
 `
-export default StyledWrapper
 
-export const FullScreenIndicator = () => (
-    <FullScreen>
+class FullScreenIndicator extends Component{
+    constructor(props) {
+        super(props)
+        this.state = {
+            show: false
+        }
+    }
+    componentDidMount() {
+        emmiter.addListener('loading', () => this.setState({show: true}))
+        emmiter.addListener('stopLoading', () => this.setState({show: false}))
+    }
+    render() {
+        return (
+            <FullScreen show={this.state.show}>
+                <StyledWrapper size='middle' color='orange'>加载中...</StyledWrapper>
+            </FullScreen>
+        )
+    }
+}
+const NoStateIndicator = ({show}) => (
+    <FullScreen show={show}>
         <StyledWrapper size='middle' color='orange'>加载中...</StyledWrapper>
     </FullScreen>
 )
+export default FullScreenIndicator
+export {NoStateIndicator}

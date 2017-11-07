@@ -5,7 +5,7 @@ import noteReducer from './reducer/notes'
 import userReducer from './reducer/user'
 import tabReducer from './reducer/tab'
 import sidebarReducer from './reducer/sidebar'
-import authReducer from './reducer/auth'
+import popInfoReducer from './reducer/popInfo'
 import promiseMiddleware from './middleware/promiseMiddleware'
 
 const initState = {
@@ -44,7 +44,7 @@ const initState = {
     ],
     tab: TAB.NOTE,
     sidebar: true,
-    authenticate: {
+    popInfo: {
         type: '',
         message: ''
     }
@@ -60,7 +60,7 @@ const reducer = combineReducers({
     user: userReducer,
     tab: tabReducer,
     sidebar: sidebarReducer,
-    authenticate: authReducer
+    popInfo: popInfoReducer
 })
 
 const storeEnhancers = compose(

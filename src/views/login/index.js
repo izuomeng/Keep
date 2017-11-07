@@ -3,8 +3,7 @@ import {connect} from 'react-redux'
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 import {Link} from 'react-router'
-import {authenticate} from '../../store/action/auth'
-import {Pop} from '../../components'
+import {authenticate} from '../../store/action/popInfo'
 import store from '../../store'
 import {browserHistory} from 'react-router'
 
@@ -56,15 +55,11 @@ class Form extends Component{
         this.state = {
             username: '',
             userpass: '',
-            auth: store.getState()['authenticate'],
         }
         this.handleNameInput = this.handleNameInput.bind(this)
         this.handlePassInput = this.handlePassInput.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
         this.unsubscribe = store.subscribe(()=> {
-            this.setState({
-                auth: store.getState()['authenticate']
-            })
             const user = store.getState()['user']
             if (user.name) {
                 browserHistory.push('/')
@@ -73,6 +68,7 @@ class Form extends Component{
     }
     componentWillUnmount() {
         this.unsubscribe()
+        clearTimeout(this.tid)
     }
     handleSubmit(event) {
         event.preventDefault()
@@ -90,17 +86,15 @@ class Form extends Component{
         this.setState({userpass: event.target.value})
     }
     render() {
-        const {className, name} = this.props,
-            message = this.state.auth.message
+        const {className, name} = this.props
         return (
             <form className={className} onSubmit={this.handleSubmit}>
-                {message && <Pop>{message}</Pop>}
                 <StyledTitle>{name}</StyledTitle>
-                    <Input placeholder="输入用户名" type="text" 
-                        onChange={this.handleNameInput} value={this.state.username} />
-                    <Input placeholder="输入密码" type="password"
-                        onChange={this.handlePassInput} value={this.state.userpass} />
-                    <Input type="submit" name={name}/>
+                <Input placeholder="输入用户名" type="text" 
+                    onChange={this.handleNameInput} value={this.state.username} />
+                <Input placeholder="输入密码" type="password"
+                    onChange={this.handlePassInput} value={this.state.userpass} />
+                <Input type="submit" name={name}/>
                 <Question name={name} />
             </form>
         )

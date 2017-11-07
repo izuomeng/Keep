@@ -1,14 +1,9 @@
-import React, {Component} from 'react'
 import styled from 'styled-components'
+import React, {Component} from 'react'
 import store from '../../store'
-import {AUTH_CLEAR} from '../../store/actionTypes/auth'
+import {clearInfo} from '../../store/action/popInfo'
 
-const Pop = ({className, children}) => (
-    <div className={className}>
-        {children}
-    </div>
-)
-const StyledPop = styled(Pop)`
+const Pop = styled.div`
     display: ${props => props.show ? 'block' : 'none'};
     min-width: 200px;
     text-align: center;
@@ -24,27 +19,34 @@ class PopUp extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            show: true
+            show: false,
+            message: ''
         }
-    }
-    componentDidMount() {
-        clearTimeout(this.timeId)
-        this.timeId = setTimeout(() => {
-            this.setState({show: false})
-            store.dispatch({type: AUTH_CLEAR})
-        }, 2000)
+        this.unsubscribe = store.subscribe(() => {
+            const popInfo = store.getState()['popInfo']
+            if (popInfo.message) {
+                this.setState({
+                    show: true,
+                    message: popInfo.message
+                })
+                clearTimeout(this.tid)
+                this.tid = setTimeout(() => {
+                    this.setState({show: false})
+                    store.dispatch(clearInfo())
+                }, popInfo.time || 2000)
+            }
+        })
     }
     componentWillUnmount() {
-        clearTimeout(this.timeId)
-        this.setState({show: false})
+        this.unsubscribe()
     }
     render() {
-        const show = this.state.show
         return (
-            <StyledPop show={show}>
-                {this.props.children}
-            </StyledPop>
+            <Pop show={this.state.show}>
+                {this.state.message}
+            </Pop>
         )
     }
 }
-export default PopUp
+export default Pop
+export {PopUp}

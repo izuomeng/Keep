@@ -1,4 +1,4 @@
-import * as Types from '../actionTypes/auth'
+import * as Types from '../actionTypes/popInfo'
 import {FILL_NOTES} from '../actionTypes/notes'
 import {ADD_USER} from '../actionTypes/user'
 import axios from 'axios'
@@ -16,6 +16,10 @@ export const authenticate = (url, name, pass) => ({
         ADD_USER
     ]
 })
-export const clearAuth = () => ({
-    type: Types.AUTH_CLEAR
+export const clearInfo = () => ({
+    type: Types.INFO_CLEAR
+})
+export const internetError = () => ({
+    type: Types.INTERNET_ERROR,
+    message: '无法连接至服务器'
 })

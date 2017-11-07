@@ -1,0 +1,6 @@
+export const AUTH_PENDING = 'AUTH_PENDING'
+export const AUTH_DONE = 'AUTH_DONE'
+export const AUTH_FAIL = 'AUTH_FAIL'
+export const INFO_CLEAR = 'INFO_CLEAR'
+export const LOGOUT_FAIL = 'LOGOUT_FAIL'
+export const INTERNET_ERROR = 'INTERNET_ERROR'

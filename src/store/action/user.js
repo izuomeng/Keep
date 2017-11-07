@@ -1,4 +1,5 @@
 import * as Types from '../actionTypes/user'
+import {LOGOUT_FAIL} from '../actionTypes/popInfo'
 import axios from 'axios'
 
 export const addUser = (name) => ({
@@ -10,6 +11,6 @@ export const removeUser = () => ({
     types: [
         Types.LOGOUT_PENDING,
         Types.LOGOUT_DONE,
-        Types.LOGOUT_FAIL
+        LOGOUT_FAIL
     ]
 })

@@ -1,12 +1,13 @@
 import Sidebar from './aside'
 import Header from './head'
-import Pop from './popup'
-import Indicator, {FullScreenIndicator} from './indicator'
+import Pop, {PopUp} from './popup'
+import FullScreenIndicator, {NoStateIndicator} from './indicator'
 
 export {
     Sidebar, 
     Header, 
     Pop,
-    Indicator,
-    FullScreenIndicator
+    PopUp,
+    NoStateIndicator,
+    FullScreenIndicator,
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import {authenticate} from '../../store/action/auth'
+import {authenticate} from '../../store/action/popInfo'
 import {connect} from 'react-redux'
 import {Container} from '../login'
 
