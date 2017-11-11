@@ -23,7 +23,8 @@ const color = {
     BROWN: '#D7CCC8',
     GREY: '#CFD8DC',
     LINE: '#DDDDDD',
-    AVATAR: '#1697A6'
+    AVATAR: '#1697A6',
+    CARD_BACK: '#FAFAFA'
 }
 
 export default color

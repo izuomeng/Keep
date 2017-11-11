@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './static/css/App.css'
+import './static/css/Draft.css'
 import {Header, Sidebar} from './components'
 import styled from 'styled-components'
 import {FullScreenIndicator as Indicator} from './components'
@@ -12,6 +13,7 @@ const Container = ({className, children}) => (
 )
 
 const StyledContainer = styled(Container)`
+	height: calc(100vh - 64px);
 	overflow-x: hidden;
 	overflow-y: auto;
 	padding: 20px;

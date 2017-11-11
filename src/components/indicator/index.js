@@ -73,10 +73,16 @@ class FullScreenIndicator extends Component{
         this.state = {
             show: false
         }
+        this.onLoading = () => this.setState({show: true})
+        this.onStopLoading = () => this.setState({show: false})
     }
     componentDidMount() {
-        emmiter.addListener('loading', () => this.setState({show: true}))
-        emmiter.addListener('stopLoading', () => this.setState({show: false}))
+        emmiter.addListener('loading', this.onLoading)
+        emmiter.addListener('stopLoading', this.onStopLoading)
+    }
+    componentWillUnmount() {
+        emmiter.removeListener('loading', this.onLoading)
+        emmiter.removeListener('stopLoading', this.onStopLoading)
     }
     render() {
         return (

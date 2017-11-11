@@ -4,7 +4,7 @@ import COLOR from '../../../static/javascript/color'
 import {NormalButton} from '../../button'
 
 const Avatar = ({className, firstName, size, handleClick, children}) => (
-    <div className={className} onClick={handleClick}>
+    <div className={className} onClick={handleClick} title="账户">
         {firstName && firstName.toUpperCase()}
         {children}
     </div>

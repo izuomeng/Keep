@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import COLOR from '../../static/javascript/color'
 
 const NormalButton = styled.input.attrs({
     type: 'button'
@@ -15,7 +16,23 @@ const NormalButton = styled.input.attrs({
         background-image: linear-gradient(top,#fff,#f8f8f8);
     }
 `
+const TextButton = styled.input.attrs({
+    type: 'button',
+    value: props => props.value
+})`
+    width: 54px;
+    float: right;
+    background-color: ${COLOR.BACKGROUND};
+    border: 0;
+    padding: 0;
+    line-height: 28px;
+    border-radius: 3px;
+    &:hover{
+        background-color: ${COLOR.SIDEBAR_HOVER};
+    }
+`
 
 export {
     NormalButton,
+    TextButton
 }

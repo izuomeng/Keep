@@ -9,7 +9,7 @@ class EventEmitter {
         const queue = this.events[type]
         queue.push(fn)
     }
-    removeEventListener(type, fn) {
+    removeListener(type, fn) {
         if (!this.events[type]) {
             return
         }
