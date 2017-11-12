@@ -4,9 +4,15 @@ import * as Types from '../actionTypes/syncProgress'
 import axios from 'axios'
 
 export default ({dispatch}) => (next) => (action) => {
-    const {type, ...note} = action
+    const {updateState, type, ...note} = action
     if (type !== ADD_NOTE) {
         return next(action)
+    }
+    if (updateState) {
+        return next({
+            type,
+            ...note
+        })
     }
     dispatch({
         promise: axios.post('/notes',{...note}).then(res => res.data),
@@ -16,5 +22,4 @@ export default ({dispatch}) => (next) => (action) => {
             Types.SYNC_FAIL
         ]
     })
-    return next(action)
 }

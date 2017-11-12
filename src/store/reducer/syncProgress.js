@@ -11,6 +11,6 @@ export default (state = '', action) => {
         case Types.SYNC_STATIC:
             return 'STATIC'
         default:
-            return 'STATIC'
+            return state
     }
 }

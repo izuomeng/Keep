@@ -8,6 +8,7 @@ import sidebarReducer from './reducer/sidebar'
 import popInfoReducer from './reducer/popInfo'
 import syncProgressReducer from './reducer/syncProgress'
 import promiseMiddleware from './middleware/promiseMiddleware'
+import addNoteMidleware from './middleware/addNoteMiddleware'
 
 const initState = {
     user: {
@@ -40,9 +41,10 @@ const initState = {
 }
 
 const win = window,
-    middlewares = []
-
-middlewares.push(promiseMiddleware)
+    middlewares = [
+        addNoteMidleware, 
+        promiseMiddleware
+    ]
 
 const reducer = combineReducers({
     notes: noteReducer,

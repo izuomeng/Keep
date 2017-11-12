@@ -9,23 +9,12 @@ class Home extends Component {
             isBeforeClick: true
         }
         this.handleClick = this.handleClick.bind(this)
-        this.handleDocumentClick = this.handleDocumentClick.bind(this)
-    }
-    componentDidMount() {
-        document.addEventListener('click', this.handleDocumentClick)
-    }
-    componentWillUnmount() {
-        document.removeEventListener('click', this.handleDocumentClick)
+        this.hideNewNote = this.hideNewNote.bind(this)
     }
     handleClick() {
         this.setState({isBeforeClick: false})
     }
-    handleDocumentClick(e) {
-        if (e.target.dataset.id === 'newNote') {
-            return
-        } else if (e.target.className.indexOf('DraftStyleDefault') > -1) {
-            return
-        }
+    hideNewNote() {
         this.setState({isBeforeClick: true})
     }
     render() {
@@ -37,7 +26,7 @@ class Home extends Component {
                                         data-id="newNote">
                                         添加记事...
                                   </BeforeClick>}
-                {!isBeforeClick && <NewNote />}
+                {!isBeforeClick && <NewNote hideNewNote={this.hideNewNote}/>}
                 <Cards notes={this.props.notes} />
             </div>
         )

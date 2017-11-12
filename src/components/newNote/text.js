@@ -25,7 +25,7 @@ class Text extends Component{
     handleKeyCommand(command, editorState) {
 		const newState = RichUtils.handleKeyCommand(editorState, command)
 		if (newState) {
-			this.onChange(newState)
+			this.props.editorOnChange(newState)
 			return true
 		}
 		return false
@@ -40,6 +40,7 @@ class Text extends Component{
                     placeholder="添加记事..."
                     ref={this.setDomEditorRef}
                     handleKeyCommand={this.handleKeyCommand}
+                    autoCorrect="on"
                 />
             </Wrapper>
         )

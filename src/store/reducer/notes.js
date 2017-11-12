@@ -6,6 +6,7 @@ export default (state = [], action) => {
         case Types.FILL_NOTES:
             return action.result.notes
         case Types.ADD_NOTE:
+            const restNotes = state.filter(v => v.id !== action.id)
             return [
                 {
                     id: action.id,
@@ -20,7 +21,7 @@ export default (state = [], action) => {
                     },
                     deleteTime: action.deleteTime || null
                 },
-                ...state
+                ...restNotes
             ]
         default:
             return state

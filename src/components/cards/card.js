@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import COLOR from '../../static/javascript/color'
+import {Editor, convertFromRaw, EditorState} from 'draft-js'
 
 const Wrapper = styled.div`
     width: 240px;
@@ -14,11 +15,12 @@ const Wrapper = styled.div`
     transition: .2s;
     border-radius: 2px;
     &:hover{
-        box-shadow: 0 0 15px 0 darkgrey;
+        box-shadow: 0 0 15px 0 darkgrey,
+                    0 2px 5px 0 darkgrey
     }
 `
 const Title = styled.div`
-    font-weight: bold;
+    font-weight: bold;  
     font-size: 17px;
     line-height: 23px;
     min-height: 38px;
@@ -38,23 +40,38 @@ const Body = styled.div`
 `
 class Card extends Component {
     static propTypes = {
-        note: PropTypes.object
-    }
-    static defaultProps = {
-        note: {}
+        note: PropTypes.object.isRequired
     }
     constructor(props) {
         super(props)
+        const {note} = this.props
+        const titleBlocksFromRaw = convertFromRaw(note.title),
+            textBlocksFromRaw = convertFromRaw(note.text)
         this.state = {
-            note: this.props.note
+            titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
+            textEditor: EditorState.createWithContent(textBlocksFromRaw)
         }
+        this.id = note.id
+        this.titleOnChange = (titleEditor) => this.setState({titleEditor})
+        this.textOnChange = (textEditor) => this.setState({textEditor})
     }
     render() {
-        const {title, text} = this.props.note
         return (
             <Wrapper>
-                <Title>{title}</Title>
-                <Body>{text}</Body>
+                <Title>
+                    <Editor 
+                        editorState={this.state.titleEditor} 
+                        onChange={this.titleOnChange}
+                        readOnly
+                    />
+                </Title>
+                <Body>
+                    <Editor 
+                        editorState={this.state.textEditor} 
+                        onChange={this.textOnChange}
+                        readOnly
+                    />
+                </Body>
             </Wrapper>
         )
     }

@@ -24,6 +24,7 @@ class Title extends Component{
                     editorState={editorState}
                     onChange={editorOnChange}
                     placeholder="标题"
+                    autoCorrect="on"
                 />
             </Wrapper>
         )
