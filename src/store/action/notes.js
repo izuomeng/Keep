@@ -20,3 +20,9 @@ export const requestNotes = (url) => {
         ]
     }
 }
+export const addNote = (title, text, other) => ({
+    type: Types.ADD_NOTE,
+    title,
+    text,
+    ...other
+})

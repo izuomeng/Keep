@@ -6,6 +6,7 @@ import userReducer from './reducer/user'
 import tabReducer from './reducer/tab'
 import sidebarReducer from './reducer/sidebar'
 import popInfoReducer from './reducer/popInfo'
+import syncProgressReducer from './reducer/syncProgress'
 import promiseMiddleware from './middleware/promiseMiddleware'
 
 const initState = {
@@ -14,12 +15,13 @@ const initState = {
     },
     notes: [
         {
-            id: '0',
-            text: 'test0',
+            id: 'f4ae8',
+            title: {},  //convertToRaw object
+            text: {},   //same as title
             lable: '',
-            isReminder: false,
             isFixed: false,
             bgColor: COLOR.WHITE,
+            isReminder: false,
             reminderInfo: {
                 date: new Date(),
                 repeat: ''
@@ -27,27 +29,14 @@ const initState = {
             isDeleted: false,
             deleteTime: new Date()
         },
-        {
-            id: '1',
-            text: 'test1',
-            lable: '',
-            isReminder: false,
-            isFixed: false,
-            bgColor: COLOR.WHITE,
-            reminderInfo: {
-                date: new Date(),
-                repeat: ''
-            },
-            isDeleted: false,
-            deleteTime: new Date()
-        }
     ],
     tab: TAB.NOTE,
     sidebar: true,
     popInfo: {
         type: '',
         message: ''
-    }
+    },
+    syncProgress: 'STATIC',
 }
 
 const win = window,
@@ -60,7 +49,8 @@ const reducer = combineReducers({
     user: userReducer,
     tab: tabReducer,
     sidebar: sidebarReducer,
-    popInfo: popInfoReducer
+    popInfo: popInfoReducer,
+    syncProgress: syncProgressReducer
 })
 
 const storeEnhancers = compose(

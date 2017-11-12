@@ -7,6 +7,7 @@ const List = styled.div`
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
+    cursor: default;
 `
 
 class Cards extends Component {

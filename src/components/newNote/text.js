@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
-import {Editor, EditorState, RichUtils} from 'draft-js'
+import {Editor, RichUtils} from 'draft-js'
 
 const Wrapper = styled.div`
     margin-bottom: 20px;
@@ -16,23 +16,30 @@ const Wrapper = styled.div`
 class Text extends Component{
     constructor(props) {
         super(props)
-        this.state = {
-            editorState: EditorState.createEmpty()
-        }
-        this.onChange = (editorState) => this.setState({editorState})
         this.setDomEditorRef = ref => this.domEditor = ref
+        this.handleKeyCommand = this.handleKeyCommand.bind(this)
     }
     componentDidMount(){
         this.domEditor.focus()
     }
+    handleKeyCommand(command, editorState) {
+		const newState = RichUtils.handleKeyCommand(editorState, command)
+		if (newState) {
+			this.onChange(newState)
+			return true
+		}
+		return false
+	}
     render() {
+        const {editorState, editorOnChange} = this.props
         return (
             <Wrapper>
                 <Editor
-                    editorState={this.state.editorState}
-                    onChange={this.onChange}
+                    editorState={editorState}
+                    onChange={editorOnChange}
                     placeholder="添加记事..."
                     ref={this.setDomEditorRef}
+                    handleKeyCommand={this.handleKeyCommand}
                 />
             </Wrapper>
         )

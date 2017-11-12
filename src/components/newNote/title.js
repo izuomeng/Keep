@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Editor, EditorState, RichUtils} from 'draft-js'
+import {Editor} from 'draft-js'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -16,19 +16,13 @@ const Wrapper = styled.div`
 `
 
 class Title extends Component{
-    constructor(props) {
-        super(props)
-        this.state = {
-            editorState: EditorState.createEmpty()
-        }
-        this.onChange = (editorState) => this.setState({editorState})
-    }
     render() {
+        const {editorState, editorOnChange} = this.props
         return (
             <Wrapper>
                 <Editor
-                    editorState={this.state.editorState}
-                    onChange={this.onChange}
+                    editorState={editorState}
+                    onChange={editorOnChange}
                     placeholder="标题"
                 />
             </Wrapper>
