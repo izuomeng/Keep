@@ -4,6 +4,7 @@ import {TextButton} from '../button'
 import COLOR from '../../static/javascript/color'
 import Lable from '../lable'
 import PropTypes from 'prop-types'
+import {confirm} from '../../static/javascript/icons'
 
 const Wrapper = styled.div.attrs({
     'data-id': 'newNote'
@@ -24,6 +25,9 @@ const StyledIcon = styled(Icon)`
     cursor: pointer;
     padding: 5px 10px;
     margin-right: 15px;
+    &:hover {
+        color: black;
+    }
     &:hover>div {
         display: inline-block;
         visibility: visible;
@@ -32,15 +36,16 @@ const StyledIcon = styled(Icon)`
         opacity: 1;
     }
 `
-const Complete = TextButton.extend`
-    background: ${COLOR.CARD_BACK};
+const CompleteButton = TextButton.extend`
     float: right;
     font-weight: bold;
 `
 const ColorBlock = styled.div`
     position: relative;
     display: inline-block;
-    background: ${props => props.color};
+    background-color: ${props => props.color};
+    background-image: ${props => `url(${props.bgImg})`};
+    background-size: contain;
     width: 26px;
     height: 26px;
     border-radius: 50%;
@@ -54,7 +59,7 @@ const ColorBlock = styled.div`
     }
 `
 const StyledLable = Lable.extend`
-    margin-left: 18px;
+    margin-left: 19px;
     z-index: 999;
 `
 const PaletteWrapper = styled.div.attrs({
@@ -69,7 +74,7 @@ const PaletteWrapper = styled.div.attrs({
     padding: 6px;
     box-shadow: 0 0 10px 0 darkgrey;
 `
-const Palette = ({className, handleClick}) => {
+const Palette = ({className, handleClick, bgColor}) => {
     const colors = [
         COLOR.WHITE,
         COLOR.RED,
@@ -88,16 +93,23 @@ const Palette = ({className, handleClick}) => {
     return (
         <div className={className}>
             <PaletteWrapper>
-                {colors.map((v, i) => (
-                    <ColorBlock 
-                        color={v} 
-                        key={v} 
-                        data-id="newNote" 
-                        onClick={() => handleClick(v)}
-                    >
-                        <StyledLable value={names[i] + '色'} />
-                    </ColorBlock>
-                ))}
+                {colors.map((v, i) => {
+                    let current = ''
+                    if (v === bgColor) {
+                         current = confirm
+                    }
+                    return (
+                        <ColorBlock 
+                            color={v} 
+                            key={v} 
+                            data-id="newNote" 
+                            onClick={() => handleClick(v)}
+                            bgImg={current}
+                        >
+                            <StyledLable value={names[i] + '色'} />
+                        </ColorBlock>
+                    )
+                })}
             </PaletteWrapper>
         </div>
     )
@@ -122,14 +134,17 @@ class Menus extends Component {
             <Wrapper>
                 <StyledIcon icon="glyphicon glyphicon-bell" lable="提醒我"/>
                 <StyledIcon icon="glyphicon glyphicon-eye-open" lable="更改颜色">
-                    <StyledPalette handleClick={this.props.onColorClick}/>
+                    <StyledPalette 
+                        handleClick={this.props.onColorClick}
+                        bgColor={this.props.bgColor}
+                    />
                 </StyledIcon>
                 <StyledIcon icon="glyphicon glyphicon-picture" lable="插入图片"/>
                 <StyledIcon icon="glyphicon glyphicon-folder-close" lable="归档"/>
                 <StyledIcon icon="glyphicon glyphicon-chevron-down" lable="更多"/>
                 <StyledIcon icon="glyphicon glyphicon-arrow-left" lable="撤销"/>
                 <StyledIcon icon="glyphicon glyphicon-arrow-right" lable="重做"/>
-                <Complete value='完成'/>
+                <CompleteButton value='完成'/>
             </Wrapper>
         )
     }

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import COLOR from '../../static/javascript/color'
+// import COLOR from '../../static/javascript/color'
 
 const NormalButton = styled.input.attrs({
     type: 'button'
@@ -22,13 +22,13 @@ const TextButton = styled.input.attrs({
 })`
     width: 54px;
     float: right;
-    background-color: ${COLOR.BACKGROUND};
+    background: transparent;
     border: 0;
     padding: 0;
     line-height: 28px;
     border-radius: 3px;
     &:hover{
-        background-color: ${COLOR.SIDEBAR_HOVER};
+        background: rgba(0,0,0,0.08);;
     }
 `
 

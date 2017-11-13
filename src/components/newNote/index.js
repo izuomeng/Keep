@@ -135,7 +135,10 @@ class NewNote extends Component{
                     editorOnChange={this.textOnChange}
                     editorState={this.state.textEditorState}
                 />
-                <Menus onColorClick={this.handleColorChange}/>
+                <Menus 
+                    onColorClick={this.handleColorChange} 
+                    bgColor={this.state.bgColor}
+                />
             </Wrapper>
         )
     }
