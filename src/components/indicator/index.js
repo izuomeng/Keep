@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import styled, {keyframes} from 'styled-components'
 import emmiter from '../../static/javascript/events'
+import COLOR from '../../static/javascript/color'
 
 const rotate = keyframes`
     from{
@@ -22,9 +23,11 @@ const Snake = styled.div`
     border-bottom-color: ${props => props.color};
     animation: ${rotate} .8s linear infinite;
     will-change: transform;
-    margin-bottom: 10px;
 `
 
+const Text = styled.div`
+    margin-top: 10px;
+`
 const Wrapper = ({className, size = 'middle', color = 'white', children}) => {
     switch (size) {
         case 'large':
@@ -43,7 +46,7 @@ const Wrapper = ({className, size = 'middle', color = 'white', children}) => {
     return (
         <div className={className}>
             <Snake size={size} color={color}/>
-            <div>{children}</div>
+            <Text>{children}</Text>
         </div>
     )
 }
@@ -97,5 +100,15 @@ const NoStateIndicator = ({show}) => (
         <StyledWrapper size='middle' color='orange'>加载中...</StyledWrapper>
     </FullScreen>
 )
+
+const IconSnake = ({className}) => (
+    <div className={className}>
+        <Snake size="20px" color={COLOR.ICON} />
+    </div>
+)
+const StyledIconSnake = styled(IconSnake)`
+    width: 48px;
+    text-align: center;
+`
 export default FullScreenIndicator
-export {NoStateIndicator}
+export {NoStateIndicator, StyledIconSnake}

@@ -25,6 +25,7 @@ const Wrapper = BeforeClick.extend`
     padding-left: 5px;
     border-radius: 2px;
     color: black;
+    background: ${props => props.bgColor};
 `
 
 class NewNote extends Component{
@@ -32,27 +33,40 @@ class NewNote extends Component{
         super(props)
         this.state = {
             titleEditorState: EditorState.createEmpty(),
-            textEditorState: EditorState.createEmpty()
+            textEditorState: EditorState.createEmpty(),
+            bgColor: COLOR.WHITE,
         }
-        this.id = Math.random().toString(16).slice(2, 8)
+        this.note = {
+            id: Math.random().toString(16).slice(2, 8),
+        }
         this.titleOnChange = this.titleOnChange.bind(this)
         this.textOnChange = this.textOnChange.bind(this)
         this.handleDocumentClick = this.handleDocumentClick.bind(this)
+        this.handleColorChange = this.handleColorChange.bind(this)
+        //set upload editorContent
+        const titleContent = this.state.titleEditorState.getCurrentContent()
+        this.titleContentInJs = convertToRaw(titleContent)
+        const textContent = this.state.textEditorState.getCurrentContent()
+        this.textContentInJs = convertToRaw(textContent)
     }
     titleOnChange(titleEditorState) {
         const prevContent = this.state.titleEditorState.getCurrentContent(),
             nextContent = titleEditorState.getCurrentContent(),
             nextContenInJs = convertToRaw(nextContent)
         this.setState({titleEditorState})
+        this.titleContentInJs = nextContenInJs
         if (nextContent.getPlainText() === prevContent.getPlainText()) {
             return
         }
-        const textContent = this.state.textEditorState.getCurrentContent(),
-            textContentInJs = convertToRaw(textContent)
         // 函数截流
         clearTimeout(this.tid)
         this.tid = setTimeout(() => {
-            this.props.addNote(false, nextContenInJs, textContentInJs, {id: this.id})
+            this.props.addNote(
+                false, 
+                nextContenInJs, 
+                this.textContentInJs, 
+                this.note
+            )
         }, 500)
     }
     textOnChange(textEditorState) {
@@ -60,14 +74,18 @@ class NewNote extends Component{
             nextContent = textEditorState.getCurrentContent(),
             nextContentInJs = convertToRaw(nextContent)
         this.setState({textEditorState})
+        this.textContentInJs = nextContentInJs
         if (nextContent.getPlainText() === prevContent.getPlainText()) {
             return
         }
-        const titleContent = this.state.titleEditorState.getCurrentContent(),
-            titleContentInJs = convertToRaw(titleContent)
         clearTimeout(this.tid)
         this.tid = setTimeout(() => {
-            this.props.addNote(false, titleContentInJs, nextContentInJs, {id: this.id})
+            this.props.addNote(
+                false, 
+                this.titleContentInJs, 
+                nextContentInJs, 
+                this.note
+            )
         }, 500)
     }
     componentDidMount() {
@@ -75,12 +93,15 @@ class NewNote extends Component{
     }
     componentWillUnmount() {
         document.removeEventListener('click', this.handleDocumentClick)
-        const titleContent = this.state.titleEditorState.getCurrentContent(),
-        titleContentInJs = convertToRaw(titleContent)
         const textContent = this.state.textEditorState.getCurrentContent(),
-            textContentInJs = convertToRaw(textContent)
+            titleContent = this.state.titleEditorState.getCurrentContent()
         if (textContent.getPlainText() || titleContent.getPlainText()) {
-            this.props.addNote(true, titleContentInJs, textContentInJs, {id: this.id})
+            this.props.addNote(
+                true, 
+                this.titleContentInJs, 
+                this.textContentInJs, 
+                this.note
+            )
         }
     }
     handleDocumentClick(e) {
@@ -91,12 +112,21 @@ class NewNote extends Component{
         } else if (e.target.dataset.text) {
             return
         }
-        console.log(e.target)
         this.props.hideNewNote()
+    }
+    handleColorChange(color) {
+        this.setState({bgColor: color})
+        this.note.bgColor = color
+        this.props.addNote(
+            false, 
+            this.titleContentInJs,
+            this.textContentInJs,
+            this.note
+        )
     }
     render() {
         return (
-            <Wrapper data-id="newNote">
+            <Wrapper data-id="newNote" bgColor={this.state.bgColor}>
                 <Title 
                     editorOnChange={this.titleOnChange}
                     editorState={this.state.titleEditorState}
@@ -105,7 +135,7 @@ class NewNote extends Component{
                     editorOnChange={this.textOnChange}
                     editorState={this.state.textEditorState}
                 />
-                <Menus />
+                <Menus onColorClick={this.handleColorChange}/>
             </Wrapper>
         )
     }

@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 import React, { Component } from 'react'
+import {connect} from 'react-redux'
 import Menu from './menu'
 import Title from './title'
 import Search from './search'
-import Refresh from './refresh'
-import Layer from './layer'
+// import Refresh from './refresh'
+import {LayerIcon, RefreshIcon, MyReminder, SycnSuccess} from './icons'
 import Avatar from './avatar'
+import {StyledIconSnake as Snake} from '../indicator'
 
 const Header = styled.header`
     width: 100%;
@@ -20,6 +22,11 @@ const Header = styled.header`
 `
 class HeaderContainer extends Component {
     render() {
+        const progress = this.props.syncProgress
+        if (progress === 'SUCCESS') {
+            clearTimeout(this.tid)
+            this.tid = setTimeout(() => this.props.setStatic(), 1000)
+        }
         return (
             <Header>
                 <Menu />
@@ -27,12 +34,24 @@ class HeaderContainer extends Component {
                     {this.props.children}
                 </Title>
                 <Search />
-                <Refresh />
-                <Layer />
+                {(progress === 'STATIC') && <RefreshIcon />}
+                {(progress === 'PENDING') && <Snake />}
+                {(progress === 'SUCCESS') && <SycnSuccess />}
+                <LayerIcon />
+                <MyReminder />
                 <Avatar />
             </Header>
         )
     }
 }
 
-export default HeaderContainer
+const mapState = (state) => ({
+    syncProgress: state.syncProgress
+})
+const mapDispatch = (dispatch) => ({
+    setStatic() {
+        dispatch({type: 'SYNC_STATIC'})
+    }
+})
+
+export default connect(mapState, mapDispatch)(HeaderContainer)

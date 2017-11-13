@@ -9,7 +9,9 @@ const Lable = styled.div`
     border-radius: 3px;
     white-space: nowrap;
     font-size: 10px;
-    margin-left: calc(-50% - 7px);
+    position: relative;
+    line-height: normal;
+    left: calc(-50% - 7px);
 `
 const DadLable = ({className, value}) => (
     <div className={className}>

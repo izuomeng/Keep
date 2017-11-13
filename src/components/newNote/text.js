@@ -40,7 +40,7 @@ class Text extends Component{
                     placeholder="添加记事..."
                     ref={this.setDomEditorRef}
                     handleKeyCommand={this.handleKeyCommand}
-                    autoCorrect="on"
+                    spellCheck
                 />
             </Wrapper>
         )

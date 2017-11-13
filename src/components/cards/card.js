@@ -1,12 +1,11 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import COLOR from '../../static/javascript/color'
 import {Editor, convertFromRaw, EditorState} from 'draft-js'
 
 const Wrapper = styled.div`
     width: 240px;
-    background: ${COLOR.CARD_BACK};
+    background: ${props => props.bgColor};
     padding: 10px 0;
     margin: 10px;
     box-sizing: border-box;
@@ -57,7 +56,7 @@ class Card extends Component {
     }
     render() {
         return (
-            <Wrapper>
+            <Wrapper bgColor={this.props.note.bgColor}>
                 <Title>
                     <Editor 
                         editorState={this.state.titleEditor} 
