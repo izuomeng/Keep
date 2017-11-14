@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import {Editor, convertFromRaw, EditorState} from 'draft-js'
+import Menus from '../commen/noteBar'
 
 const Wrapper = styled.div`
     width: 240px;
@@ -13,9 +14,12 @@ const Wrapper = styled.div`
                 0 2px 2px darkgrey;
     transition: .2s;
     border-radius: 2px;
-    &:hover{
+    &:hover {
         box-shadow: 0 0 15px 0 darkgrey,
                     0 2px 5px 0 darkgrey
+    }
+    &:hover #MenuContainer {
+        opacity: 1;
     }
 `
 const Title = styled.div`
@@ -37,6 +41,13 @@ const Body = styled.div`
     word-wrap: break-word;
     font-family: 'Roboto Slab','Times New Roman',serif;
 `
+const MenuContainer = styled.div.attrs({
+    id: 'MenuContainer'
+})`
+    padding: 0 10px;
+    transition: .3s;
+    opacity: 0;
+`
 class Card extends Component {
     static propTypes = {
         note: PropTypes.object.isRequired
@@ -48,29 +59,46 @@ class Card extends Component {
             textBlocksFromRaw = convertFromRaw(note.text)
         this.state = {
             titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
-            textEditor: EditorState.createWithContent(textBlocksFromRaw)
+            textEditor: EditorState.createWithContent(textBlocksFromRaw),
+            bgColor: note.bgColor
         }
         this.id = note.id
         this.titleOnChange = (titleEditor) => this.setState({titleEditor})
         this.textOnChange = (textEditor) => this.setState({textEditor})
+        this.onColorClick = this.onColorClick.bind(this)
+    }
+    onColorClick(color) {
+        this.setState({bgColor: color})
     }
     render() {
+        const {titleEditor, textEditor} = this.state
+        const titleText = titleEditor.getCurrentContent().getPlainText(),
+            bodyText = textEditor.getCurrentContent().getPlainText()
         return (
-            <Wrapper bgColor={this.props.note.bgColor}>
+            <Wrapper bgColor={this.state.bgColor}>
+                {titleText &&
                 <Title>
                     <Editor 
                         editorState={this.state.titleEditor} 
                         onChange={this.titleOnChange}
                         readOnly
                     />
-                </Title>
+                </Title>}
+                {bodyText && 
                 <Body>
                     <Editor 
                         editorState={this.state.textEditor} 
                         onChange={this.textOnChange}
                         readOnly
                     />
-                </Body>
+                </Body>}
+                <MenuContainer>
+                    <Menus 
+                        isInCard 
+                        bgColor={this.state.bgColor} 
+                        onColorClick={this.onColorClick}
+                    />
+                </MenuContainer>
             </Wrapper>
         )
     }

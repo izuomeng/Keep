@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import {EditorState, convertToRaw} from 'draft-js'
-import COLOR from '../../static/javascript/color'
+import COLOR from '../commen/color'
 import Title from './title'
 import Text from './text'
-import Menus from './menus'
+import Menus, {CompleteButton} from '../commen/noteBar'
 import {addNote} from '../../store/action/notes'
 import {connect} from 'react-redux'
 
@@ -27,7 +27,9 @@ const Wrapper = BeforeClick.extend`
     color: black;
     background: ${props => props.bgColor};
 `
+const MenuWrapper = styled.div`
 
+`
 class NewNote extends Component{
     constructor(props) {
         super(props)
@@ -135,10 +137,13 @@ class NewNote extends Component{
                     editorOnChange={this.textOnChange}
                     editorState={this.state.textEditorState}
                 />
-                <Menus 
-                    onColorClick={this.handleColorChange} 
-                    bgColor={this.state.bgColor}
-                />
+                <MenuWrapper data-id="newNote">
+                    <CompleteButton value='完成'/>
+                    <Menus 
+                        onColorClick={this.handleColorChange} 
+                        bgColor={this.state.bgColor}
+                    />
+                </MenuWrapper>
             </Wrapper>
         )
     }

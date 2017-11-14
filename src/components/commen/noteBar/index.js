@@ -1,15 +1,17 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import {TextButton} from '../button'
-import COLOR from '../../static/javascript/color'
+import COLOR from '../color'
 import Lable from '../lable'
 import PropTypes from 'prop-types'
-import {confirm} from '../../static/javascript/icons'
+import {confirm} from '../../../static/javascript/icons'
 
 const Wrapper = styled.div.attrs({
     'data-id': 'newNote'
 })`
-
+    display: flex;
+    justify-content: space-between;
+    max-width: 350px;
 `
 const Icon = ({className, icon, lable, children}) => (
     <div className={className} data-id='newNote'>
@@ -24,7 +26,6 @@ const StyledIcon = styled(Icon)`
     color: #747474;
     cursor: pointer;
     padding: 5px 10px;
-    margin-right: 15px;
     &:hover {
         color: black;
     }
@@ -130,6 +131,7 @@ class Menus extends Component {
         onColorClick: PropTypes.func.isRequired
     }
     render() {
+        const {isInCard} = this.props
         return (
             <Wrapper>
                 <StyledIcon icon="glyphicon glyphicon-bell" lable="提醒我"/>
@@ -142,11 +144,11 @@ class Menus extends Component {
                 <StyledIcon icon="glyphicon glyphicon-picture" lable="插入图片"/>
                 <StyledIcon icon="glyphicon glyphicon-folder-close" lable="归档"/>
                 <StyledIcon icon="glyphicon glyphicon-chevron-down" lable="更多"/>
-                <StyledIcon icon="glyphicon glyphicon-arrow-left" lable="撤销"/>
-                <StyledIcon icon="glyphicon glyphicon-arrow-right" lable="重做"/>
-                <CompleteButton value='完成'/>
+                {!isInCard&&<StyledIcon icon="glyphicon glyphicon-arrow-left" lable="撤销"/>}
+                {!isInCard&&<StyledIcon icon="glyphicon glyphicon-arrow-right" lable="重做"/>}
             </Wrapper>
         )
     }
 }
 export default Menus
+export {CompleteButton}
