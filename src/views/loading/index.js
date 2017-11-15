@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import {NoStateIndicator as Indicator} from '../../components'
-import store from '../../store'
+import {NoStateIndicator as Indicator} from '@/components'
+import store from '@/store'
 import {browserHistory} from 'react-router'
-import {requestNotes} from '../../store/action/notes'
+import {requestNotes} from '@/store/action/notes'
 
 class Loading extends Component {
     constructor(props) {

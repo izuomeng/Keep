@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Info, {Avatar} from './userInfo'
-import {removeUser} from '../../../store/action/user'
-import store from '../../../store'
+import {removeUser} from '@/store/action/user'
+import store from '@/store'
 import {browserHistory} from 'react-router'
 import Pop from '../../popup'
-import emitter from '../../../static/javascript/events'
+import emitter from '@/static/javascript/events'
 
 const SmallAvatar = Avatar.extend`
     margin: 0 10px;

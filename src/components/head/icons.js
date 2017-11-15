@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import COLOR from '../../static/javascript/color'
-import Lable from '../lable'
+import COLOR from '../commen/color'
+import Lable from '../commen/lable'
 
 const StyledLable = Lable.extend`
     top: 40px;

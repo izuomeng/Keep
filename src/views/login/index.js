@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
-import COLOR from '../../static/javascript/color'
+import COLOR from '@/static/javascript/color'
 import {Link} from 'react-router'
-import {authenticate} from '../../store/action/popInfo'
-import store from '../../store'
+import {authenticate} from '@/store/action/popInfo'
+import store from '@/store'
 import {browserHistory} from 'react-router'
 
 const setColor = (colorLogin, colorRegister) => (props) => {

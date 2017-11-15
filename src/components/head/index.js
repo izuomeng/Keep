@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import COLOR from '../../static/javascript/color'
+import COLOR from '@/static/javascript/color'
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import Menu from './menu'

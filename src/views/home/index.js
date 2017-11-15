@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {Cards, BeforeClick, NewNote} from '../../components'
+import {Cards, BeforeClick, NewNote} from '@/components'
 
 class Home extends Component {
     constructor(props) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import COLOR from '../../../static/javascript/color'
-import {NormalButton} from '../../button'
+import COLOR from '../../commen/color'
+import {NormalButton} from '../../commen/button'
 
 const Avatar = ({className, firstName, size, handleClick, children}) => (
     <div className={className} onClick={handleClick}>

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import COLOR from '../../static/javascript/color'
 import Item from './item'
 import {Link} from 'react-router'
-import {TextButton as Button} from '../button'
+import {TextButton as Button} from '../commen/button'
 
 const Title = ({className}) => (
     <div className={className}>

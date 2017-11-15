@@ -1,3 +1,3 @@
-import COLOR from '../../../static/javascript/color'
+import COLOR from '@/static/javascript/color'
 
 export default COLOR
