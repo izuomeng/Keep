@@ -8,7 +8,6 @@ const Wrapper = styled.div`
     width: 240px;
     background: ${props => props.bgColor};
     padding: 10px 0;
-    margin: 10px;
     box-sizing: border-box;
     box-shadow: 0 1px 3px darkgrey,
                 0 2px 2px darkgrey;
@@ -75,7 +74,7 @@ class Card extends Component {
         const titleText = titleEditor.getCurrentContent().getPlainText(),
             bodyText = textEditor.getCurrentContent().getPlainText()
         return (
-            <Wrapper bgColor={this.state.bgColor}>
+            <Wrapper bgColor={this.state.bgColor} data-key={this.props.mykey}>
                 {titleText &&
                 <Title>
                     <Editor 

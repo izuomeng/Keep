@@ -2,12 +2,10 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Card from './card'
+import WaterFall from '../commen/waterfall'
 
-const List = styled.div`
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    cursor: default;
+const Container = styled.div`
+    margin-top: 40px;
 `
 
 class Cards extends Component {
@@ -26,11 +24,14 @@ class Cards extends Component {
     render() {
         const {notes} = this.props
         return (
-            <List>
-                {notes.map((note) => (
-                    <Card note={note} key={note.id} />
-                ))}
-            </List>
+            <Container>
+                <WaterFall 
+                    waterDrops={notes.map((note) => (
+                        <Card note={note} key={note.id} mykey={note.id}/>
+                    ))}
+                    spacing={20}
+                />
+            </Container>
         )
     }
 }
