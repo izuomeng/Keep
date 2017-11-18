@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import Card from './card'
 import WaterFall from '../commen/waterfall'
 
 const Container = styled.div`
@@ -21,15 +20,22 @@ class Cards extends Component {
             notes: this.props.notes
         }
     }
+    componentWillReceiveProps(nextProps) {
+        this.setState({notes: nextProps.notes})
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.notes.length === this.state.notes.length) {
+            return false
+        }
+        return true
+    }
     render() {
-        const {notes} = this.props
+        const {notes} = this.state
         return (
             <Container>
                 <WaterFall 
-                    waterDrops={notes.map((note) => (
-                        <Card note={note} key={note.id} mykey={note.id}/>
-                    ))}
                     spacing={20}
+                    notes={notes}
                 />
             </Container>
         )

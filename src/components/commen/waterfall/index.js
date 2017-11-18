@@ -1,67 +1,44 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Card from '../../cards/card'
 
-const Wrapper = styled.div`
+const Wrapper = styled.div.attrs({
+    style: props => ({transform: `translate(${props.left}px, ${props.top}px)`})
+})`
     position: absolute;
-    top: ${props => props.top + 'px'};
-    left: ${props => props.left + 'px'}
+    transition: .2s;
+    transform: translateZ(0);
 `
-const hideStyle = {
-    position: 'fixed',
-    zIndex: -999,
-    visibility: 'hidden'
-}
 const containerStyle = {
     position: 'relative'
-}
-class ComputeStyle extends Component {
-    constructor(props) {
-        super(props)
-        this.DOMStyles = []
-        this.DOMContainer = {}
-    }
-    componentDidMount() {
-        const children = Array.from(this.DOMContainer.children)
-        this.DOMStyles = children.map(el => ({
-            key: el.dataset.key,
-            height: parseInt(getComputedStyle(el).height, 10),
-            width: parseInt(getComputedStyle(el).width, 10)
-        }))
-        this.props.handleStyles(this.DOMStyles)
-    }
-    render() {
-        return (
-            <div ref={ref => {this.DOMContainer = ref}} style={hideStyle}>
-                {this.props.components}
-            </div>
-        )
-    }
 }
 
 // 一个容器，放进去的子元素(props)可以自动按照瀑布流排列
 class WaterFall extends Component {
     static propTypes = {
-        waterDrops: PropTypes.array,
+        notes: PropTypes.array.isRequired
     }
     constructor(props) {
         super(props)
         this.state = {
-            isDOMGet: false,
-            waterDrops: this.props.waterDrops,
             layout: [],
-            computeFinish: false
+            computeFinish: false,
+            notes: this.props.notes,
+            containerWidth: 0
         }
-        this.getStylePromise = new Promise((resolve) => {
-            this.onStyleGet = (styles) => {
-                this.waterDropStyle = styles
-                this.setState({isDOMGet: true})
-                resolve(styles)
-            }
-        })
+        this.waterDropStyle = this.props.notes.map((v) => ({
+            width: 240,
+            height: v.height,
+            key: v.id
+        }))
         this.computeXY = this.computeXY.bind(this)
+        this.onResize = this.onResize.bind(this)
     }
     computeXY(waterDropStyle, containerStyle) {
+        if (waterDropStyle.length <= 0) {
+            return
+        }
          const columnCnt = parseInt(containerStyle.width / waterDropStyle[0].width, 10),
             layout = [],
             columns = Array(parseInt(columnCnt, 10)).fill(0),
@@ -76,36 +53,60 @@ class WaterFall extends Component {
                 key: waterDropStyle[i].key
             }
             columns[min.index] += (waterDropStyle[i].height + spacing)
-            try {
-                this.container.style.height = Math.max(...columns) + 'px'
-            } catch(e){}
         }
-        this.setState({computeFinish: true})
+        try {
+            this.container.style.height = Math.max(...columns) + 'px'
+        } catch(e){}
         return layout
     }
+    onResize() {
+        clearTimeout(this.rid)
+        const self = this
+        this.rid = setTimeout(() => {
+            const width = parseInt(getComputedStyle(self.container).width, 10)
+            this.setState({
+                layout: self.computeXY(self.waterDropStyle,{
+                    width
+                }),
+                containerWidth: width
+            })
+        }, 200)
+    }
     componentDidMount() {
-        this.container = this.refs.container
-        const containerStyle = {
-            width: parseInt(getComputedStyle(this.container).width, 10)
+        if (this.state.layout.length > 0) {
+            return
         }
-        this.layout = this.computeXY(this.waterDropStyle, containerStyle)
+        this.container = this.refs.container
+        window.addEventListener('resize', this.onResize)
+        const width = parseInt(getComputedStyle(this.container).width, 10)
+        const layout = this.computeXY(this.waterDropStyle,{width})
+        this.setState({layout, computeFinish: true, containerWidth: width})
+    }
+    componentWillReceiveProps(nextProps) {
+        const waterDropStyle = nextProps.notes.map((v) => ({
+            width: 240,
+            height: v.height,
+            key: v.id
+        }))
+        this.waterDropStyle = waterDropStyle
+        const self = this
+        const layout = this.computeXY(waterDropStyle, {
+            width: self.state.containerWidth
+        })
+        this.setState({layout, notes: nextProps.notes})
+    }
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.onResize)
     }
     render() {
-        const {isDOMGet, waterDrops, computeFinish} = this.state
+        const {computeFinish, notes, layout} = this.state
         return (
-            <div style={{width: '100%'}}>
-                {!isDOMGet && 
-                <ComputeStyle 
-                    components={waterDrops} 
-                    handleStyles={this.onStyleGet}
-                />}
-                <div style={containerStyle} ref='container'>
-                    {computeFinish && this.layout.map((v, i) => (
-                        <Wrapper top={v.top} left={v.left} key={v.key}>
-                            {waterDrops[i]}
-                        </Wrapper>
-                    ))}
-                </div>
+            <div style={containerStyle} ref='container'>
+                {computeFinish && layout.map((v, i) => (
+                    <Wrapper top={v.top} left={v.left} key={v.key}>
+                        <Card note={notes[i]}/>
+                    </Wrapper>
+                ))}
             </div>
         )
     }

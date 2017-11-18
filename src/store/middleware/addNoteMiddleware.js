@@ -13,13 +13,14 @@ export default ({dispatch}) => (next) => (action) => {
             type,
             ...note
         })
+    }else {
+        dispatch({
+            promise: axios.post('/notes',{...note}).then(res => res.data),
+            types: [
+                Types.SYNC_PENDING,
+                Types.SYNC_SUCCESS,
+                Types.SYNC_FAIL
+            ]
+        })
     }
-    dispatch({
-        promise: axios.post('/notes',{...note}).then(res => res.data),
-        types: [
-            Types.SYNC_PENDING,
-            Types.SYNC_SUCCESS,
-            Types.SYNC_FAIL
-        ]
-    })
 }

@@ -19,7 +19,8 @@ export default (state = [], action) => {
                         date: null,
                         repeat: ''
                     },
-                    deleteTime: action.deleteTime || null
+                    deleteTime: action.deleteTime || null,
+                    height: action.height || 134
                 },
                 ...restNotes
             ]

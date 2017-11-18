@@ -70,6 +70,7 @@ const BottomDiv = styled.div.attrs({
 const Container = styled.div`
     display: ${props => props.show ? 'block' : 'none'};
     position: absolute;
+    z-index: 999;
     top: 55px;
     right: 10px;
     background: #fff;

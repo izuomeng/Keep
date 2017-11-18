@@ -69,6 +69,13 @@ class Card extends Component {
     onColorClick(color) {
         this.setState({bgColor: color})
     }
+    shouldComponentUpdate(nextProps) {
+        // 未来加入更多state后有可能要判断note内容是否完全相等
+        if (nextProps.note.bgColor === this.state.bgColor) {
+            return false
+        }
+        return true
+    }
     render() {
         const {titleEditor, textEditor} = this.state
         const titleText = titleEditor.getCurrentContent().getPlainText(),

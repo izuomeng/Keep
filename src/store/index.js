@@ -28,7 +28,8 @@ const initState = {
                 repeat: ''
             },
             isDeleted: false,
-            deleteTime: new Date()
+            deleteTime: new Date(),
+            height: 134
         },
     ],
     tab: TAB.NOTE,

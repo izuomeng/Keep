@@ -7,6 +7,8 @@ import Text from './text'
 import Menus, {CompleteButton} from '../commen/noteBar'
 import {addNote} from '../../store/action/notes'
 import {connect} from 'react-redux'
+import {DoNotUpdate} from '@/lib/highOrderComponents'
+import {findDOMNode} from 'react-dom'
 
 const BeforeClick = styled.div`
     max-width: 600px;
@@ -40,16 +42,21 @@ class NewNote extends Component{
         }
         this.note = {
             id: Math.random().toString(16).slice(2, 8),
+            height: 134
         }
         this.titleOnChange = this.titleOnChange.bind(this)
         this.textOnChange = this.textOnChange.bind(this)
-        this.handleDocumentClick = this.handleDocumentClick.bind(this)
         this.handleColorChange = this.handleColorChange.bind(this)
         //set upload editorContent
         const titleContent = this.state.titleEditorState.getCurrentContent()
         this.titleContentInJs = convertToRaw(titleContent)
+        this.titlePlainText = titleContent.getPlainText()
         const textContent = this.state.textEditorState.getCurrentContent()
         this.textContentInJs = convertToRaw(textContent)
+        this.textPlainText = textContent.getPlainText()
+    }
+    componentDidMount() {
+        this.DOMContainer = findDOMNode(this.refs.container)
     }
     titleOnChange(titleEditorState) {
         const prevContent = this.state.titleEditorState.getCurrentContent(),
@@ -57,9 +64,21 @@ class NewNote extends Component{
             nextContenInJs = convertToRaw(nextContent)
         this.setState({titleEditorState})
         this.titleContentInJs = nextContenInJs
+        this.titlePlainText = nextContent.getPlainText()
         if (nextContent.getPlainText() === prevContent.getPlainText()) {
             return
         }
+        // 计算高度
+        setTimeout(() => {
+            const containerHeight = parseInt(getComputedStyle(this.DOMContainer).height, 10)
+            this.note.height = containerHeight
+            if (!nextContent.getPlainText()) {
+                this.note.height = containerHeight - 38
+            }
+            if (!this.textPlainText) {
+                this.note.height = containerHeight - 46
+            }
+        }, 0)
         // 函数截流
         clearTimeout(this.tid)
         this.tid = setTimeout(() => {
@@ -69,7 +88,7 @@ class NewNote extends Component{
                 this.textContentInJs, 
                 this.note
             )
-        }, 500)
+        }, 200)
     }
     textOnChange(textEditorState) {
         const prevContent = this.state.textEditorState.getCurrentContent(),
@@ -77,9 +96,20 @@ class NewNote extends Component{
             nextContentInJs = convertToRaw(nextContent)
         this.setState({textEditorState})
         this.textContentInJs = nextContentInJs
+        this.textPlainText = nextContent.getPlainText()
         if (nextContent.getPlainText() === prevContent.getPlainText()) {
             return
         }
+        setTimeout(() => {
+            const containerHeight = parseInt(getComputedStyle(this.DOMContainer).height, 10)
+            this.note.height = containerHeight
+            if (!nextContent.getPlainText()) {
+                this.note.height = containerHeight - 46
+            }
+            if (!this.titlePlainText) {
+                this.note.height = containerHeight - 38
+            }
+        }, 0)
         clearTimeout(this.tid)
         this.tid = setTimeout(() => {
             this.props.addNote(
@@ -88,33 +118,20 @@ class NewNote extends Component{
                 nextContentInJs, 
                 this.note
             )
-        }, 500)
-    }
-    componentDidMount() {
-        document.addEventListener('click', this.handleDocumentClick)
+        }, 200)
     }
     componentWillUnmount() {
-        document.removeEventListener('click', this.handleDocumentClick)
         const textContent = this.state.textEditorState.getCurrentContent(),
-            titleContent = this.state.titleEditorState.getCurrentContent()
-        if (textContent.getPlainText() || titleContent.getPlainText()) {
-            this.props.addNote(
-                true, 
-                this.titleContentInJs, 
-                this.textContentInJs, 
-                this.note
-            )
-        }
-    }
-    handleDocumentClick(e) {
-        if (e.target.dataset.id === 'newNote') {
-            return
-        } else if (e.target.className.indexOf('DraftStyleDefault') > -1) {
-            return
-        } else if (e.target.dataset.text) {
-            return
-        }
-        this.props.hideNewNote()
+            titleContent = this.state.titleEditorState.getCurrentContent(),
+            addNote = this.props.addNote,
+            title = this.titleContentInJs,
+            text = this.textContentInJs,
+            note = this.note
+        requestAnimationFrame(() => {
+            if (textContent.getPlainText() || titleContent.getPlainText()) {
+                addNote(true, title, text, note)
+            }
+        })
     }
     handleColorChange(color) {
         this.setState({bgColor: color})
@@ -128,7 +145,7 @@ class NewNote extends Component{
     }
     render() {
         return (
-            <Wrapper data-id="newNote" bgColor={this.state.bgColor}>
+            <Wrapper data-id="newNote" bgColor={this.state.bgColor} ref='container'>
                 <Title 
                     editorOnChange={this.titleOnChange}
                     editorState={this.state.titleEditorState}
@@ -155,5 +172,6 @@ const mapDispatch = (dispatch) => ({
     }
 })
 
-export {BeforeClick}
+const WrappedBeforeClick = DoNotUpdate(BeforeClick)
+export {WrappedBeforeClick as BeforeClick}
 export default connect(null, mapDispatch)(NewNote)

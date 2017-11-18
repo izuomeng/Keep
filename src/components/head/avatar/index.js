@@ -20,15 +20,20 @@ class User extends Component {
         this.hideInfo = this.hideInfo.bind(this)
         this.handleLogout = this.handleLogout.bind(this)
         this.unsubscribe = store.subscribe(() => {
-            emitter.emitEvent('stopLoading')
             const user = store.getState()['user']
-            if (user.logout) {
+            if (user.logout === true) {
                 this.setState({isLoading: false})
+                emitter.emitEvent('stopLoading')
                 browserHistory.push('/login')
+            } else if (user.logout === false) {
+                emitter.emitEvent('stopLoading')
             }
         })
     }
     hideInfo(e) {
+        if (!this.state.isInfoShow) {
+            return
+        }
         this.setState({isInfoShow: false})
     }
     handleLogout() {
@@ -70,7 +75,7 @@ class User extends Component {
 
 const mapState = (state) => ({
     firstName: state.user.name && state.user.name.slice(0,1),
-    name: state.user.name
+    name: state.user.name,
 })
 const mapDispatch = (dispatch) => ({
     handleLogout() {
