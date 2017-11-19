@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import {Editor, convertFromRaw, EditorState} from 'draft-js'
 import Menus from '../commen/noteBar'
+import {connect} from 'react-redux'
+import {editNote, postEditNote} from '@/store/action/notes'
 
 const Wrapper = styled.div`
     width: 240px;
@@ -59,6 +61,7 @@ class Card extends Component {
         this.state = {
             titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
             textEditor: EditorState.createWithContent(textBlocksFromRaw),
+            note,
             bgColor: note.bgColor
         }
         this.id = note.id
@@ -68,13 +71,10 @@ class Card extends Component {
     }
     onColorClick(color) {
         this.setState({bgColor: color})
-    }
-    shouldComponentUpdate(nextProps) {
-        // 未来加入更多state后有可能要判断note内容是否完全相等
-        if (nextProps.note.bgColor === this.state.bgColor) {
-            return false
-        }
-        return true
+        const newNote = {...this.state.note, bgColor: color}
+        this.props.editNote(newNote)
+        clearTimeout(this.tid)
+        this.tid = setTimeout(() => this.props.postEditnote(newNote), 500)
     }
     render() {
         const {titleEditor, textEditor} = this.state
@@ -109,4 +109,14 @@ class Card extends Component {
         )
     }
 }
-export default Card
+
+const mapDispatch = (dispatch) => ({
+    editNote(newNote) {
+        dispatch(editNote(newNote))
+    },
+    postEditnote(newNote) {
+        dispatch(postEditNote(newNote))
+    }
+})
+
+export default connect(null, mapDispatch)(Card)

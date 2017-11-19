@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Card from '../../cards/card'
+import {connect} from 'react-redux'
 
 const Wrapper = styled.div.attrs({
     style: props => ({transform: `translate(${props.left}px, ${props.top}px)`})
@@ -25,7 +26,8 @@ class WaterFall extends Component {
             layout: [],
             computeFinish: false,
             notes: this.props.notes,
-            containerWidth: 0
+            containerWidth: 0,
+            sidebar: this.props.sidebar
         }
         this.waterDropStyle = this.props.notes.map((v) => ({
             width: 240,
@@ -83,6 +85,10 @@ class WaterFall extends Component {
         this.setState({layout, computeFinish: true, containerWidth: width})
     }
     componentWillReceiveProps(nextProps) {
+        if (nextProps.sidebar !== this.state.sidebar) {
+            this.setState({sidebar: nextProps.sidebar})
+            return requestAnimationFrame(this.onResize)
+        }
         const waterDropStyle = nextProps.notes.map((v) => ({
             width: 240,
             height: v.height,
@@ -123,4 +129,8 @@ function findMin(ary) {
     }
     return min
 }
-export default WaterFall
+
+const mapState = (state) => ({
+    sidebar: state.sidebar
+})
+export default connect(mapState, null)(WaterFall)

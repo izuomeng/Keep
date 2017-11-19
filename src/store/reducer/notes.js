@@ -24,6 +24,15 @@ export default (state = [], action) => {
                 },
                 ...restNotes
             ]
+        case Types.EDIT_NOTE:
+            let nextNotes = []
+            nextNotes = state.map((v, i) => {
+                if (v.id === action.newNote.id) {
+                    return action.newNote
+                }
+                return v
+            })
+            return nextNotes
         default:
             return state
     }

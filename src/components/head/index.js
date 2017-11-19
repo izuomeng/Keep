@@ -6,7 +6,11 @@ import Menu from './menu'
 import Title from './title'
 import Search from './search'
 // import Refresh from './refresh'
-import {LayerIcon, RefreshIcon, MyReminder, SycnSuccess} from './icons'
+import {LayerIcon, 
+        RefreshIcon, 
+        MyReminder, 
+        SycnSuccess, 
+        SyncFail} from './icons'
 import Avatar from './avatar'
 import {StyledIconSnake as Snake} from '../indicator'
 
@@ -23,7 +27,7 @@ const Header = styled.header`
 class HeaderContainer extends Component {
     render() {
         const progress = this.props.syncProgress
-        if (progress === 'SUCCESS') {
+        if (progress === 'SUCCESS' || progress === 'FAIL') {
             clearTimeout(this.tid)
             this.tid = setTimeout(() => this.props.setStatic(), 1000)
         }
@@ -37,6 +41,7 @@ class HeaderContainer extends Component {
                 {(progress === 'STATIC') && <RefreshIcon />}
                 {(progress === 'PENDING') && <Snake />}
                 {(progress === 'SUCCESS') && <SycnSuccess />}
+                {(progress === 'FAIL') && <SyncFail />}
                 <LayerIcon />
                 <MyReminder />
                 <Avatar />

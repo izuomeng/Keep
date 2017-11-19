@@ -5,7 +5,7 @@ import COLOR from '../commen/color'
 import Title from './title'
 import Text from './text'
 import Menus, {CompleteButton} from '../commen/noteBar'
-import {addNote} from '../../store/action/notes'
+import {addNote} from '@/store/action/notes'
 import {connect} from 'react-redux'
 import {DoNotUpdate} from '@/lib/highOrderComponents'
 import {findDOMNode} from 'react-dom'
@@ -88,7 +88,7 @@ class NewNote extends Component{
                 this.textContentInJs, 
                 this.note
             )
-        }, 200)
+        }, 500)
     }
     textOnChange(textEditorState) {
         const prevContent = this.state.textEditorState.getCurrentContent(),
@@ -118,7 +118,7 @@ class NewNote extends Component{
                 nextContentInJs, 
                 this.note
             )
-        }, 200)
+        }, 500)
     }
     componentWillUnmount() {
         const textContent = this.state.textEditorState.getCurrentContent(),

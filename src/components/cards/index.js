@@ -31,6 +31,9 @@ class Cards extends Component {
     }
     render() {
         const {notes} = this.state
+        if (notes.length <= 0) {
+            return null
+        }
         return (
             <Container>
                 <WaterFall 

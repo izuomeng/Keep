@@ -54,9 +54,13 @@ const MyReminder = () => (
 const SycnSuccess = () => (
     <StyledSimpleIcon iconClass="glyphicon glyphicon-ok-sign" />
 )
+const SyncFail = () => (
+    <StyledSimpleIcon iconClass="glyphicon glyphicon-remove-sign" />
+)
 export {
     LayerIcon,
     RefreshIcon,
     MyReminder,
-    SycnSuccess
+    SycnSuccess,
+    SyncFail
 }
