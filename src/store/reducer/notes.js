@@ -14,6 +14,7 @@ export default (state = [], action) => {
                     text: action.text || {},
                     lable: action.lable || '',
                     isFixed: action.isFixed || false,
+                    isArchived: action.isArchived || false,
                     bgColor: action.bgColor || COLOR.WHITE,
                     reminderInfo: action.reminderInfo || {
                         date: null,

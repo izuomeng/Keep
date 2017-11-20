@@ -4,7 +4,8 @@ import {TextButton} from '../button'
 import COLOR from '../color'
 import Lable from '../lable'
 import PropTypes from 'prop-types'
-import {confirm} from '../../../static/javascript/icons'
+import {confirm} from '@/static/javascript/icons'
+import {browserHistory} from 'react-router'
 
 const Wrapper = styled.div.attrs({
     'data-id': 'newNote'
@@ -13,8 +14,8 @@ const Wrapper = styled.div.attrs({
     justify-content: space-between;
     max-width: 350px;
 `
-const Icon = ({className, icon, lable, children}) => (
-    <div className={className} data-id='newNote'>
+const Icon = ({className, icon, lable, children, handleClick = ()=>{}}) => (
+    <div className={className} data-id='newNote' onClick={handleClick}>
         <span className={icon} data-id='newNote'></span>
         {children}
         <Lable value={lable} />
@@ -45,7 +46,7 @@ const ColorBlock = styled.div`
     position: relative;
     display: inline-block;
     background-color: ${props => props.color};
-    background-image: ${props => `url(${props.bgImg})`};
+    background-image: ${props => props.bgImg ? `url(${props.bgImg})` : ''};
     background-size: contain;
     width: 26px;
     height: 26px;
@@ -131,18 +132,24 @@ class Menus extends Component {
         onColorClick: PropTypes.func.isRequired
     }
     render() {
-        const {isInCard} = this.props
+        const {isInCard, bgColor, onColorClick, onArchiveClick} = this.props
+        const path = browserHistory.getCurrentLocation().pathname,
+            archiveLable = path.indexOf('archive') > -1 ? '取消归档' : '归档'
         return (
             <Wrapper>
                 <StyledIcon icon="glyphicon glyphicon-bell" lable="提醒我"/>
                 <StyledIcon icon="glyphicon glyphicon-eye-open" lable="更改颜色">
                     <StyledPalette 
-                        handleClick={this.props.onColorClick}
-                        bgColor={this.props.bgColor}
+                        handleClick={onColorClick}
+                        bgColor={bgColor}
                     />
                 </StyledIcon>
                 <StyledIcon icon="glyphicon glyphicon-picture" lable="插入图片"/>
-                <StyledIcon icon="glyphicon glyphicon-folder-close" lable="归档"/>
+                <StyledIcon 
+                    icon="glyphicon glyphicon-folder-close" 
+                    lable={archiveLable}
+                    handleClick={onArchiveClick}
+                />
                 <StyledIcon icon="glyphicon glyphicon-chevron-down" lable="更多"/>
                 {!isInCard&&<StyledIcon icon="glyphicon glyphicon-arrow-left" lable="撤销"/>}
                 {!isInCard&&<StyledIcon icon="glyphicon glyphicon-arrow-right" lable="重做"/>}

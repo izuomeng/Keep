@@ -15,7 +15,6 @@ const StyledAside = styled(Aside)`
     width: 280px;
     height: calc(100vh - 64px);
     overflow: auto;
-    float: left;
     transition: .2s;
     will-change: transform;
     margin-left: ${props => props.show ? '0' : '-280px'}

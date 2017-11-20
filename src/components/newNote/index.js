@@ -47,6 +47,7 @@ class NewNote extends Component{
         this.titleOnChange = this.titleOnChange.bind(this)
         this.textOnChange = this.textOnChange.bind(this)
         this.handleColorChange = this.handleColorChange.bind(this)
+        this.handleArchiveChange = this.handleArchiveChange.bind(this)
         //set upload editorContent
         const titleContent = this.state.titleEditorState.getCurrentContent()
         this.titleContentInJs = convertToRaw(titleContent)
@@ -120,15 +121,16 @@ class NewNote extends Component{
             )
         }, 500)
     }
+    isBlank() {
+        return !this.titlePlainText && !this.textPlainText
+    }
     componentWillUnmount() {
-        const textContent = this.state.textEditorState.getCurrentContent(),
-            titleContent = this.state.titleEditorState.getCurrentContent(),
-            addNote = this.props.addNote,
+        const addNote = this.props.addNote,
             title = this.titleContentInJs,
             text = this.textContentInJs,
             note = this.note
         requestAnimationFrame(() => {
-            if (textContent.getPlainText() || titleContent.getPlainText()) {
+            if (!this.isBlank()) {
                 addNote(true, title, text, note)
             }
         })
@@ -142,6 +144,19 @@ class NewNote extends Component{
             this.textContentInJs,
             this.note
         )
+    }
+    handleArchiveChange() {
+        if (this.isBlank()) {
+            return
+        }
+        this.note.isArchived = true
+        this.props.addNote(
+            true, 
+            this.titleContentInJs,
+            this.textContentInJs,
+            this.note
+        )
+        this.props.hideEditor()
     }
     render() {
         return (
@@ -157,8 +172,9 @@ class NewNote extends Component{
                 <MenuWrapper data-id="newNote">
                     <CompleteButton value='完成'/>
                     <Menus 
-                        onColorClick={this.handleColorChange} 
                         bgColor={this.state.bgColor}
+                        onColorClick={this.handleColorChange}
+                        onArchiveClick={this.handleArchiveChange}
                     />
                 </MenuWrapper>
             </Wrapper>

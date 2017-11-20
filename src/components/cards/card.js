@@ -67,14 +67,27 @@ class Card extends Component {
         this.id = note.id
         this.titleOnChange = (titleEditor) => this.setState({titleEditor})
         this.textOnChange = (textEditor) => this.setState({textEditor})
+        this.dispatchNewNote = this.dispatchNewNote.bind(this)
         this.onColorClick = this.onColorClick.bind(this)
+        this.onArchiveClick = this.onArchiveClick.bind(this)
     }
-    onColorClick(color) {
-        this.setState({bgColor: color})
-        const newNote = {...this.state.note, bgColor: color}
+    dispatchNewNote(newNote) {
         this.props.editNote(newNote)
         clearTimeout(this.tid)
-        this.tid = setTimeout(() => this.props.postEditnote(newNote), 500)
+        this.tid = setTimeout(() => this.props.postEditnote(newNote), 200)
+    }
+    onColorClick(color) {
+        if (color === this.state.bgColor) {
+            return
+        }
+        const newNote = {...this.state.note, bgColor: color}
+        this.setState({bgColor: color, note: newNote})
+        this.dispatchNewNote(newNote)
+    }
+    onArchiveClick() {
+        const {isArchived} = this.state.note
+        const newNote = {...this.state.note, isArchived: !isArchived}
+        this.dispatchNewNote(newNote)
     }
     render() {
         const {titleEditor, textEditor} = this.state
@@ -103,6 +116,7 @@ class Card extends Component {
                         isInCard 
                         bgColor={this.state.bgColor} 
                         onColorClick={this.onColorClick}
+                        onArchiveClick={this.onArchiveClick}
                     />
                 </MenuContainer>
             </Wrapper>

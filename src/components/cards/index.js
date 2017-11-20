@@ -1,11 +1,6 @@
 import React, {Component} from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import WaterFall from '../commen/waterfall'
-
-const Container = styled.div`
-    margin-top: 40px;
-`
 
 class Cards extends Component {
     static propTypes = {
@@ -35,12 +30,10 @@ class Cards extends Component {
             return null
         }
         return (
-            <Container>
-                <WaterFall 
-                    spacing={20}
-                    notes={notes}
-                />
-            </Container>
+            <WaterFall 
+                spacing={20}
+                notes={notes}
+            />
         )
     }
 }

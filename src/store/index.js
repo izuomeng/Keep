@@ -21,13 +21,12 @@ const initState = {
             text: {},   //same as title
             lable: '',
             isFixed: false,
+            isArchived: false,
             bgColor: COLOR.WHITE,
-            isReminder: false,
             reminderInfo: {
                 date: new Date(),
                 repeat: ''
             },
-            isDeleted: false,
             deleteTime: new Date(),
             height: 134
         },

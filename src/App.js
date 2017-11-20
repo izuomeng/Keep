@@ -6,18 +6,16 @@ import styled from 'styled-components'
 import {FullScreenIndicator as Indicator} from './components'
 import {PopUp} from './components'
 
-const Container = ({className, children}) => (
-	<div className={className}>
-		{children}
-	</div>
-)
-
-const StyledContainer = styled(Container)`
-	height: calc(100vh - 64px);
-	overflow-x: hidden;
-	overflow-y: auto;
-	padding: 20px;
+const Container = styled.div`
+	display: flex;
 `
+const Main = styled.div`
+	height: calc(100vh - 64px);
+	overflow-y: scroll;
+	padding: 20px;
+	flex: 1;
+`
+
 class App extends Component {
 	render() {
 		return (
@@ -25,10 +23,12 @@ class App extends Component {
 				<Header>
 					Keep
 				</Header>
-				<Sidebar />
-				<StyledContainer>
-					{this.props.children}
-				</StyledContainer>
+				<Container>
+					<Sidebar />
+					<Main>
+						{this.props.children}
+					</Main>
+				</Container>
 				<PopUp />
 				<Indicator />
 			</div>

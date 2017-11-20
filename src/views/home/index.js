@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {Cards, BeforeClick, NewNote} from '@/components'
+import styled from 'styled-components'
+
+const CardsConntainer = styled.div`
+    margin-top: 40px;
+`
 
 class Home extends Component {
     constructor(props) {
@@ -10,6 +15,7 @@ class Home extends Component {
         }
         this.handleClick = this.handleClick.bind(this)
         this.handleDocumentClick = this.handleDocumentClick.bind(this)
+        this.hideEditor = this.hideEditor.bind(this)
     }
     handleClick() {
         if (!this.state.isBeforeClick) {
@@ -30,6 +36,9 @@ class Home extends Component {
         }
         this.setState({isBeforeClick: true})
     }
+    hideEditor() {
+        this.setState({isBeforeClick: true})
+    }
     componentDidMount() {
         document.addEventListener('click', this.handleDocumentClick)
     }
@@ -40,20 +49,23 @@ class Home extends Component {
         const {isBeforeClick} = this.state
         return (
             <div>
-                {isBeforeClick && <BeforeClick 
-                                        onClick={this.handleClick} 
-                                        data-id="newNote">
-                                        添加记事...
-                                  </BeforeClick>}
-                {!isBeforeClick && <NewNote />}
-                <Cards notes={this.props.notes} />
+                {isBeforeClick && 
+                <BeforeClick 
+                    onClick={this.handleClick} 
+                    data-id="newNote">
+                    添加记事...
+                </BeforeClick>}
+                {!isBeforeClick && <NewNote hideEditor={this.hideEditor} />}
+                <CardsConntainer>
+                    <Cards notes={this.props.notes} />
+                </CardsConntainer>
             </div>
         )
     }
 }
 
 const mapState = (state) => ({
-    notes: state.notes
+    notes: state.notes.filter((v) => !v.isArchived && !v.deleteTime)
 })
 
 export default connect(mapState, null)(Home)

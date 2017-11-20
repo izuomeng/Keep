@@ -11,9 +11,6 @@ const Wrapper = styled.div.attrs({
     transition: .2s;
     transform: translateZ(0);
 `
-const containerStyle = {
-    position: 'relative'
-}
 
 // 一个容器，放进去的子元素(props)可以自动按照瀑布流排列
 class WaterFall extends Component {
@@ -107,7 +104,7 @@ class WaterFall extends Component {
     render() {
         const {computeFinish, notes, layout} = this.state
         return (
-            <div style={containerStyle} ref='container'>
+            <div style={{position: 'relative'}} ref='container'>
                 {computeFinish && layout.map((v, i) => (
                     <Wrapper top={v.top} left={v.left} key={v.key}>
                         <Card note={notes[i]}/>
