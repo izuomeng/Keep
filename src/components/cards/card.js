@@ -7,7 +7,7 @@ import {connect} from 'react-redux'
 import {editNote, postEditNote} from '@/store/action/notes'
 
 const Wrapper = styled.div`
-    width: 240px;
+    width: ${props => props.isList ? '' : '240px'};
     background: ${props => props.bgColor};
     padding: 10px 0;
     box-sizing: border-box;
@@ -53,6 +53,9 @@ class Card extends Component {
     static propTypes = {
         note: PropTypes.object.isRequired
     }
+    static defaultProps = {
+        isList: false
+    }
     constructor(props) {
         super(props)
         const {note} = this.props
@@ -94,7 +97,11 @@ class Card extends Component {
         const titleText = titleEditor.getCurrentContent().getPlainText(),
             bodyText = textEditor.getCurrentContent().getPlainText()
         return (
-            <Wrapper bgColor={this.state.bgColor} data-key={this.props.mykey}>
+            <Wrapper 
+                bgColor={this.state.bgColor} 
+                data-key={this.props.mykey}
+                isList={this.props.isList}
+            >
                 {titleText &&
                 <Title>
                     <Editor 

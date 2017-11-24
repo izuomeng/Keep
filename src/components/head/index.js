@@ -5,14 +5,15 @@ import {connect} from 'react-redux'
 import Menu from './menu'
 import Title from './title'
 import Search from './search'
-// import Refresh from './refresh'
-import {LayerIcon, 
-        RefreshIcon, 
-        MyReminder, 
-        SycnSuccess, 
+import {LayerIcon,
+        LayerIconII,
+        RefreshIcon,
+        MyReminder,
+        SycnSuccess,
         SyncFail} from './icons'
 import Avatar from './avatar'
 import {StyledIconSnake as Snake} from '../indicator'
+import {toggleLayout} from '@/store/action/app'
 
 const Header = styled.header`
     width: 100%;
@@ -25,8 +26,20 @@ const Header = styled.header`
     align-items: center;
 `
 class HeaderContainer extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            isWaterFall: this.props.isWaterFall
+        }
+        this.onLayerClick = this.onLayerClick.bind(this)
+    }
+    onLayerClick() {
+        this.setState({isWaterFall: !this.state.isWaterFall})
+        requestAnimationFrame(this.props.toggleLayout)
+    }
     render() {
         const progress = this.props.syncProgress
+        const {isWaterFall} = this.state
         if (progress === 'SUCCESS' || progress === 'FAIL') {
             clearTimeout(this.tid)
             this.tid = setTimeout(() => this.props.setStatic(), 1000)
@@ -42,7 +55,10 @@ class HeaderContainer extends Component {
                 {(progress === 'PENDING') && <Snake />}
                 {(progress === 'SUCCESS') && <SycnSuccess />}
                 {(progress === 'FAIL') && <SyncFail />}
-                <LayerIcon />
+                {isWaterFall ? 
+                    <LayerIcon handleClick={this.onLayerClick} /> :
+                    <LayerIconII handleClick={this.onLayerClick} />
+                }
                 <MyReminder />
                 <Avatar />
             </Header>
@@ -51,11 +67,15 @@ class HeaderContainer extends Component {
 }
 
 const mapState = (state) => ({
-    syncProgress: state.syncProgress
+    syncProgress: state.app.syncProgress,
+    isWaterFall: state.app.isWaterFall
 })
 const mapDispatch = (dispatch) => ({
     setStatic() {
         dispatch({type: 'SYNC_STATIC'})
+    },
+    toggleLayout() {
+        dispatch(toggleLayout())
     }
 })
 

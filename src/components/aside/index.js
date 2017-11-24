@@ -31,6 +31,6 @@ class SideBar extends Component {
     }
 }
 const mapState = (state) => ({
-    show: state.sidebar
+    show: state.app.sidebar
 })
 export default connect(mapState, null)(SideBar)

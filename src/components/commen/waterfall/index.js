@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Card from '../../cards/card'
 import {connect} from 'react-redux'
+import shouldUpdate from '@/static/javascript/shouldUpdate'
 
 const Wrapper = styled.div.attrs({
-    style: props => ({transform: `translate(${props.left}px, ${props.top}px)`})
+    style: props => ({transform: `translate(${props.left}px, ${props.top}px`})
 })`
     position: absolute;
     transition: .2s;
-    transform: translateZ(0);
 `
 
 // 一个容器，放进去的子元素(props)可以自动按照瀑布流排列
@@ -19,20 +19,25 @@ class WaterFall extends Component {
     }
     constructor(props) {
         super(props)
-        this.state = {
-            layout: [],
-            computeFinish: false,
-            notes: this.props.notes,
-            containerWidth: 0,
-            sidebar: this.props.sidebar
-        }
         this.waterDropStyle = this.props.notes.map((v) => ({
             width: 240,
             height: v.height,
             key: v.id
         }))
+        const windowWidth = window.innerWidth || document.documentElement.clientWidth || 
+                document.body.clientWidth
+        this.containerWidth = this.props.sidebar ? windowWidth - 320 : windowWidth - 40
+        const layout = this.computeXY(this.waterDropStyle,{width: this.containerWidth})
+        this.state = {
+            layout: layout || [],
+            notes: this.props.notes,
+            containerWidth: 0,
+            sidebar: this.props.sidebar
+        }
         this.computeXY = this.computeXY.bind(this)
         this.onResize = this.onResize.bind(this)
+        this.shouldComponentUpdate = shouldUpdate.bind(this)
+        window.addEventListener('resize', this.onResize)
     }
     computeXY(waterDropStyle, containerStyle) {
         if (waterDropStyle.length <= 0) {
@@ -53,33 +58,21 @@ class WaterFall extends Component {
             }
             columns[min.index] += (waterDropStyle[i].height + spacing)
         }
-        try {
-            this.container.style.height = Math.max(...columns) + 'px'
-        } catch(e){}
         return layout
     }
     onResize() {
         clearTimeout(this.rid)
         const self = this
+        const windowWidth = window.innerWidth || document.documentElement.clientWidth || 
+            document.body.clientWidth
+        this.containerWidth = this.props.sidebar ? windowWidth - 320 : windowWidth - 40
         this.rid = setTimeout(() => {
-            const width = parseInt(getComputedStyle(self.container).width, 10)
             this.setState({
                 layout: self.computeXY(self.waterDropStyle,{
-                    width
-                }),
-                containerWidth: width
+                    width: this.containerWidth
+                })
             })
         }, 200)
-    }
-    componentDidMount() {
-        if (this.state.layout.length > 0) {
-            return
-        }
-        this.container = this.refs.container
-        window.addEventListener('resize', this.onResize)
-        const width = parseInt(getComputedStyle(this.container).width, 10)
-        const layout = this.computeXY(this.waterDropStyle,{width})
-        this.setState({layout, computeFinish: true, containerWidth: width})
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.sidebar !== this.state.sidebar) {
@@ -92,20 +85,18 @@ class WaterFall extends Component {
             key: v.id
         }))
         this.waterDropStyle = waterDropStyle
-        const self = this
-        const layout = this.computeXY(waterDropStyle, {
-            width: self.state.containerWidth
-        })
+        const width = this.containerWidth
+        const layout = this.computeXY(waterDropStyle, {width})
         this.setState({layout, notes: nextProps.notes})
     }
     componentWillUnmount() {
         window.removeEventListener('resize', this.onResize)
     }
     render() {
-        const {computeFinish, notes, layout} = this.state
+        const {notes, layout} = this.state
         return (
             <div style={{position: 'relative'}} ref='container'>
-                {computeFinish && layout.map((v, i) => (
+                {layout.map((v, i) => (
                     <Wrapper top={v.top} left={v.left} key={v.key}>
                         <Card note={notes[i]}/>
                     </Wrapper>
@@ -128,6 +119,6 @@ function findMin(ary) {
 }
 
 const mapState = (state) => ({
-    sidebar: state.sidebar
+    sidebar: state.app.sidebar
 })
 export default connect(mapState, null)(WaterFall)

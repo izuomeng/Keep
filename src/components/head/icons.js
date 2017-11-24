@@ -9,8 +9,8 @@ const StyledLable = Lable.extend`
     margin-left: -2px; 
 `
 
-const Icon = ({className, iconClass, lable}) => (
-    <div className={className}>
+const Icon = ({className, iconClass, lable, handleClick = ()=>{}}) => (
+    <div className={className} onMouseDown={handleClick}>
         <span className={iconClass}></span>
         <StyledLable value={lable} />
     </div>
@@ -39,17 +39,11 @@ const StyledIcon = styled(Icon)`
         color: black
     }
     &:hover>div{
-        display: inline-block;
+        visibility: visible;
     }
 `
-const LayerIcon = () => (
-    <StyledIcon iconClass="glyphicon glyphicon-th-list" lable="切换布局" />
-)
-const RefreshIcon = () => (
-    <StyledIcon iconClass="glyphicon glyphicon-repeat" lable="刷新" />
-)
-const MyReminder = () => (
-    <StyledIcon iconClass="glyphicon glyphicon-time" lable="通知" />
+const iconFactory = (iconClass, lable) => ({handleClick}) => (
+    <StyledIcon iconClass={iconClass} lable={lable} handleClick={handleClick}/>
 )
 const SycnSuccess = () => (
     <StyledSimpleIcon iconClass="glyphicon glyphicon-ok-sign" />
@@ -57,8 +51,14 @@ const SycnSuccess = () => (
 const SyncFail = () => (
     <StyledSimpleIcon iconClass="glyphicon glyphicon-remove-sign" />
 )
+const LayerIcon = iconFactory('glyphicon glyphicon-th-list', '切换布局')
+const LayerIconII = iconFactory('glyphicon glyphicon-th', '切换布局')
+const RefreshIcon = iconFactory('glyphicon glyphicon-repeat', '刷新')
+const MyReminder = iconFactory('glyphicon glyphicon-time', '通知')
+
 export {
     LayerIcon,
+    LayerIconII,
     RefreshIcon,
     MyReminder,
     SycnSuccess,

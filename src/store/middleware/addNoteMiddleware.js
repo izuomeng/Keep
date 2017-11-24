@@ -1,6 +1,6 @@
 // when get addNote action, post the note to the server
 import {ADD_NOTE} from '../actionTypes/notes'
-import * as Types from '../actionTypes/syncProgress'
+import * as Types from '../actionTypes/app'
 import axios from 'axios'
 
 export default ({dispatch}) => (next) => (action) => {

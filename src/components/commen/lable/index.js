@@ -20,8 +20,10 @@ const DadLable = ({className, value}) => (
 )
 
 const StyledDadLable = styled(DadLable)`
-    display: none;
+    visibility: hidden;
+    display: inline-block;
     position: absolute;
+    z-index: 999;
     top: 30px;
 `
 

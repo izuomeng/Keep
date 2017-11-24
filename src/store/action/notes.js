@@ -3,7 +3,7 @@ import {FILL_NOTES} from '../actionTypes/notes'
 import {ADD_USER} from '../actionTypes/user'
 import {INTERNET_ERROR} from '../actionTypes/popInfo'
 import axios from 'axios'
-import {SYNC_PENDING, SYNC_SUCCESS, SYNC_FAIL} from '../actionTypes/syncProgress'
+import {SYNC_PENDING, SYNC_SUCCESS, SYNC_FAIL} from '../actionTypes/app'
 
 export const fillNotes = (notes = []) => ({
     type: Types.FILL_NOTES,

@@ -3,10 +3,8 @@ import COLOR from '../static/javascript/color'
 import TAB from '../static/javascript/tab'
 import noteReducer from './reducer/notes'
 import userReducer from './reducer/user'
-import tabReducer from './reducer/tab'
-import sidebarReducer from './reducer/sidebar'
 import popInfoReducer from './reducer/popInfo'
-import syncProgressReducer from './reducer/syncProgress'
+import appReducer from './reducer/app'
 import promiseMiddleware from './middleware/promiseMiddleware'
 import addNoteMidleware from './middleware/addNoteMiddleware'
 
@@ -31,13 +29,16 @@ const initState = {
             height: 134
         },
     ],
-    tab: TAB.NOTE,
-    sidebar: true,
     popInfo: {
         type: '',
         message: ''
     },
-    syncProgress: 'STATIC',
+    app: {
+        tab: TAB.NOTE,
+        sidebar: true,
+        syncProgress: 'STATIC',
+        isWaterFall: true,
+    }
 }
 
 const win = window,
@@ -49,10 +50,8 @@ const win = window,
 const reducer = combineReducers({
     notes: noteReducer,
     user: userReducer,
-    tab: tabReducer,
-    sidebar: sidebarReducer,
     popInfo: popInfoReducer,
-    syncProgress: syncProgressReducer
+    app: appReducer
 })
 
 const storeEnhancers = compose(
