@@ -95,7 +95,7 @@ class WaterFall extends Component {
     render() {
         const {notes, layout} = this.state
         return (
-            <div style={{position: 'relative'}} ref='container'>
+            <div style={{position: 'relative'}}>
                 {layout.map((v, i) => (
                     <Wrapper top={v.top} left={v.left} key={v.key}>
                         <Card note={notes[i]}/>

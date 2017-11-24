@@ -1,14 +1,15 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
+import {findDOMNode} from 'react-dom'
+import {connect} from 'react-redux'
 import {EditorState, convertToRaw} from 'draft-js'
 import COLOR from '../commen/color'
 import Title from './title'
 import Text from './text'
 import Menus, {CompleteButton} from '../commen/noteBar'
 import {addNote} from '@/store/action/notes'
-import {connect} from 'react-redux'
 import {DoNotUpdate} from '@/lib/highOrderComponents'
-import {findDOMNode} from 'react-dom'
+import shouldUpdate from '@/static/javascript/shouldUpdate'
 
 const BeforeClick = styled.div`
     max-width: 600px;
@@ -48,6 +49,8 @@ class NewNote extends Component{
         this.textOnChange = this.textOnChange.bind(this)
         this.handleColorChange = this.handleColorChange.bind(this)
         this.handleArchiveChange = this.handleArchiveChange.bind(this)
+        this.getContainer = this.getContainer.bind(this)
+        this.shouldComponentUpdate = shouldUpdate.bind(this)
         //set upload editorContent
         const titleContent = this.state.titleEditorState.getCurrentContent()
         this.titleContentInJs = convertToRaw(titleContent)
@@ -56,8 +59,8 @@ class NewNote extends Component{
         this.textContentInJs = convertToRaw(textContent)
         this.textPlainText = textContent.getPlainText()
     }
-    componentDidMount() {
-        this.DOMContainer = findDOMNode(this.refs.container)
+    getContainer(ref) {
+        this.DOMContainer = findDOMNode(ref)
     }
     titleOnChange(titleEditorState) {
         const prevContent = this.state.titleEditorState.getCurrentContent(),
@@ -160,7 +163,7 @@ class NewNote extends Component{
     }
     render() {
         return (
-            <Wrapper data-id="newNote" bgColor={this.state.bgColor} ref='container'>
+            <Wrapper data-id="newNote" bgColor={this.state.bgColor} ref={this.getContainer}>
                 <Title 
                     editorOnChange={this.titleOnChange}
                     editorState={this.state.titleEditorState}

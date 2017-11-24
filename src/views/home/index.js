@@ -11,7 +11,8 @@ class Home extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isBeforeClick: true
+            isBeforeClick: true,
+            asyncRender: false
         }
         this.handleClick = this.handleClick.bind(this)
         this.handleDocumentClick = this.handleDocumentClick.bind(this)
@@ -40,6 +41,7 @@ class Home extends Component {
         this.setState({isBeforeClick: true})
     }
     componentDidMount() {
+        setTimeout(() => this.setState({asyncRender: true}), 0)
         document.addEventListener('click', this.handleDocumentClick)
     }
     componentWillUnmount() {
@@ -56,9 +58,9 @@ class Home extends Component {
                     添加记事...
                 </BeforeClick>}
                 {!isBeforeClick && <NewNote hideEditor={this.hideEditor} />}
-                <CardsConntainer>
+                {this.state.asyncRender && <CardsConntainer>
                     <Cards notes={this.props.notes} />
-                </CardsConntainer>
+                </CardsConntainer>}
             </div>
         )
     }

@@ -13,11 +13,20 @@ const Title = styled.div`
     color: ${COLOR.SIDEBAR_TEXT}
 `
 class Archive extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            asyncRender: false
+        }
+    }
+    componentDidMount() {
+        setTimeout(() => this.setState({asyncRender: true}))
+    }
     render() {
         return (
             <Container>
                 <Title>归档</Title>
-                <Cards notes={this.props.notes} />
+                {this.state.asyncRender && <Cards notes={this.props.notes} />}
             </Container>
         )
     }

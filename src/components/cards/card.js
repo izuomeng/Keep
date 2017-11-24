@@ -48,6 +48,7 @@ const MenuContainer = styled.div.attrs({
     padding: 0 10px;
     transition: .3s;
     opacity: 0;
+    height: 30px;
 `
 class Card extends Component {
     static propTypes = {
@@ -65,7 +66,8 @@ class Card extends Component {
             titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
             textEditor: EditorState.createWithContent(textBlocksFromRaw),
             note,
-            bgColor: note.bgColor
+            bgColor: note.bgColor,
+            asyncRender: false
         }
         this.id = note.id
         this.titleOnChange = (titleEditor) => this.setState({titleEditor})
@@ -91,6 +93,10 @@ class Card extends Component {
         const {isArchived} = this.state.note
         const newNote = {...this.state.note, isArchived: !isArchived}
         this.dispatchNewNote(newNote)
+    }
+    componentDidMount() {
+        console.log('mount')
+        setTimeout(() => this.setState({asyncRender: true}), 0)
     }
     render() {
         const {titleEditor, textEditor} = this.state
@@ -119,12 +125,12 @@ class Card extends Component {
                     />
                 </Body>}
                 <MenuContainer>
-                    <Menus 
+                {this.state.asyncRender && <Menus 
                         isInCard 
                         bgColor={this.state.bgColor} 
                         onColorClick={this.onColorClick}
                         onArchiveClick={this.onArchiveClick}
-                    />
+                    />}
                 </MenuContainer>
             </Wrapper>
         )
