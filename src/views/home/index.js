@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {Cards, BeforeClick, NewNote} from '@/components'
 import styled from 'styled-components'
+import {Cards, BeforeClick, NewNote} from '@/components'
 
 const CardsConntainer = styled.div`
     margin-top: 40px;

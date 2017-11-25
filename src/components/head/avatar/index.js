@@ -5,7 +5,7 @@ import {removeUser} from '@/store/action/user'
 import store from '@/store'
 import {browserHistory} from 'react-router'
 import Pop from '../../popup'
-import emitter from '@/static/javascript/events'
+import emitter from '@/lib/events'
 
 const SmallAvatar = Avatar.extend`
     margin: 0 10px;
@@ -22,7 +22,6 @@ class User extends Component {
         this.unsubscribe = store.subscribe(() => {
             const user = store.getState()['user']
             if (user.logout === true) {
-                this.setState({isLoading: false})
                 emitter.emitEvent('stopLoading')
                 browserHistory.push('/login')
             } else if (user.logout === false) {
@@ -66,7 +65,7 @@ class User extends Component {
                         show={this.state.isInfoShow} 
                         name={name}
                         handleLogout = {this.handleLogout}
-                        />
+                    />
                 </SmallAvatar>
             </div>
         )

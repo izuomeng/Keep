@@ -5,6 +5,7 @@ import FullScreenIndicator, {NoStateIndicator} from './indicator'
 import Cards from './cards'
 import {BeforeClick} from './newNote'
 import NewNote from './newNote'
+import More from './commen/noteBar/more'
 
 export {
     Sidebar, 
@@ -15,5 +16,6 @@ export {
     FullScreenIndicator,
     Cards,
     BeforeClick,
-    NewNote
+    NewNote,
+    More
 }

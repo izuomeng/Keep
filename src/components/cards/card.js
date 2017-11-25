@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import {Editor, convertFromRaw, EditorState} from 'draft-js'
-import Menus from '../commen/noteBar'
 import {connect} from 'react-redux'
+import Menus from '../commen/noteBar'
 import {editNote, postEditNote} from '@/store/action/notes'
 
 const Wrapper = styled.div`
@@ -95,7 +95,6 @@ class Card extends Component {
         this.dispatchNewNote(newNote)
     }
     componentDidMount() {
-        console.log('mount')
         setTimeout(() => this.setState({asyncRender: true}), 0)
     }
     render() {

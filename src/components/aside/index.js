@@ -13,20 +13,28 @@ const Aside = ({className, children, show}) => (
 
 const StyledAside = styled(Aside)`
     width: 280px;
-    height: calc(100vh - 64px);
-    overflow: auto;
-    transition: .2s;
+    font-size: 14px;
+    height: 100%;
+    overflow: scroll;
     will-change: transform;
-    margin-left: ${props => props.show ? '0' : '-280px'}
+`
+const Container = styled.div`
+    height: calc(100vh - 64px);
+    transition: .2s;
+    position: absolute;
+    top: 64px;
+    left: ${props => props.show ? '0' : '-280px'};
 `
 class SideBar extends Component {
     render() {
         return (
-            <StyledAside show={this.props.show}>
-                <Top />
-                <Tags />
-                <Trash />
-            </StyledAside>
+            <Container show={this.props.show}>
+                <StyledAside>
+                    <Top />
+                    <Tags />
+                    <Trash />
+                </StyledAside>
+            </Container>
         )
     }
 }

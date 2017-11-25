@@ -1,36 +1,39 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
+import {connect} from 'react-redux'
 import './static/css/App.css'
 import './static/css/Draft.css'
-import {Header, Sidebar} from './components'
-import styled from 'styled-components'
-import {FullScreenIndicator as Indicator} from './components'
-import {PopUp} from './components'
+import {
+	Header,
+	Sidebar,
+	PopUp,
+	FullScreenIndicator as Indicator,
+	More
+} from './components'
 
 const Container = styled.div`
-	display: flex;
+	padding-left: ${props => props.sidebar ? '300px' : '20px'};
+	padding-top: 80px;
+	transition: .2s;
 `
-const Main = styled.div`
-	height: calc(100vh - 64px);
-	overflow-y: scroll;
-	padding: 20px;
-	flex: 1;
-`
+const mapState = (state) => ({
+	sidebar: state.app.sidebar
+})
+const WrappedContainer = connect(mapState, null)(Container)
 
 class App extends Component {
 	render() {
 		return (
 			<div className="App">
 				<Header>
-					Keep
-				</Header>
-				<Container>
 					<Sidebar />
-					<Main>
-						{this.props.children}
-					</Main>
-				</Container>
+				</Header>
+				<WrappedContainer>
+					{this.props.children}
+				</WrappedContainer>
 				<PopUp />
 				<Indicator />
+				<More />
 			</div>
 		)
 	}

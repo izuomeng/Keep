@@ -9,7 +9,7 @@ import Text from './text'
 import Menus, {CompleteButton} from '../commen/noteBar'
 import {addNote} from '@/store/action/notes'
 import {DoNotUpdate} from '@/lib/highOrderComponents'
-import shouldUpdate from '@/static/javascript/shouldUpdate'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const BeforeClick = styled.div`
     max-width: 600px;

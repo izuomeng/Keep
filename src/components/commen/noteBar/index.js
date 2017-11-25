@@ -5,7 +5,6 @@ import {browserHistory} from 'react-router'
 import {TextButton} from '../button'
 import Palette from './palette'
 import Icon from './icon'
-import More from './more'
 
 const Wrapper = styled.div.attrs({
     'data-id': 'newNote'
@@ -25,14 +24,10 @@ class Menus extends Component {
     }
     constructor(props) {
         super(props)
-        this.state = {
-            isMoreShow: false
-        }
         this.onMoreClick = this.onMoreClick.bind(this)
     }
     onMoreClick() {
-        const current = this.state.isMoreShow
-        this.setState({isMoreShow: !current})
+        
     }
     render() {
         const {isInCard, bgColor, onColorClick, onArchiveClick} = this.props
@@ -58,7 +53,6 @@ class Menus extends Component {
                     lable="更多"
                     handleClick={this.onMoreClick}
                 >
-                    <More show={this.state.isMoreShow} />
                 </Icon>
                 {!isInCard&&<Icon icon="glyphicon glyphicon-arrow-left" lable="撤销"/>}
                 {!isInCard&&<Icon icon="glyphicon glyphicon-arrow-right" lable="重做"/>}

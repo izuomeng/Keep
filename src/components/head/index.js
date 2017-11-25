@@ -16,6 +16,7 @@ import {StyledIconSnake as Snake} from '../indicator'
 import {toggleLayout} from '@/store/action/app'
 
 const Header = styled.header`
+    z-index: 990;
     width: 100%;
     background-color: ${COLOR.HEAD};
     padding: 8px;
@@ -24,6 +25,7 @@ const Header = styled.header`
     display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    position: fixed;
 `
 class HeaderContainer extends Component {
     constructor(props) {
@@ -48,7 +50,7 @@ class HeaderContainer extends Component {
             <Header>
                 <Menu />
                 <Title>
-                    {this.props.children}
+                    Keep
                 </Title>
                 <Search />
                 {(progress === 'STATIC') && <RefreshIcon />}
@@ -61,6 +63,7 @@ class HeaderContainer extends Component {
                 }
                 <MyReminder />
                 <Avatar />
+                {this.props.children}
             </Header>
         )
     }

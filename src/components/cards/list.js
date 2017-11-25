@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Card from './card'
-import shouldUpdate from '@/static/javascript/shouldUpdate'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Container = styled.div`
 

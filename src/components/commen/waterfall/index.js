@@ -1,17 +1,21 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Card from '../../cards/card'
 import {connect} from 'react-redux'
-import shouldUpdate from '@/static/javascript/shouldUpdate'
+import Card from '../../cards/card'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Wrapper = styled.div.attrs({
     style: props => ({transform: `translate(${props.left}px, ${props.top}px`})
 })`
     position: absolute;
     transition: .2s;
+    will-change: transform;
 `
-
+const Container = styled.div`
+    position: relative;
+    height: ${props => props.height + 'px'}
+`
 // 一个容器，放进去的子元素(props)可以自动按照瀑布流排列
 class WaterFall extends Component {
     static propTypes = {
@@ -58,6 +62,7 @@ class WaterFall extends Component {
             }
             columns[min.index] += (waterDropStyle[i].height + spacing)
         }
+        this.height = Math.max(...columns)
         return layout
     }
     onResize() {
@@ -95,13 +100,13 @@ class WaterFall extends Component {
     render() {
         const {notes, layout} = this.state
         return (
-            <div style={{position: 'relative'}}>
+            <Container height={this.height}>
                 {layout.map((v, i) => (
                     <Wrapper top={v.top} left={v.left} key={v.key}>
                         <Card note={notes[i]}/>
                     </Wrapper>
                 ))}
-            </div>
+            </Container>
         )
     }
 

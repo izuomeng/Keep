@@ -118,9 +118,11 @@ const StyledContainer = styled(Container)`
     padding: 40px;
     left: 0;
     top: 0;
+    bottom: 0;
+    min-height: 300px;
     width: 100%;
-    height: 100vh;
     background-color: rgba(232,232,232,0.9);
+    z-index: 999;
 `
 
 const mapDispatch = (dispatch) => ({

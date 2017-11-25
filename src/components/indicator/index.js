@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import styled, {keyframes} from 'styled-components'
-import emmiter from '../../static/javascript/events'
+import emmiter from '@/lib/events'
 import COLOR from '../../static/javascript/color'
 
 const rotate = keyframes`

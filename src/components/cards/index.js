@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import WaterFall from '../commen/waterfall'
 import List from './list'
-import shouldUpdate from '@/static/javascript/shouldUpdate'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 class Cards extends Component {
     static propTypes = {
