@@ -5,8 +5,8 @@ import {connect} from 'react-redux'
 import {toggleSidebar} from '@/store/action/app'
 
 const Menu = ({className, handleClick}) => (
-    <div className={className} onClick={handleClick}>
-        <span className="glyphicon glyphicon-align-justify"></span>
+    <div className={className} onClick={handleClick} data-id='sidebar'>
+        <span className="glyphicon glyphicon-align-justify" data-id='sidebar'></span>
     </div>
 )
 const StyledMenu = styled(Menu)`

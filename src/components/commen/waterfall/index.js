@@ -32,9 +32,9 @@ class WaterFall extends Component {
         const windowWidth = window.innerWidth || document.documentElement.clientWidth || 
                 document.body.clientWidth
         if (window.innerWidth > minWidthToHideSidebar) {
-            this.containerWidth = this.props.sidebar ? windowWidth - 320 : windowWidth - 40
+            this.containerWidth = this.props.sidebar ? windowWidth - 360 : windowWidth - 80
         } else {
-            this.containerWidth = windowWidth - 40
+            this.containerWidth = windowWidth - 80
         }
         const layout = this.computeXY(this.waterDropStyle,{width: this.containerWidth})
         this.state = {
@@ -57,7 +57,7 @@ class WaterFall extends Component {
             columns = Array(Math.max(columnCnt, 1)).fill(0),
             spacing = parseInt(this.props.spacing, 10) || 10,
             contentWidth = columnCnt * (waterDropStyle[0].width + spacing) - spacing,
-            marginLeft = (containerStyle.width - contentWidth) / 2
+            marginLeft = (containerStyle.width - contentWidth) / 2 + 20
         for (let i = 0, len = waterDropStyle.length; i < len; i++) {
             const min = findMin(columns)
             layout[i] = {
@@ -74,7 +74,7 @@ class WaterFall extends Component {
         clearTimeout(this.rid)
         const windowWidth = window.innerWidth || document.documentElement.clientWidth || 
             document.body.clientWidth
-        this.containerWidth = this.props.sidebar ? windowWidth - 320 : windowWidth - 40
+        this.containerWidth = this.props.sidebar ? windowWidth - 360 : windowWidth - 80
         if (this.containerWidth < 600) {
             this.containerWidth = 600
         }
