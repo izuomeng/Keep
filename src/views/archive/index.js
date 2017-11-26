@@ -33,7 +33,7 @@ class Archive extends Component {
 }
 
 const mapState = (state) => ({
-    notes: state.notes.filter((v) => v.isArchived)
+    notes: state.notes.filter((v) => v.isArchived && !v.deleteTime)
 })
 
 export default connect(mapState, null)(Archive)

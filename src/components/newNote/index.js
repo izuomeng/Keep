@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {findDOMNode} from 'react-dom'
 import {connect} from 'react-redux'
 import {EditorState, convertToRaw} from 'draft-js'
-import {addNote} from '@/store/action/notes'
+import {addNote, deleteNoteInDB} from '@/store/action/notes'
 import {DoNotUpdate} from '@/lib/highOrderComponents'
 import shouldUpdate from '@/lib/shouldUpdate'
 import event from '@/lib/events'
@@ -60,6 +60,11 @@ class NewNote extends Component{
         this.textContentInJs = convertToRaw(textContent)
         this.textPlainText = textContent.getPlainText()
         this.handleMoreClick = this.handleMoreClick.bind(this)
+        // setup clickHandlers for more click
+        const handleDelete = this.handleDelete.bind(this)
+        this.moreClickHandlers = {
+            handleDelete
+        }
     }
     getContainer(ref) {
         this.DOMContainer = findDOMNode(ref)
@@ -164,7 +169,16 @@ class NewNote extends Component{
         this.props.hideEditor()
     }
     handleMoreClick(pos) {
-        event.emitEvent('moreClick', pos)
+        event.emitEvent('moreClick', pos, null, this.moreClickHandlers)
+    }
+    handleDelete() {
+        if (this.isBlank()) {
+            return
+        }
+        this.titlePlainText = ''
+        this.textPlainText = ''
+        clearTimeout(this.dnID)
+        this.dnID = setTimeout(() => this.props.deleteNote(this.note.id), 200)
     }
     render() {
         return (
@@ -194,6 +208,9 @@ class NewNote extends Component{
 const mapDispatch = (dispatch) => ({
     addNote(updateState, title, text, other) {
         dispatch(addNote(updateState, title, text, other))
+    },
+    deleteNote(id) {
+        dispatch(deleteNoteInDB(id))
     }
 })
 

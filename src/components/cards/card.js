@@ -79,6 +79,10 @@ class Card extends Component {
         this.onArchiveClick = this.onArchiveClick.bind(this)
         this.onMoreClick = this.onMoreClick.bind(this)
         this.hideMore = () => this.setState({isMoreShow: false})
+        const handleDelete = this.onDelete.bind(this)
+        this.moreClickHandlers = {
+            handleDelete
+        }
     }
     dispatchNewNote(newNote) {
         this.props.editNote(newNote)
@@ -94,13 +98,24 @@ class Card extends Component {
         this.dispatchNewNote(newNote)
     }
     onArchiveClick() {
+        if (this.state.note.deleteTime) {
+            return
+        }
         const {isArchived} = this.state.note
         const newNote = {...this.state.note, isArchived: !isArchived}
         this.dispatchNewNote(newNote)
     }
     onMoreClick(pos) {
-        event.emitEvent('moreClick', pos, this.hideMore)
         this.setState({isMoreShow: true})
+        event.emitEvent('moreClick', pos, this.hideMore, this.moreClickHandlers)
+    }
+    onDelete() {
+        if (this.state.note.deleteTime) {
+            return
+        }
+        const deleteTime = new Date()
+        const newNote = {...this.state.note, deleteTime}
+        this.dispatchNewNote(newNote)
     }
     componentDidMount() {
         setTimeout(() => this.setState({asyncRender: true}), 0)

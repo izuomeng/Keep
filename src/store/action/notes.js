@@ -40,3 +40,13 @@ export const postEditNote = (newNote) => ({
         SYNC_FAIL
     ]
 })
+export const deleteNoteInDB = (id) => ({
+    promise: axios.post('/notes/deleteNote', {
+        id
+    }).then(res => res.data),
+    types: [
+        SYNC_PENDING,
+        SYNC_SUCCESS,
+        SYNC_FAIL
+    ]
+})

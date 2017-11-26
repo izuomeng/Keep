@@ -34,7 +34,8 @@ class More extends Component {
       show: false,
       x: 0,
       y: 0,
-      callback: null
+      callback: null,
+      clickHandlers: {}
     }
     this.show = this.show.bind(this)
     this.hide = this.hide.bind(this)
@@ -46,7 +47,7 @@ class More extends Component {
   hide() {
     this.setState({show: false,x:-100})
   }
-  show(pos, callback = () => {}) {
+  show(pos, callback, clickHandlers) {
     if (this.state.callback) {
       this.state.callback()
     }
@@ -54,7 +55,8 @@ class More extends Component {
       show: true,
       x: pos.left,
       y: pos.top + 30,
-      callback
+      callback,
+      clickHandlers
     })
   }
   onDocumentClick(e) {
@@ -65,7 +67,9 @@ class More extends Component {
     if (data.lable === '更多') {
         return
     }
-    this.state.callback()
+    if (this.state.callback) {
+      this.state.callback()
+    }
     this.hide()
   }
   componentWillUnmount() {
@@ -74,10 +78,11 @@ class More extends Component {
     document.removeEventListener('click', this.onDocumentClick)
   }
   render() {
+    const {clickHandlers} = this.state
     return (
       <Wrapper {...this.state}>
         <Container data-id='newNote' show={this.state.show}>
-          <Item data-id='moreItem'>删除这条记事</Item>
+          <Item data-id='moreItem' onClick={clickHandlers.handleDelete}>删除这条记事</Item>
           <Item data-id='newNote'>添加标签</Item>
           <Item data-id='newNote'>添加绘图</Item>
           <Item data-id='newNote'>复制</Item>
