@@ -10,7 +10,7 @@ const StyledLable = Lable.extend`
 `
 
 const Icon = ({className, iconClass, lable, handleClick = ()=>{}}) => (
-    <div className={className} onMouseDown={handleClick}>
+    <div className={className} onClick={handleClick}>
         <span className={iconClass}></span>
         <StyledLable value={lable} />
     </div>

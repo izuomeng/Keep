@@ -60,6 +60,7 @@ const StyledWrapper = styled(Wrapper)`
 `
 const FullScreen = styled.div`
     position: absolute;
+    z-index: 1200;
     left: 0;
     top: 0;
     width: 100%;

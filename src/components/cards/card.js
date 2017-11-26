@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import {Editor, convertFromRaw, EditorState} from 'draft-js'
 import {connect} from 'react-redux'
-import Menus from '../commen/noteBar'
 import {editNote, postEditNote} from '@/store/action/notes'
+import event from '@/lib/events'
+import Menus from '../commen/noteBar'
 
 const Wrapper = styled.div`
     width: ${props => props.isList ? '' : '240px'};
@@ -47,7 +48,7 @@ const MenuContainer = styled.div.attrs({
 })`
     padding: 0 10px;
     transition: .3s;
-    opacity: 0;
+    opacity: ${props => props.isMoreShow ? 1 : 0};
     height: 30px;
 `
 class Card extends Component {
@@ -67,7 +68,8 @@ class Card extends Component {
             textEditor: EditorState.createWithContent(textBlocksFromRaw),
             note,
             bgColor: note.bgColor,
-            asyncRender: false
+            asyncRender: false,
+            isMoreShow: false
         }
         this.id = note.id
         this.titleOnChange = (titleEditor) => this.setState({titleEditor})
@@ -75,6 +77,8 @@ class Card extends Component {
         this.dispatchNewNote = this.dispatchNewNote.bind(this)
         this.onColorClick = this.onColorClick.bind(this)
         this.onArchiveClick = this.onArchiveClick.bind(this)
+        this.onMoreClick = this.onMoreClick.bind(this)
+        this.hideMore = () => this.setState({isMoreShow: false})
     }
     dispatchNewNote(newNote) {
         this.props.editNote(newNote)
@@ -94,11 +98,15 @@ class Card extends Component {
         const newNote = {...this.state.note, isArchived: !isArchived}
         this.dispatchNewNote(newNote)
     }
+    onMoreClick(pos) {
+        event.emitEvent('moreClick', pos, this.hideMore)
+        this.setState({isMoreShow: true})
+    }
     componentDidMount() {
         setTimeout(() => this.setState({asyncRender: true}), 0)
     }
     render() {
-        const {titleEditor, textEditor} = this.state
+        const {titleEditor, textEditor, isMoreShow} = this.state
         const titleText = titleEditor.getCurrentContent().getPlainText(),
             bodyText = textEditor.getCurrentContent().getPlainText()
         return (
@@ -123,12 +131,13 @@ class Card extends Component {
                         readOnly
                     />
                 </Body>}
-                <MenuContainer>
+                <MenuContainer isMoreShow={isMoreShow}>
                 {this.state.asyncRender && <Menus 
                         isInCard 
                         bgColor={this.state.bgColor} 
                         onColorClick={this.onColorClick}
                         onArchiveClick={this.onArchiveClick}
+                        onMoreClick={this.onMoreClick}
                     />}
                 </MenuContainer>
             </Wrapper>

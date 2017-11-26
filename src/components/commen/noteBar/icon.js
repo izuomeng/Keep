@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import Lable from '../lable'
 
 const Icon = ({className, icon, lable, children, handleClick = ()=>{}}) => (
-  <div className={className} data-id='newNote' onClick={handleClick}>
-      <span className={icon} data-id='newNote'></span>
+  <div className={className} data-id='newNote' onClick={handleClick} data-lable={lable}>
+      <span className={icon} data-id='newNote' data-lable={lable}></span>
       {children}
       <Lable value={lable} />
   </div>

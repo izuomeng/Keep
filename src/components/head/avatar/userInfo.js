@@ -4,7 +4,7 @@ import COLOR from '../../commen/color'
 import {NormalButton} from '../../commen/button'
 
 const Avatar = ({className, firstName, size, handleClick, children}) => (
-    <div className={className} onClick={handleClick}>
+    <div className={className} onClick={handleClick} data-id='avatar'>
         {firstName && firstName.toUpperCase()}
         {children}
     </div>
@@ -36,20 +36,20 @@ const RightButton = NormalButton.extend`
     float: right;
 `
 const TopDiv = styled.div.attrs({
-    name: 'myAvatar'
+    'data-name': 'myAvatar'
 })`
     display: flex;
     padding: 20px;
 `
 const Info = styled.div.attrs({
-    name: 'myAvatar'
+    'data-name': 'myAvatar'
 })`
     text-align: left;
     width: 170px;
     padding-left: 20px;
 `
 const UserName = styled.div.attrs({
-    name: 'myAvatar'
+    'data-name': 'myAvatar'
 })`
     color: black;
     font-weight: bold;
@@ -60,7 +60,7 @@ const UserName = styled.div.attrs({
     text-transform: capitalize;
 `
 const BottomDiv = styled.div.attrs({
-    name: 'myAvatar'
+    'data-name': 'myAvatar'
 })`
     padding: 10px 20px;
     background: #f5f5f5;

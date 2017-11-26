@@ -49,7 +49,7 @@ class WaterFall extends Component {
         }
          const columnCnt = parseInt(containerStyle.width / waterDropStyle[0].width, 10),
             layout = [],
-            columns = Array(parseInt(columnCnt, 10)).fill(0),
+            columns = Array(Math.max(columnCnt, 1)).fill(0),
             spacing = parseInt(this.props.spacing, 10) || 10,
             contentWidth = columnCnt * (waterDropStyle[0].width + spacing) - spacing,
             marginLeft = (containerStyle.width - contentWidth) / 2
@@ -67,17 +67,16 @@ class WaterFall extends Component {
     }
     onResize() {
         clearTimeout(this.rid)
-        const self = this
         const windowWidth = window.innerWidth || document.documentElement.clientWidth || 
             document.body.clientWidth
         this.containerWidth = this.props.sidebar ? windowWidth - 320 : windowWidth - 40
-        this.rid = setTimeout(() => {
-            this.setState({
-                layout: self.computeXY(self.waterDropStyle,{
-                    width: this.containerWidth
-                })
-            })
-        }, 200)
+        if (this.containerWidth < 600) {
+            this.containerWidth = 600
+        }
+        const layout = this.computeXY(this.waterDropStyle,{
+            width: this.containerWidth
+        })
+        this.rid = setTimeout(() => this.setState({layout}), 200)
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.sidebar !== this.state.sidebar) {

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import React from 'react'
+import {DoNotUpdate} from '@/lib/highOrderComponents'
 
 const Title = ({className, children}) => (
     <span className={className}>
@@ -14,4 +15,4 @@ const StyledTitle = styled(Title)`
     }
 `
 
-export default StyledTitle
+export default DoNotUpdate(StyledTitle)

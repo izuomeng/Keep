@@ -4,10 +4,10 @@ import Info, {Avatar} from './userInfo'
 import {removeUser} from '@/store/action/user'
 import store from '@/store'
 import {browserHistory} from 'react-router'
-import Pop from '../../popup'
 import emitter from '@/lib/events'
 
 const SmallAvatar = Avatar.extend`
+    user-select: none;
     margin: 0 10px;
 `
 class User extends Component {
@@ -33,6 +33,10 @@ class User extends Component {
         if (!this.state.isInfoShow) {
             return
         }
+        const data = e.target.dataset
+        if (data.id === 'avatar' || data.name === 'myAvatar') {
+            return
+        }
         this.setState({isInfoShow: false})
     }
     handleLogout() {
@@ -40,12 +44,9 @@ class User extends Component {
         emitter.emitEvent('loading')
     }
     toggleInfo(e) {
-        e.nativeEvent.stopImmediatePropagation()
-        try{
-            if (e.target.attributes.name.value === 'myAvatar') {
-                return
-            }
-        } catch(e) {}
+        if (e.target.dataset.name === 'myAvatar') {
+            return
+        }
         this.setState({isInfoShow: !this.state.isInfoShow})
     }
     componentDidMount() {
@@ -56,18 +57,14 @@ class User extends Component {
     }
     render() {
         const {firstName, name} = this.props
-        const {message, isPopShow} = this.state
         return (
-            <div>
-                <Pop show={isPopShow}>{message}</Pop>
-                <SmallAvatar firstName={firstName} small handleClick={this.toggleInfo}>
-                    <Info firstName={firstName} 
-                        show={this.state.isInfoShow} 
-                        name={name}
-                        handleLogout = {this.handleLogout}
-                    />
-                </SmallAvatar>
-            </div>
+            <SmallAvatar firstName={firstName} small handleClick={this.toggleInfo}>
+                <Info firstName={firstName} 
+                    show={this.state.isInfoShow} 
+                    name={name}
+                    handleLogout = {this.handleLogout}
+                />
+            </SmallAvatar>
         )
     }
 }

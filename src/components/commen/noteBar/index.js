@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
+import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import {browserHistory} from 'react-router'
+import {getPosition} from '@/lib/DOM'
 import {TextButton} from '../button'
 import Palette from './palette'
 import Icon from './icon'
@@ -27,7 +29,8 @@ class Menus extends Component {
         this.onMoreClick = this.onMoreClick.bind(this)
     }
     onMoreClick() {
-        
+        const pos = getPosition(this.more)
+        this.props.onMoreClick(pos)
     }
     render() {
         const {isInCard, bgColor, onColorClick, onArchiveClick} = this.props
@@ -52,6 +55,7 @@ class Menus extends Component {
                     icon="glyphicon glyphicon-chevron-down" 
                     lable="更多"
                     handleClick={this.onMoreClick}
+                    ref={ref => this.more = findDOMNode(ref)}
                 >
                 </Icon>
                 {!isInCard&&<Icon icon="glyphicon glyphicon-arrow-left" lable="撤销"/>}

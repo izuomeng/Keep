@@ -26,14 +26,37 @@ const Header = styled.header`
     flex-flow: row nowrap;
     align-items: center;
     position: fixed;
+    transition: .4s;
+    box-shadow: ${props => props.shadow ? 
+        `0 4px 5px 0 rgba(0,0,0,0.14),
+        0 1px 10px 0 rgba(0,0,0,0.12),
+        0 2px 4px -1px rgba(0,0,0,0.2);` :
+        '0'
+    }
 `
 class HeaderContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isWaterFall: this.props.isWaterFall
+            isWaterFall: this.props.isWaterFall,
+            shadow: false
         }
         this.onLayerClick = this.onLayerClick.bind(this)
+        this.tesShadow = this.tesShadow.bind(this)
+        window.addEventListener('scroll', this.tesShadow)
+    }
+    tesShadow() {
+        clearTimeout(this.tid)
+        this.tid = setTimeout(() => {
+            if (document.documentElement.scrollTop > 0) {
+                this.setState({shadow: true})
+            } else {
+                this.setState({shadow: false})
+            }
+        }, 100)
+    }
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.tesShadow)
     }
     onLayerClick() {
         this.setState({isWaterFall: !this.state.isWaterFall})
@@ -47,7 +70,7 @@ class HeaderContainer extends Component {
             this.tid = setTimeout(() => this.props.setStatic(), 1000)
         }
         return (
-            <Header>
+            <Header shadow={this.state.shadow}>
                 <Menu />
                 <Title>
                     Keep
