@@ -46,14 +46,14 @@ class More extends Component {
   hide() {
     this.setState({show: false,x:-100})
   }
-  show(pos, callback) {
+  show(pos, callback = () => {}) {
     if (this.state.callback) {
       this.state.callback()
     }
     this.setState({
       show: true,
-      x: pos.left + 20,
-      y: pos.top + 20,
+      x: pos.left,
+      y: pos.top + 30,
       callback
     })
   }
@@ -62,7 +62,7 @@ class More extends Component {
     if (!this.state.show) {
       return
     }
-    if (data.lable === '更多' || data.id === 'moreItem') {
+    if (data.lable === '更多') {
         return
     }
     this.state.callback()
@@ -76,11 +76,11 @@ class More extends Component {
   render() {
     return (
       <Wrapper {...this.state}>
-        <Container data-id='moreItem' show={this.state.show}>
+        <Container data-id='newNote' show={this.state.show}>
           <Item data-id='moreItem'>删除这条记事</Item>
-          <Item data-id='moreItem'>添加标签</Item>
-          <Item data-id='moreItem'>添加绘图</Item>
-          <Item data-id='moreItem'>复制</Item>
+          <Item data-id='newNote'>添加标签</Item>
+          <Item data-id='newNote'>添加绘图</Item>
+          <Item data-id='newNote'>复制</Item>
         </Container>
       </Wrapper>
     )

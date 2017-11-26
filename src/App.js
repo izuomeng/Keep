@@ -10,11 +10,17 @@ import {
 	FullScreenIndicator as Indicator,
 	More
 } from './components'
+import {minWidthToHideSidebar} from './static/javascript/constants'
 
 const Container = styled.div`
-	padding-left: ${props => props.sidebar ? '300px' : '20px'};
 	padding-top: 80px;
 	transition: .2s;
+	@media (max-width: ${minWidthToHideSidebar}px) {
+		padding-left: 20px;
+	}
+	@media (min-width: ${minWidthToHideSidebar}px) {
+		padding-left: ${props => props.sidebar ? '300px' : '20px'};
+	}
 `
 const mapState = (state) => ({
 	sidebar: state.app.sidebar

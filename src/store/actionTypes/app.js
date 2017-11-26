@@ -1,4 +1,5 @@
 export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
+export const HIDE_SIDEBAR = 'HIDE_SIDEBAR'
 export const TOGGLE_LAYOUT = 'TOGGLE_LAYOUT'
 export const SYNC_PENDING = 'SYNC_PENDING'
 export const SYNC_SUCCESS = 'SYNC_SUCCESS'

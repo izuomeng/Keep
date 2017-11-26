@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import {connect} from 'react-redux'
 import Card from '../../cards/card'
 import shouldUpdate from '@/lib/shouldUpdate'
+import {minWidthToHideSidebar} from '@/static/javascript/constants'
 
 const Wrapper = styled.div.attrs({
     style: props => ({transform: `translate(${props.left}px, ${props.top}px`})
@@ -30,7 +31,11 @@ class WaterFall extends Component {
         }))
         const windowWidth = window.innerWidth || document.documentElement.clientWidth || 
                 document.body.clientWidth
-        this.containerWidth = this.props.sidebar ? windowWidth - 320 : windowWidth - 40
+        if (window.innerWidth > minWidthToHideSidebar) {
+            this.containerWidth = this.props.sidebar ? windowWidth - 320 : windowWidth - 40
+        } else {
+            this.containerWidth = windowWidth - 40
+        }
         const layout = this.computeXY(this.waterDropStyle,{width: this.containerWidth})
         this.state = {
             layout: layout || [],
@@ -80,8 +85,12 @@ class WaterFall extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.sidebar !== this.state.sidebar) {
-            this.setState({sidebar: nextProps.sidebar})
-            return requestAnimationFrame(this.onResize)
+            if (window.innerWidth > minWidthToHideSidebar) {
+                this.setState({sidebar: nextProps.sidebar})
+                return requestAnimationFrame(this.onResize)
+            } else {
+                this.setState({sidebar: nextProps.sidebar})
+            }
         }
         const waterDropStyle = nextProps.notes.map((v) => ({
             width: 240,

@@ -7,6 +7,9 @@ import popInfoReducer from './reducer/popInfo'
 import appReducer from './reducer/app'
 import promiseMiddleware from './middleware/promiseMiddleware'
 import addNoteMidleware from './middleware/addNoteMiddleware'
+import {minWidthToHideSidebar} from '@/static/javascript/constants'
+
+const isSidebarShow = window.innerWidth >= minWidthToHideSidebar ? true : false
 
 const initState = {
     user: {
@@ -35,7 +38,7 @@ const initState = {
     },
     app: {
         tab: TAB.NOTE,
-        sidebar: true,
+        sidebar: isSidebarShow,
         syncProgress: 'STATIC',
         isWaterFall: true,
     }
@@ -56,7 +59,7 @@ const reducer = combineReducers({
 const storeEnhancers = compose(
     applyMiddleware(...middlewares),
     // 注意！！！下面这玩意儿在其他浏览器会报错
-    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 export default createStore(
     reducer,

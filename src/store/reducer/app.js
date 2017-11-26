@@ -4,6 +4,8 @@ export default (state = {}, action) => {
     switch (action.type) {
         case Types.TOGGLE_SIDEBAR:
             return {...state, sidebar: !state.sidebar}
+        case Types.HIDE_SIDEBAR:
+            return {...state, sidebar: false}
         case Types.SYNC_PENDING:
             return {...state, syncProgress: 'PENDING'}
         case Types.SYNC_SUCCESS:

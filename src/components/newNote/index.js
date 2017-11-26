@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import {findDOMNode} from 'react-dom'
 import {connect} from 'react-redux'
 import {EditorState, convertToRaw} from 'draft-js'
+import {addNote} from '@/store/action/notes'
+import {DoNotUpdate} from '@/lib/highOrderComponents'
+import shouldUpdate from '@/lib/shouldUpdate'
+import event from '@/lib/events'
 import COLOR from '../commen/color'
 import Title from './title'
 import Text from './text'
 import Menus, {CompleteButton} from '../commen/noteBar'
-import {addNote} from '@/store/action/notes'
-import {DoNotUpdate} from '@/lib/highOrderComponents'
-import shouldUpdate from '@/lib/shouldUpdate'
 
 const BeforeClick = styled.div`
     max-width: 600px;
@@ -58,6 +59,7 @@ class NewNote extends Component{
         const textContent = this.state.textEditorState.getCurrentContent()
         this.textContentInJs = convertToRaw(textContent)
         this.textPlainText = textContent.getPlainText()
+        this.handleMoreClick = this.handleMoreClick.bind(this)
     }
     getContainer(ref) {
         this.DOMContainer = findDOMNode(ref)
@@ -161,6 +163,9 @@ class NewNote extends Component{
         )
         this.props.hideEditor()
     }
+    handleMoreClick(pos) {
+        event.emitEvent('moreClick', pos)
+    }
     render() {
         return (
             <Wrapper data-id="newNote" bgColor={this.state.bgColor} ref={this.getContainer}>
@@ -178,6 +183,7 @@ class NewNote extends Component{
                         bgColor={this.state.bgColor}
                         onColorClick={this.handleColorChange}
                         onArchiveClick={this.handleArchiveChange}
+                        onMoreClick={this.handleMoreClick}
                     />
                 </MenuWrapper>
             </Wrapper>

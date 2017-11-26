@@ -1,0 +1,1 @@
+export const minWidthToHideSidebar = 920
