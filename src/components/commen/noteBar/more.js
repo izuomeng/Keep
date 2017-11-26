@@ -54,7 +54,7 @@ class More extends Component {
     this.setState({
       show: true,
       x: pos.left,
-      y: pos.top + 30,
+      y: pos.top,
       callback,
       clickHandlers
     })

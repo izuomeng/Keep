@@ -106,8 +106,8 @@ class Card extends Component {
         this.dispatchNewNote(newNote)
     }
     onMoreClick(pos) {
-        this.setState({isMoreShow: true})
         event.emitEvent('moreClick', pos, this.hideMore, this.moreClickHandlers)
+        this.setState({isMoreShow: true})
     }
     onDelete() {
         if (this.state.note.deleteTime) {
