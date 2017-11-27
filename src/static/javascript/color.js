@@ -24,7 +24,8 @@ const color = {
     GREY: '#CFD8DC',
     LINE: '#DDDDDD',
     AVATAR: '#1697A6',
-    CARD_BACK: '#FAFAFA'
+    CARD_BACK: '#FAFAFA',
+    FIX_STATUS: 'rgba(0,0,0,.54)'
 }
 
 export default color

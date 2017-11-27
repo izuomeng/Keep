@@ -19,6 +19,7 @@ const ColorBlock = styled.div`
       border: 2px solid grey
   }
   &:hover>div {
+      visibility: visible;
       display: inline-block;
   }
 `

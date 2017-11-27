@@ -9,10 +9,9 @@ const Wrapper = styled.div`
     & .public-DraftEditorPlaceholder-hasFocus {
         color: #737373;
     }
-    margin-bottom: 20px;
     font-size: 17px;
     font-weight: bold;
-    padding-left: 10px;
+    margin: 0 10px 20px 10px
 `
 
 class Title extends Component{

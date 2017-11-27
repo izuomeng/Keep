@@ -60,7 +60,8 @@ class HeaderContainer extends Component {
     }
     onLayerClick() {
         this.setState({isWaterFall: !this.state.isWaterFall})
-        requestAnimationFrame(this.props.toggleLayout)
+        clearTimeout(this.tid)
+        this.tid = setTimeout(this.props.toggleLayout, 100)
     }
     render() {
         const progress = this.props.syncProgress

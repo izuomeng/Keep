@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import {Editor, RichUtils} from 'draft-js'
 
 const Wrapper = styled.div`
-    margin-bottom: 20px;
-    padding-left: 10px;
+    margin: 0 0 20px 10px;
     & .public-DraftEditorPlaceholder-root {
         color: rgba(0,0,0,.54);
     }

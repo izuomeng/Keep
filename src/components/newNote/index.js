@@ -11,6 +11,7 @@ import COLOR from '../commen/color'
 import Title from './title'
 import Text from './text'
 import Menus, {CompleteButton} from '../commen/noteBar'
+import FixIcon from '../commen/icons/fix'
 
 const BeforeClick = styled.div`
     max-width: 600px;
@@ -30,6 +31,7 @@ const Wrapper = BeforeClick.extend`
     border-radius: 2px;
     color: black;
     background: ${props => props.bgColor};
+    position: relative;
 `
 const MenuWrapper = styled.div`
 
@@ -180,9 +182,32 @@ class NewNote extends Component{
         clearTimeout(this.dnID)
         this.dnID = setTimeout(() => this.props.deleteNote(this.note.id), 200)
     }
+    handleFixClick() {
+        if (this.isBlank()) {
+            return
+        }
+        this.note.isFixed = true
+        this.props.addNote(
+            true, 
+            this.titleContentInJs,
+            this.textContentInJs,
+            this.note
+        )
+        this.props.hideEditor()
+    }
     render() {
         return (
-            <Wrapper data-id="newNote" bgColor={this.state.bgColor} ref={this.getContainer}>
+            <Wrapper 
+                data-id="newNote"
+                bgColor={this.state.bgColor}
+                ref={this.getContainer}
+            >
+                <FixIcon 
+                    dataID='newNote'
+                    lable='固定记事'
+                    style={{opacity: 1, right: '5px'}}
+                    handleClick={::this.handleFixClick}
+                />
                 <Title 
                     editorOnChange={this.titleOnChange}
                     editorState={this.state.titleEditorState}

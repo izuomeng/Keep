@@ -6,7 +6,9 @@ import {Cards, BeforeClick, NewNote} from '@/components'
 const CardsConntainer = styled.div`
     margin-top: 40px;
 `
+const Container = styled.div`
 
+`
 class Home extends Component {
     constructor(props) {
         super(props)
@@ -49,19 +51,28 @@ class Home extends Component {
     }
     render() {
         const {isBeforeClick} = this.state
+        const {notes} = this.props,
+            fixedNotes = notes.filter(v => v.isFixed),
+            hasFixedNote = fixedNotes.length > 0 ? true : false,
+            label = hasFixedNote ? '其他' : '',
+            otherNotes = notes.filter(v => !v.isFixed)
         return (
-            <div>
+            <Container>
                 {isBeforeClick && 
                 <BeforeClick 
                     onClick={this.handleClick} 
                     data-id="newNote">
                     添加记事...
                 </BeforeClick>}
-                {!isBeforeClick && <NewNote hideEditor={this.hideEditor} />}
-                {this.state.asyncRender && <CardsConntainer>
-                    <Cards notes={this.props.notes} />
+                {!isBeforeClick && 
+                <NewNote hideEditor={this.hideEditor} />}
+                {this.state.asyncRender && 
+                <CardsConntainer>
+                    {hasFixedNote && 
+                    <Cards notes={fixedNotes} label='已固定的记事'/>}
+                    <Cards notes={otherNotes} label={label}/>
                 </CardsConntainer>}
-            </div>
+            </Container>
         )
     }
 }

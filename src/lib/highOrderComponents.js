@@ -9,3 +9,10 @@ export const DoNotUpdate = (MyComponent) =>
       return <MyComponent {...this.props}/>
     }
   }
+
+export const AddProps = (MyComponent) => (newProps) =>
+  class extends Component {
+    render() {
+      return <MyComponent {...this.props} {...newProps}/>
+    }
+  }

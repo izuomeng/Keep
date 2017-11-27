@@ -6,8 +6,13 @@ import {connect} from 'react-redux'
 import {editNote, postEditNote} from '@/store/action/notes'
 import event from '@/lib/events'
 import Menus from '../commen/noteBar'
+import FixIcon from '../commen/icons/fix'
+import SelectIcon from '../commen/icons/select'
 
 const Wrapper = styled.div`
+    user-select: none;
+    cursor: default;
+    position: relative;
     width: ${props => props.isList ? '' : '240px'};
     background: ${props => props.bgColor};
     padding: 10px 0;
@@ -21,6 +26,12 @@ const Wrapper = styled.div`
                     0 2px 5px 0 darkgrey
     }
     &:hover #MenuContainer {
+        opacity: 1;
+    }
+    &:hover #fixIcon {
+        opacity: 1;
+    }
+    &:hover #selectIcon {
         opacity: 1;
     }
 `
@@ -109,6 +120,14 @@ class Card extends Component {
         event.emitEvent('moreClick', pos, this.hideMore, this.moreClickHandlers)
         this.setState({isMoreShow: true})
     }
+    onFixClick() {
+        const {note} = this.state
+        if (note.isArchived || note.deleteTime) {
+            return
+        }
+        const newNote = {...this.state.note, isFixed: !note.isFixed}
+        this.dispatchNewNote(newNote)
+    }
     onDelete() {
         if (this.state.note.deleteTime) {
             return
@@ -124,12 +143,15 @@ class Card extends Component {
         const {titleEditor, textEditor, isMoreShow} = this.state
         const titleText = titleEditor.getCurrentContent().getPlainText(),
             bodyText = textEditor.getCurrentContent().getPlainText()
+        const lable = this.state.note.isFixed ? '取消固定' : '固定记事'
         return (
             <Wrapper 
                 bgColor={this.state.bgColor} 
                 data-key={this.props.mykey}
                 isList={this.props.isList}
             >
+                <SelectIcon handleClick={()=>console.log('select clicked')} />
+                <FixIcon handleClick={::this.onFixClick} lable={lable}/>
                 {titleText &&
                 <Title>
                     <Editor 
@@ -147,13 +169,14 @@ class Card extends Component {
                     />
                 </Body>}
                 <MenuContainer isMoreShow={isMoreShow}>
-                {this.state.asyncRender && <Menus 
-                        isInCard 
-                        bgColor={this.state.bgColor} 
-                        onColorClick={this.onColorClick}
-                        onArchiveClick={this.onArchiveClick}
-                        onMoreClick={this.onMoreClick}
-                    />}
+                {this.state.asyncRender && 
+                <Menus 
+                    isInCard 
+                    bgColor={this.state.bgColor} 
+                    onColorClick={this.onColorClick}
+                    onArchiveClick={this.onArchiveClick}
+                    onMoreClick={this.onMoreClick}
+                />}
                 </MenuContainer>
             </Wrapper>
         )

@@ -8,6 +8,7 @@ import Tags from './tags'
 import Trash from './trash'
 
 const Container = styled.div`
+    user-select: none;
     height: calc(100vh - 64px);
     transition: ${props => props.show ? '.2s' : 'none'};
     position: absolute;

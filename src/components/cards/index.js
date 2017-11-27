@@ -4,7 +4,11 @@ import {connect} from 'react-redux'
 import WaterFall from '../commen/waterfall'
 import List from './list'
 import shouldUpdate from '@/lib/shouldUpdate'
+import styled from 'styled-components'
 
+const Container = styled.div`
+
+`
 class Cards extends Component {
     static propTypes = {
         notes: PropTypes.array
@@ -25,17 +29,24 @@ class Cards extends Component {
     }
     render() {
         const {notes} = this.state
-        const {isWaterFall} = this.props
+        const {isWaterFall, label} = this.props
         if (notes.length <= 0) {
             return null
         }
         return (
-            <div>
-                {isWaterFall && <WaterFall spacing={20} notes={notes} />}
-                <div style={{display: isWaterFall ? 'none' : 'block'}}>
-                    <List notes={notes} isWaterFall={isWaterFall} />
-                </div>
-            </div>
+            <Container>
+                {isWaterFall &&
+                <WaterFall 
+                    spacing={20}
+                    notes={notes}
+                    label={label}
+                />}
+                {!isWaterFall &&
+                <List 
+                    notes={notes}
+                    label={label}
+                />}
+            </Container>
         ) 
     }
 }

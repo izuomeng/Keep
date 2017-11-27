@@ -2,9 +2,9 @@ import 'react-hot-loader/patch'
 import { AppContainer } from 'react-hot-loader'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {Provider} from 'react-redux'
 import registerServiceWorker from './registerServiceWorker'
 import store from './store'
-import {Provider} from 'react-redux'
 import Routes from './router'
 
 ReactDOM.render(
