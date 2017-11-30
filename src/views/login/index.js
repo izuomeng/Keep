@@ -20,7 +20,8 @@ const Input = styled.input.attrs({
     value: props => props.type === 'submit' ? props.name : ''
 })`
     width: 100%;
-    line-height: 42px;
+    vertical-align: middle;
+    height: 42px;
     border-radius: 3px;
     border: 0;
     display: block;

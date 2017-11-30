@@ -12,7 +12,7 @@ export default (state = [], action) => {
                     id: action.id,
                     title: action.title || {},
                     text: action.text || {},
-                    lable: action.lable || '',
+                    lable: action.lable || [],
                     isFixed: action.isFixed || false,
                     isArchived: action.isArchived || false,
                     bgColor: action.bgColor || COLOR.WHITE,

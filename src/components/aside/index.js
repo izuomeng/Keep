@@ -18,7 +18,6 @@ const Container = styled.div`
     width: 280px;
     font-size: 14px;
     overflow: scroll;
-    will-change: transform;
     visibility: ${props => props.show ? 'visible' : 'hidden'};
     @media (max-width: ${minWidthToHideSidebar}px) {
         background: #FFFFFF;

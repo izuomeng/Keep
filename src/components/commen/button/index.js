@@ -21,7 +21,6 @@ const TextButton = styled.input.attrs({
     value: props => props.value
 })`
     width: 54px;
-    float: right;
     background: transparent;
     border: 0;
     padding: 0;

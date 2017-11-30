@@ -8,6 +8,7 @@ import event from '@/lib/events'
 import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
 import SelectIcon from '../commen/icons/select'
+import Tag from '../commen/lable/tags'
 
 const Wrapper = styled.div`
     user-select: none;
@@ -168,6 +169,7 @@ class Card extends Component {
                         readOnly
                     />
                 </Body>}
+                
                 <MenuContainer isMoreShow={isMoreShow}>
                 {this.state.asyncRender && 
                 <Menus 

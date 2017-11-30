@@ -1,7 +1,8 @@
+import axios from 'axios'
 import * as Types from '../actionTypes/popInfo'
 import {FILL_NOTES} from '../actionTypes/notes'
 import {ADD_USER} from '../actionTypes/user'
-import axios from 'axios'
+import {EDIT_LABLE} from '../actionTypes/app'
 
 export const authenticate = (url, name, pass) => ({
     promise: axios.post(url, {
@@ -13,7 +14,8 @@ export const authenticate = (url, name, pass) => ({
         Types.AUTH_DONE,
         Types.AUTH_FAIL,
         FILL_NOTES,
-        ADD_USER
+        ADD_USER,
+        EDIT_LABLE
     ]
 })
 export const clearInfo = () => ({

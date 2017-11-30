@@ -1,9 +1,10 @@
+import axios from 'axios'
 import * as Types from '../actionTypes/notes'
 import {FILL_NOTES} from '../actionTypes/notes'
 import {ADD_USER} from '../actionTypes/user'
 import {INTERNET_ERROR} from '../actionTypes/popInfo'
-import axios from 'axios'
 import {SYNC_PENDING, SYNC_SUCCESS, SYNC_FAIL} from '../actionTypes/app'
+import {EDIT_LABLE} from '../actionTypes/app'
 
 export const fillNotes = (notes = []) => ({
     type: Types.FILL_NOTES,
@@ -16,7 +17,8 @@ export const requestNotes = (url) => ({
         Types.REQUEST_NOTES_SUCCESS,
         INTERNET_ERROR,
         FILL_NOTES,
-        ADD_USER
+        ADD_USER,
+        EDIT_LABLE
     ]
 })
 export const addNote = (updateState, title, text, other) => ({

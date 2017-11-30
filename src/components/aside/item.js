@@ -16,8 +16,8 @@ const StyledIcon = styled(Icon)`
     font-size: 20px;
     vertical-align: middle;
 `
-const Item = ({className, children}) => (
-    <li className={className}>
+const Item = ({className, children, handleClick = () => {}}) => (
+    <li className={className} onClick={handleClick}>
         {children}
     </li>
 )
@@ -31,8 +31,8 @@ const StyledItem = styled(Item)`
     }
 `
 
-export default ({iconName, text}) => (
-    <StyledItem>
+export default ({iconName, text, handleClick}) => (
+    <StyledItem handleClick={handleClick}>
         <StyledIcon iconName={iconName} />
         {text}
     </StyledItem>

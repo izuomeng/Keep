@@ -8,7 +8,7 @@ const Lable = styled.div`
     color: white;
     border-radius: 3px;
     white-space: nowrap;
-    font-size: 10px;
+    font-size: 12px;
     position: relative;
     line-height: normal;
     left: calc(-50% - 7px);
