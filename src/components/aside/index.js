@@ -12,7 +12,6 @@ const Container = styled.div`
     height: calc(100vh - 64px);
     transition: ${props => props.show ? '.2s' : 'none'};
     position: absolute;
-    z-index: 100;
     top: 64px;
     left: ${props => props.show ? '0' : '-300px'};
     width: 280px;

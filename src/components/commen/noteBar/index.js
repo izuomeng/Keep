@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 import {browserHistory} from 'react-router'
 import {getPosition} from '@/lib/DOM'
 import {TextButton} from '../button'
@@ -21,9 +20,6 @@ const CompleteButton = TextButton.extend`
 `
 
 class Menus extends Component {
-    static propTypes = {
-        onColorClick: PropTypes.func.isRequired
-    }
     constructor(props) {
         super(props)
         this.onMoreClick = this.onMoreClick.bind(this)

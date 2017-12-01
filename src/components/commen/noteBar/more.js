@@ -47,7 +47,7 @@ class More extends Component {
   hide() {
     this.setState({show: false,x:-100})
   }
-  show(pos, callback, clickHandlers) {
+  show(pos, callback, clickHandlers = {}) {
     if (this.state.callback) {
       this.state.callback()
     }
@@ -77,13 +77,18 @@ class More extends Component {
     event.removeListener('moreHide', this.hide)
     document.removeEventListener('click', this.onDocumentClick)
   }
+  onAddTagsClick() {
+    const {x, y} = this.state
+    const pos = {x, y}
+    this.state.clickHandlers.handleAddTags(pos)
+  }
   render() {
     const {clickHandlers} = this.state
     return (
       <Wrapper {...this.state}>
         <Container data-id='newNote' show={this.state.show}>
           <Item data-id='moreItem' onClick={clickHandlers.handleDelete}>删除这条记事</Item>
-          <Item data-id='newNote'>添加标签</Item>
+          <Item data-id='addNewTag' onClick={::this.onAddTagsClick}>添加标签</Item>
           <Item data-id='newNote'>添加绘图</Item>
           <Item data-id='newNote'>复制</Item>
         </Container>

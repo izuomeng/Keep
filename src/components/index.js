@@ -6,6 +6,8 @@ import Cards from './cards'
 import {BeforeClick} from './newNote'
 import NewNote from './newNote'
 import More from './commen/noteBar/more'
+import AddTag from './commen/noteBar/addTag'
+import Worker from './worker'
 
 export {
     Sidebar, 
@@ -17,5 +19,7 @@ export {
     Cards,
     BeforeClick,
     NewNote,
-    More
+    More,
+    AddTag,
+    Worker
 }

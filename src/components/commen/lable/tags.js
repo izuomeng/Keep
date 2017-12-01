@@ -5,11 +5,12 @@ const Container  = styled.div`
   user-select: none;
   cursor: pointer;
   display: inline-block;
-  padding: 4px 6px;
-  margin: 15px 10px;
+  padding: 3px 7px;
+  margin: 0 0 10px 10px;
   background: rgba(0, 0, 0, 0.08);
   position: relative;
   border-radius: 2px;
+  vertical-align: middle;
   &:hover > div{
     width: calc(100% - 10px);
     overflow: hidden;
@@ -22,7 +23,6 @@ const Container  = styled.div`
 `
 const Delete = styled.div`
   transform: scale(1.4, 1);
-  font-size: 12px;
   font-weight: 100;
   position: absolute;
   right: 8px;
@@ -34,16 +34,17 @@ const Delete = styled.div`
   }
 `
 const Label = styled.div`
-  font-size: 11px;
+  font-size: 12px;
   margin: 0;
   border-radius: 2px;
+  line-height: 19px;
 `
 
-export default ({children, handleClick = () => {}}) => (
-  <Container>
-    <Label>
+export default ({children, handleClick = () => {}, dataID}) => (
+  <Container data-id={dataID}>
+    <Label data-id={dataID}>
       {children}
-      <Delete id='delete' onClick={handleClick}>X</Delete>
+      <Delete id='delete' onClick={handleClick} data-id={dataID}>X</Delete>
     </Label>
   </Container>
 )

@@ -25,3 +25,7 @@ export const editLable = (lable = []) => ({
   type: Types.EDIT_LABLE,
   lable
 })
+export const initLable = (lable = []) => ({
+  type: Types.INIT_LABLE,
+  lable
+})

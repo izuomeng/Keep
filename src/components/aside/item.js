@@ -23,6 +23,9 @@ const Item = ({className, children, handleClick = () => {}}) => (
 )
 const StyledItem = styled(Item)`
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     line-height: 48px;
     padding: 0 20px;
     color: ${COLOR.SIDEBAR_TEXT};

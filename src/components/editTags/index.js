@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
+import {findDOMNode} from 'react-dom'
 import {connect} from 'react-redux'
 import {TextButton} from '../commen/button'
 import IconWithLable from '../commen/icons/base'
@@ -30,6 +31,7 @@ const Top = styled.div`
   padding: 15px;
   max-height: 400px;
   overflow-y: auto;
+  overflow-x: hidden;
   & .tagIcon {
     color: #767676;
     cursor: pointer;
@@ -102,14 +104,40 @@ const IconWithClass = ({className, icon, lable, handleClick}) => (
 class EditTag extends Component {
   constructor(props) {
     super(props)
+    const inputEditTags = this.props.tags.map(v => v.text)
     this.state = {
       inputNewTag: '',
+      inputEditTags: inputEditTags,
       isRepeat: false
     }
+    this.inputs = []
     this.onDeleteClick = this.onDeleteClick.bind(this)
+  }
+  componentWillReceiveProps(nextProp) {
+    this.setState({inputEditTags: nextProp.tags.map(v => v.text)})
   }
   onInputNewTag(e) {
     this.setState({inputNewTag: e.target.value})
+  }
+  onInputEditTag(index) {
+    return (e) => {
+      const myNewTags = this.state.inputEditTags.map((v, i) => {
+        if (i === index) {
+          return e.target.value
+        }
+        return v
+      })
+      this.setState({inputEditTags: myNewTags})
+    }
+  }
+  onInputEditTagBlur() {
+    const prevTags = this.props.tags.map(v => v.text)
+    const newTags = this.state.inputEditTags.filter(v => v)
+    newTags.forEach((v, i) => {
+      if (v !== prevTags[i]) {
+        this.props.editLable(newTags.map(v => ({text: v})))
+      }
+    })
   }
   onOkClick() {
     const {tags, editLable} = this.props
@@ -132,9 +160,19 @@ class EditTag extends Component {
     const newTags = tags.filter(v => v.text !== tagText)
     editLable(newTags)
   }
+  onEditClick(index) {
+    return () => {
+      const inputDOM = findDOMNode(this.inputs[index])
+      inputDOM.focus()
+      inputDOM.select()
+    }
+  }
+  bindInput(ref) {
+    this.inputs.push(ref)
+  }
   render() {
     const {onBackClick, tags} = this.props
-    const {inputNewTag, isRepeat} = this.state
+    const {inputNewTag, isRepeat, inputEditTags} = this.state
     return (
       <Back onClick={onBackClick} data-id='editTagBack'>
         <Main>
@@ -161,7 +199,7 @@ class EditTag extends Component {
               />
             </Item>
             {isRepeat && <Exsist>该标签已存在</Exsist>}
-            {tags.map(v => (
+            {tags.map((v, i) => (
               <Item key={v.text}>
                 <div id='tagIcon'>
                   <IconWithClass
@@ -178,8 +216,13 @@ class EditTag extends Component {
                     handleClick={() => {this.onDeleteClick(v.text)}}
                   />
                 </div>
-                <Input value={v.text} />
-                <div id='editTagIcon'>
+                <Input
+                  value={inputEditTags[i]}
+                  ref={::this.bindInput}
+                  onChange={::this.onInputEditTag(i)}
+                  onBlur={::this.onInputEditTagBlur}
+                />
+                <div id='editTagIcon' onClick={this.onEditClick(i)}>
                   <IconWithClass
                     icon='glyphicon glyphicon-pencil'
                     lable='重命名标签'

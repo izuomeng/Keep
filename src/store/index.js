@@ -5,8 +5,7 @@ import noteReducer from './reducer/notes'
 import userReducer from './reducer/user'
 import popInfoReducer from './reducer/popInfo'
 import appReducer from './reducer/app'
-import promiseMiddleware from './middleware/promiseMiddleware'
-import addNoteMidleware from './middleware/addNoteMiddleware'
+import { promiseMw, addNoteMw, uploadAppMw } from './middleware'
 import { minWidthToHideSidebar } from '@/static/javascript/constants'
 
 const isSidebarShow = window.innerWidth >= minWidthToHideSidebar ? true : false
@@ -51,8 +50,9 @@ const initState = {
 }
 
 const middlewares = [
-  addNoteMidleware,
-  promiseMiddleware
+  addNoteMw,
+  uploadAppMw,
+  promiseMw
 ]
 
 const reducer = combineReducers({

@@ -4,7 +4,7 @@ import {FILL_NOTES} from '../actionTypes/notes'
 import {ADD_USER} from '../actionTypes/user'
 import {INTERNET_ERROR} from '../actionTypes/popInfo'
 import {SYNC_PENDING, SYNC_SUCCESS, SYNC_FAIL} from '../actionTypes/app'
-import {EDIT_LABLE} from '../actionTypes/app'
+import {INIT_LABLE} from '../actionTypes/app'
 
 export const fillNotes = (notes = []) => ({
     type: Types.FILL_NOTES,
@@ -18,7 +18,7 @@ export const requestNotes = (url) => ({
         INTERNET_ERROR,
         FILL_NOTES,
         ADD_USER,
-        EDIT_LABLE
+        INIT_LABLE
     ]
 })
 export const addNote = (updateState, title, text, other) => ({

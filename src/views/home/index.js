@@ -27,15 +27,18 @@ class Home extends Component {
         this.setState({isBeforeClick: false})
     }
     handleDocumentClick(e) {
+        const data = e.target.dataset
         if (this.state.isBeforeClick) {
             return
         }
-        if (e.target.dataset.id === 'newNote') {
+        if (data.id === 'newNote') {
             return
         } else if (e.target.className.indexOf('DraftStyleDefault') > -1) {
             return
-        } else if (e.target.dataset.text) {
+        } else if (data.text) {
             return
+        } else if (data.id === 'addNewTag') {
+          return
         }
         this.setState({isBeforeClick: true})
     }

@@ -17,7 +17,9 @@ export default (state = {}, action) => {
         case Types.TOGGLE_LAYOUT:
           return {...state, isWaterFall: !state.isWaterFall}
         case Types.EDIT_LABLE:
-          return {...state, lables: action.lable || action.result.app.lables || []}
+          return {...state, lables: action.lable}
+        case Types.INIT_LABLE:
+          return {...state, lables: action.result.app.lables || []}
         default:
             return state
     }
