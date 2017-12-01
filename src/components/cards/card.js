@@ -9,6 +9,7 @@ import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
 import SelectIcon from '../commen/icons/select'
 import Tag from '../commen/lable/tags'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Wrapper = styled.div`
     user-select: none;
@@ -41,7 +42,7 @@ const Title = styled.div`
     font-size: 17px;
     line-height: 23px;
     min-height: 38px;
-    padding: 15px 15px 0 15px;
+    padding: 4px 15px 15px 15px;
     white-space: pre-wrap;
     word-wrap: break-word;
     font-family: 'Roboto Condensed',arial,sans-serif;
@@ -79,7 +80,7 @@ class Card extends Component {
             titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
             textEditor: EditorState.createWithContent(textBlocksFromRaw),
             note,
-            bgColor: note.bgColor,
+            bgColor: note.bgColor || '#FAFAFA',
             asyncRender: false,
             isMoreShow: false
         }
@@ -91,10 +92,14 @@ class Card extends Component {
         this.onArchiveClick = this.onArchiveClick.bind(this)
         this.onMoreClick = this.onMoreClick.bind(this)
         this.hideMore = () => this.setState({isMoreShow: false})
+        this.shouldComponentUpdate = shouldUpdate.bind(this)
         const handleDelete = this.onDelete.bind(this)
         this.moreClickHandlers = {
             handleDelete
         }
+    }
+    componentWillReceiveProps(nextProp) {
+      this.setState({note: nextProp.note})
     }
     dispatchNewNote(newNote) {
         this.props.editNote(newNote)
@@ -105,7 +110,8 @@ class Card extends Component {
         if (color === this.state.bgColor) {
             return
         }
-        const newNote = {...this.state.note, bgColor: color}
+        const {note} = this.state
+        const newNote = {...note, bgColor: color}
         this.setState({bgColor: color, note: newNote})
         this.dispatchNewNote(newNote)
     }
@@ -113,8 +119,8 @@ class Card extends Component {
         if (this.state.note.deleteTime) {
             return
         }
-        const {isArchived} = this.state.note
-        const newNote = {...this.state.note, isArchived: !isArchived}
+        const {note} = this.state
+        const newNote = {...note, isArchived: !note.isArchived}
         this.dispatchNewNote(newNote)
     }
     onMoreClick(pos) {
@@ -126,7 +132,7 @@ class Card extends Component {
         if (note.isArchived || note.deleteTime) {
             return
         }
-        const newNote = {...this.state.note, isFixed: !note.isFixed}
+        const newNote = {...note, isFixed: !note.isFixed}
         this.dispatchNewNote(newNote)
     }
     onDelete() {
@@ -134,20 +140,21 @@ class Card extends Component {
             return
         }
         const deleteTime = new Date()
-        const newNote = {...this.state.note, deleteTime}
+        const {note} = this.state
+        const newNote = {...note, deleteTime}
         this.dispatchNewNote(newNote)
     }
     componentDidMount() {
         setTimeout(() => this.setState({asyncRender: true}), 0)
     }
     render() {
-        const {titleEditor, textEditor, isMoreShow} = this.state
+        const {titleEditor, textEditor, isMoreShow, note, bgColor} = this.state
         const titleText = titleEditor.getCurrentContent().getPlainText(),
             bodyText = textEditor.getCurrentContent().getPlainText()
-        const lable = this.state.note.isFixed ? '取消固定' : '固定记事'
+        const lable = note.isFixed ? '取消固定' : '固定记事'
         return (
             <Wrapper 
-                bgColor={this.state.bgColor} 
+                bgColor={bgColor} 
                 data-key={this.props.mykey}
                 isList={this.props.isList}
             >
@@ -156,7 +163,7 @@ class Card extends Component {
                 {titleText &&
                 <Title>
                     <Editor 
-                        editorState={this.state.titleEditor} 
+                        editorState={titleEditor} 
                         onChange={this.titleOnChange}
                         readOnly
                     />
@@ -164,17 +171,19 @@ class Card extends Component {
                 {bodyText && 
                 <Body>
                     <Editor 
-                        editorState={this.state.textEditor} 
+                        editorState={textEditor} 
                         onChange={this.textOnChange}
                         readOnly
                     />
                 </Body>}
-                
+                {note.lable.map(v => (
+                  <Tag key={v.text}>{v.text}</Tag>
+                ))}
                 <MenuContainer isMoreShow={isMoreShow}>
                 {this.state.asyncRender && 
                 <Menus 
                     isInCard 
-                    bgColor={this.state.bgColor} 
+                    bgColor={bgColor} 
                     onColorClick={this.onColorClick}
                     onArchiveClick={this.onArchiveClick}
                     onMoreClick={this.onMoreClick}

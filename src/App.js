@@ -8,7 +8,9 @@ import {
 	Sidebar,
 	PopUp,
 	FullScreenIndicator as Indicator,
-	More
+  More,
+  AddTag,
+  Worker
 } from './components'
 import {minWidthToHideSidebar} from './static/javascript/constants'
 
@@ -40,6 +42,8 @@ class App extends Component {
 				<PopUp />
 				<Indicator />
 				<More />
+        <AddTag />
+        <Worker />
 			</div>
 		)
 	}
