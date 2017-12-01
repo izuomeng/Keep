@@ -144,6 +144,14 @@ class Card extends Component {
         const newNote = {...note, deleteTime}
         this.dispatchNewNote(newNote)
     }
+    onRemoveTag(tagText) {
+      return () => {
+        const {note} = this.state,
+          newTags = note.lable.filter(v => v.text !== tagText),
+          newNote = {...note, lable: newTags}
+        this.dispatchNewNote(newNote)
+      }
+    }
     componentDidMount() {
         setTimeout(() => this.setState({asyncRender: true}), 0)
     }
@@ -177,7 +185,7 @@ class Card extends Component {
                     />
                 </Body>}
                 {note.lable.map(v => (
-                  <Tag key={v.text}>{v.text}</Tag>
+                  <Tag key={v.text} handleClick={this.onRemoveTag(v.text)}>{v.text}</Tag>
                 ))}
                 <MenuContainer isMoreShow={isMoreShow}>
                 {this.state.asyncRender && 

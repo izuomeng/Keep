@@ -10,15 +10,13 @@ const Container = styled.div`
   top: 0;
   z-index: -100;
   visibility: hidden;
-  display: ${props => props.pain ? 'block' : 'none'}
 `
 
 class Worker extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      note: {},
-      paint: false
+      note: {}
     }
     this.compute = this.compute.bind(this)
     this.bindDOM = this.bindDOM.bind(this)
@@ -26,27 +24,24 @@ class Worker extends Component {
   }
   compute(note, callback) {
     this.callback = callback
-    this.setState({note, paint: true})
+    this.setState({note})
   }
   bindDOM(ref) {
     this.cardDOM = findDOMNode(ref)
   }
   componentDidUpdate() {
-    if (this.state.paint) {
-      const height = parseInt(getComputedStyle(this.cardDOM).height, 10)
-      if (this.callback) {
-        this.callback(height)
-      }
-      // setTimeout(() => this.setState({paint: false}), 100)
+    const height = parseInt(getComputedStyle(this.cardDOM).height, 10)
+    if (this.callback) {
+      this.callback(height)
     }
   }
   componentWillUnmount() {
     event.removeListener('computeCardHeight', this.compute)
   }
   render() {
-    const {paint, note} = this.state
+    const {note} = this.state
     return (
-      <Container pain={paint} ref={this.bindDOM}>
+      <Container ref={this.bindDOM}>
         <WorkerCard note={note} />
       </Container>
     )
