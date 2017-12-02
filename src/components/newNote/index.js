@@ -88,17 +88,20 @@ class NewNote extends Component {
     )
   }
   setNewNoteHeight(title = this.titleContentInJs, text = this.textContentInJs) {
-    clearTimeout(this.hid)
-    this.hid = setTimeout(() => {
-      const note = {
-        title,
-        text,
-        lable: this.state.tags
-      }
-      event.emitEvent('computeCardHeight', note, (height) => {
-        this.note.height = height
-      })
-    }, 500)
+    return new Promise((resolve) => {
+      clearTimeout(this.hid)
+      this.hid = setTimeout(() => {
+        const note = {
+          title,
+          text,
+          lable: this.state.tags
+        }
+        event.emitEvent('computeCardHeight', note, (height) => {
+          this.note.height = height
+          resolve()
+        })
+      }, 500)
+    })
   }
   titleOnChange(titleEditorState) {
     const prevContent = this.state.titleEditorState.getCurrentContent(),
@@ -110,17 +113,9 @@ class NewNote extends Component {
     if (nextContent.getPlainText() === prevContent.getPlainText()) {
       return
     }
-    this.setNewNoteHeight(nextContenInJs)
-    // 函数截流
-    clearTimeout(this.tid)
-    this.tid = setTimeout(() => {
-      this.props.addNote(
-        false,
-        nextContenInJs,
-        this.textContentInJs,
-        this.note
-      )
-    }, 500)
+    this.setNewNoteHeight(nextContenInJs).then(() => {
+      this.uploadNoteStatus(false)
+    })
   }
   textOnChange(textEditorState) {
     const prevContent = this.state.textEditorState.getCurrentContent(),
@@ -132,16 +127,9 @@ class NewNote extends Component {
     if (nextContent.getPlainText() === prevContent.getPlainText()) {
       return
     }
-    this.setNewNoteHeight(this.titleContentInJs, nextContentInJs)
-    clearTimeout(this.tid)
-    this.tid = setTimeout(() => {
-      this.props.addNote(
-        false,
-        this.titleContentInJs,
-        nextContentInJs,
-        this.note
-      )
-    }, 500)
+    this.setNewNoteHeight(this.titleContentInJs, nextContentInJs).then(() => {
+      this.uploadNoteStatus(false)
+    })
   }
   isBlank() {
     return !this.titlePlainText && !this.textPlainText
@@ -175,8 +163,7 @@ class NewNote extends Component {
     }
     this.titlePlainText = ''
     this.textPlainText = ''
-    clearTimeout(this.dnID)
-    this.dnID = setTimeout(() => this.props.deleteNote(this.note.id), 200)
+    setTimeout(() => this.props.deleteNote(this.note.id), 200)
   }
   handleAddTags(pos) {
     const handleTagItemClick = this.handleTagItemClick.bind(this)
@@ -188,10 +175,7 @@ class NewNote extends Component {
       const newTags = this.state.tags.filter(v => v.text !== tagText)
       this.setState({tags: newTags})
       this.note.lable = newTags
-      setTimeout(() => {
-        this.setNewNoteHeight()
-        this.uploadNoteStatus(false)
-      }, 100)
+      this.setNewNoteHeight().then(() => this.uploadNoteStatus(false))
     }
   }
   handleTagItemClick(tagText) {
@@ -205,10 +189,7 @@ class NewNote extends Component {
     }
     this.setState({tags: newTags})
     this.note.lable = newTags
-    setTimeout(() => {
-      this.setNewNoteHeight()
-      this.uploadNoteStatus(false)
-    }, 100)
+    this.setNewNoteHeight().then(() => this.uploadNoteStatus(false))
   }
   handleFixClick() {
     if (this.isBlank()) {

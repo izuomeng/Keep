@@ -33,14 +33,14 @@ export const editNote = (newNote) => ({
     newNote
 })
 export const postEditNote = (newNote) => ({
-    promise: axios.post('/notes/editNote', {
-        newNote
-    }).then(res => res.data),
-    types: [
-        SYNC_PENDING,
-        SYNC_SUCCESS,
-        SYNC_FAIL
-    ]
+  promise: axios.post('/notes/editNote', {
+    newNote
+  }).then(res => res.data),
+  types: [
+      SYNC_PENDING,
+      SYNC_SUCCESS,
+      SYNC_FAIL
+  ]
 })
 export const deleteNoteInDB = (id) => ({
     promise: axios.post('/notes/deleteNote', {
