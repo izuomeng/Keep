@@ -1,7 +1,7 @@
 import hooks from './hooks'
 
 export default {
-    path: 'tags',
+    path: 'tags/:name',
     getComponent(nextState, cb) {
         require.ensure([], (require) => {
             cb(null, require('../../views/tags').default)

@@ -51,7 +51,7 @@ class Container extends Component {
       <Wrapper>
         <StyledTitle />
         {tags.map(v => (
-          <Link to={`/tags?tag=${v.text}`} key={v.text}>
+          <Link to={`/tags/${v.text}`} key={v.text}>
             <Item iconName="glyphicon glyphicon-tag" text={v.text} />
           </Link>
         ))}
