@@ -52,9 +52,8 @@ class More extends Component {
       this.state.callback()
     }
     this.setState({
+      ...pos,
       show: true,
-      x: pos.left,
-      y: pos.top,
       callback,
       clickHandlers
     })
@@ -78,8 +77,8 @@ class More extends Component {
     document.removeEventListener('click', this.onDocumentClick)
   }
   onAddTagsClick() {
-    const {x, y} = this.state
-    const pos = {x, y}
+    const {x, y, position} = this.state
+    const pos = {x, y, position}
     this.state.clickHandlers.handleAddTags(pos)
   }
   render() {

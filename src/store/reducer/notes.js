@@ -26,14 +26,20 @@ export default (state = [], action) => {
                 ...restNotes
             ]
         case Types.EDIT_NOTE:
-            let nextNotes = []
-            nextNotes = state.map((v, i) => {
-                if (v.id === action.newNote.id) {
+            return state.map(note => {
+                if (note.id === action.newNote.id) {
                     return action.newNote
                 }
-                return v
+                return note
             })
-            return nextNotes
+        case Types.BATCH_UPDATE_NOTES:
+            return state.map(note => {
+              const newNote = action.notes.find(v => v.id === note.id)
+              if (newNote) {
+                return newNote
+              }
+              return note
+            })
         default:
             return state
     }

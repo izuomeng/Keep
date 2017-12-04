@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {connect} from 'react-redux'
 import event from '@/lib/events'
 import CheckBox from '../../commen/icons/checkBox'
+import {calcTagPosition} from '@/lib/DOM'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -36,6 +37,10 @@ const Item = styled.li`
   &:hover {
     background: #eee;
   }
+`
+const Title = styled.div`
+  font-size: 14px;
+  padding: 0 12px;
 `
 const Text = styled.span`
   user-select: none;
@@ -74,10 +79,10 @@ class AddTag extends Component {
         newCheckStatus[tag] = false
       }
     }
+    calcTagPosition(this.props.tags.length, pos)
     this.setState({
+      ...pos,
       show: true,
-      x: pos.x,
-      y: pos.y,
       clickHandlers,
       checkStatus: newCheckStatus
     })
@@ -109,6 +114,7 @@ class AddTag extends Component {
     return (
       <Wrapper {...this.state}>
         <Container show={show} data-id='addNewTag'>
+          <Title>为记事添加标签</Title>
           {tags.map(v => (
             <Item
               key={v.text}

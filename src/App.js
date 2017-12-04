@@ -10,7 +10,8 @@ import {
 	FullScreenIndicator as Indicator,
   More,
   AddTag,
-  Worker
+  Worker,
+  MessageBox
 } from './components'
 import {minWidthToHideSidebar} from './static/javascript/constants'
 
@@ -44,6 +45,7 @@ class App extends Component {
 				<More />
         <AddTag />
         <Worker />
+        <MessageBox />
 			</div>
 		)
 	}

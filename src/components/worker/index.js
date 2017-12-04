@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
-import WorkerCard from '../cards/wokerCard'
+import WorkerCard from './wokerCard'
 import event from '@/lib/events'
 
 const Container = styled.div`
@@ -16,7 +16,7 @@ class Worker extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      note: {}
+      note: null
     }
     this.compute = this.compute.bind(this)
     this.bindDOM = this.bindDOM.bind(this)
@@ -30,9 +30,24 @@ class Worker extends Component {
     this.cardDOM = findDOMNode(ref)
   }
   componentDidUpdate() {
-    const height = parseInt(getComputedStyle(this.cardDOM).height, 10)
-    if (this.callback) {
-      this.callback(height)
+    let height
+    if (!Array.isArray(this.state.note)) {
+      height = parseInt(getComputedStyle(this.cardDOM).height, 10)
+      if (this.callback) {
+        this.callback(height)
+      }
+    } else {
+      height = []
+      const notes = Array.from(this.cardDOM.children)
+      notes.forEach((note, index) => {
+        height[index] = parseInt(getComputedStyle(note).height, 10)
+      })
+      if (this.callback) {
+        const noteAfterCalc = this.state.note.map((v, i) => {
+          return {...v, height: height[i]}
+        })
+        this.callback(noteAfterCalc)
+      }
     }
   }
   componentWillUnmount() {
@@ -40,11 +55,22 @@ class Worker extends Component {
   }
   render() {
     const {note} = this.state
-    return (
-      <Container ref={this.bindDOM}>
-        <WorkerCard note={note} />
-      </Container>
-    )
+    if (!Array.isArray(note)) {
+      return (
+        <Container ref={this.bindDOM}>
+          <WorkerCard note={note} />
+        </Container>
+      )
+    }
+    else {
+      return (
+        <Container ref={this.bindDOM}>
+          {note.map(v => (
+            <WorkerCard note={v} key={v.id}/>
+          ))}
+        </Container>
+      )
+    }
   }
 }
 

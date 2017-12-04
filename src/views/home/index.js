@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
-import {Cards, BeforeClick, NewNote} from '@/components'
+import {Cards, NewNote} from '@/components'
 
 const CardsConntainer = styled.div`
     margin-top: 40px;
-`
-const Container = styled.div`
-
 `
 class Home extends Component {
     constructor(props) {
@@ -60,22 +57,19 @@ class Home extends Component {
             label = hasFixedNote ? '其他' : '',
             otherNotes = notes.filter(v => !v.isFixed)
         return (
-            <Container>
-                {isBeforeClick && 
-                <BeforeClick 
-                    onClick={this.handleClick} 
-                    data-id="newNote">
-                    添加记事...
-                </BeforeClick>}
-                {!isBeforeClick && 
-                <NewNote hideEditor={this.hideEditor} />}
+            <div>
+                <NewNote
+                  isBeforeClick={isBeforeClick}
+                  onBeforeClick={this.handleClick}
+                  hideEditor={this.hideEditor}
+                />
                 {this.state.asyncRender && 
                 <CardsConntainer>
                     {hasFixedNote && 
                     <Cards notes={fixedNotes} label='已固定的记事'/>}
                     <Cards notes={otherNotes} label={label}/>
                 </CardsConntainer>}
-            </Container>
+            </div>
         )
     }
 }

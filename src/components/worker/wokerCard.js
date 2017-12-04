@@ -45,7 +45,7 @@ const MenuContainer = styled.div.attrs({
 `
 const Card = (props) => {
   const { note } = props
-  if (!note.title) {
+  if (!note || !note.title) {
     return null
   }
   const titleBlocksFromRaw = convertFromRaw(note.title),

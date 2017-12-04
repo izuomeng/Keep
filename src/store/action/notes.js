@@ -52,3 +52,7 @@ export const deleteNoteInDB = (id) => ({
         SYNC_FAIL
     ]
 })
+export const batchUpdateNote = (notes) => ({
+  type: Types.BATCH_UPDATE_NOTES,
+  notes
+})

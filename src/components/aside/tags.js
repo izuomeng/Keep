@@ -8,9 +8,9 @@ import {TextButton as Button} from '../commen/button'
 import shouldUpdate from '@/lib/shouldUpdate'
 import EditTag from '../editTags'
 
-const Title = ({className}) => (
+const Title = ({className, handleClick}) => (
     <div className={className}>
-        标签<Button value='修改'/>
+        标签<Button value='修改' onClick={handleClick} />
     </div>
 )
 const StyledTitle = styled(Title)`
@@ -49,7 +49,7 @@ class Container extends Component {
     const {tags} = this.props
     return (
       <Wrapper>
-        <StyledTitle />
+        <StyledTitle handleClick={::this.onNewTagClick}/>
         {tags.map(v => (
           <Link to={`/tags/${v.text}`} key={v.text}>
             <Item iconName="glyphicon glyphicon-tag" text={v.text} />

@@ -5,6 +5,14 @@ import {connect} from 'react-redux'
 import {TextButton} from '../commen/button'
 import IconWithLable from '../commen/icons/base'
 import {editLable} from '@/store/action/app'
+import {batchUpdateNote} from '@/store/action/notes'
+import MessageBox from '@/lib/messageBox'
+import {DELETE_TAG_CONFIRM} from '@/static/javascript/constants'
+import {
+  getNewNotesAfterEditTag,
+  getNotesNeedToRecalc,
+  recalcHeight
+} from '@/lib/calc'
 
 const Back = styled.div`
   position: fixed;
@@ -156,9 +164,14 @@ class EditTag extends Component {
     this.setState({inputNewTag: '', isRepeat: false})
   }
   onDeleteClick(tagText) {
-    const {tags, editLable} = this.props
+    const {tags, editLable, batchUpdateNote, notes} = this.props
     const newTags = tags.filter(v => v.text !== tagText)
-    editLable(newTags)
+    MessageBox.confirm(DELETE_TAG_CONFIRM).then(() => {
+      editLable(newTags)
+      const newNote = getNewNotesAfterEditTag(tagText, notes)
+      const notesToRecalc = getNotesNeedToRecalc(notes, newNote)
+      return recalcHeight(notesToRecalc)
+    }).then((result) => batchUpdateNote(result))
   }
   onEditClick(index) {
     return () => {
@@ -240,14 +253,22 @@ class EditTag extends Component {
             ))}
           </Top>
           <Bottom>
-            <TextButton value='完成' data-id='editTagBack' />
+            <TextButton
+              value='完成'
+              data-id='editTagBack'
+              onClick={::this.onOkClick}
+            />
           </Bottom>
         </Main>
       </Back>
     )
   }
 }
+const mapState = (state) => ({
+  notes: state.notes
+})
 const mapDispatch = {
-  editLable
+  editLable,
+  batchUpdateNote
 }
-export default connect(null, mapDispatch)(EditTag)
+export default connect(mapState, mapDispatch)(EditTag)

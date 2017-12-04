@@ -12,57 +12,54 @@ import Tag from '../commen/lable/tags'
 import shouldUpdate from '@/lib/shouldUpdate'
 
 const Wrapper = styled.div`
-user-select: none;
-cursor: default;
-position: relative;
-width: ${props => props.isList ? '' : '240px'};
-background: ${props => props.bgColor};
-padding: 10px 0;
-box-sizing: border-box;
-box-shadow: 0 1px 3px darkgrey,
-0 2px 2px darkgrey;
-transition: .2s;
-border-radius: 2px;
-&:hover {
-box-shadow: 0 0 15px 0 darkgrey,
-0 2px 5px 0 darkgrey
-}
-&:hover #MenuContainer {
-opacity: 1;
-}
-&:hover #fixIcon {
-opacity: 1;
-}
-&:hover #selectIcon {
-opacity: 1;
-}
+  user-select: none;
+  cursor: default;
+  position: relative;
+  width: ${props => props.isList ? '' : '240px'};
+  background: ${props => props.bgColor};
+  padding: 10px 0;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px darkgrey,
+  0 2px 2px darkgrey;
+  transition: .2s;
+  border-radius: 2px;
+  &:hover {
+    box-shadow: 0 0 15px 0 darkgrey,
+    0 2px 5px 0 darkgrey
+  }
+  &:hover #MenuContainer {
+    opacity: 1;
+  }
+  &:hover #fixIcon {
+    opacity: 1;
+  }
+  &:hover #selectIcon {
+    opacity: 1;
+  }
 `
 const Title = styled.div`
-font-weight: bold;  
-font-size: 17px;
-line-height: 23px;
-min-height: 38px;
-padding: 4px 15px 15px 15px;
-white-space: pre-wrap;
-word-wrap: break-word;
-font-family: 'Roboto Condensed',arial,sans-serif;
+  font-weight: bold;  
+  font-size: 17px;
+  line-height: 23px;
+  min-height: 38px;
+  padding: 4px 15px 15px 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 `
 const Body = styled.div`
-font-size: 14px;
-line-height: 19px;
-min-height: 30px;
-padding: 12px 15px 15px 15px;
-white-space: pre-wrap;
-word-wrap: break-word;
-font-family: 'Roboto Slab','Times New Roman',serif;
+  font-size: 14px;
+  line-height: 19px;
+  min-height: 30px;
+  padding: 12px 15px 15px 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Roboto Slab','Times New Roman',serif;
 `
-const MenuContainer = styled.div.attrs({
-  id: 'MenuContainer'
-}) `
-padding: 0 10px;
-transition: .3s;
-opacity: ${props => props.isMoreShow ? 1 : 0};
-height: 30px;
+const MenuContainer = styled.div`
+  padding: 0 10px;
+  transition: .3s;
+  opacity: ${props => props.isMoreShow ? 1 : 0};
+  height: 30px;
 `
 class Card extends Component {
   static propTypes = {
@@ -84,6 +81,7 @@ class Card extends Component {
       isMoreShow: false,
       tags: note.lable
     }
+    this.tids = {}
     this.titleOnChange = (titleEditor) => this.setState({ titleEditor })
     this.textOnChange = (textEditor) => this.setState({ textEditor })
     this.dispatchNewNote = this.dispatchNewNote.bind(this)
@@ -92,8 +90,10 @@ class Card extends Component {
     this.onMoreClick = this.onMoreClick.bind(this)
     this.shouldComponentUpdate = shouldUpdate.bind(this)
     const handleDelete = this.onDelete.bind(this)
+    const handleAddTags = this.onAddTag.bind(this)
     this.moreClickHandlers = {
-      handleDelete
+      handleDelete,
+      handleAddTags
     }
     //防止出现update a unmounted component
     this.willUnmount = false
@@ -104,10 +104,13 @@ class Card extends Component {
       this.setState({ isMoreShow: false })
     }
   }
+  componentWillReceiveProps(nextprops) {
+      this.setState({tags: nextprops.note.lable})
+  }
   dispatchNewNote(newNote) {
     this.props.editNote(newNote)
-    clearTimeout(this.tid)
-    this.tid = setTimeout(() => this.props.postEditnote(newNote), 200)
+    clearTimeout(this.tids[newNote.id])
+    this.tids[newNote.id] = setTimeout(() => this.props.postEditnote(newNote), 200)
   }
   setNewNoteHeight(newNote) {
     return new Promise((resolve) => {
@@ -117,7 +120,7 @@ class Card extends Component {
         text: newNote.text,
         lable: newNote.lable
       }
-      event.emitEvent('computeCardHeight', note, (height) => resolve(height))
+      event.emitEvent('computeCardHeight', note, resolve)
     })
   }
   onColorClick(color) {
@@ -157,6 +160,28 @@ class Card extends Component {
     const deleteTime = new Date()
     const newNote = { ...note, deleteTime }
     this.dispatchNewNote(newNote)
+  }
+  onAddTag(pos) {
+    const handleTagItemClick = this.onTagItemClick.bind(this)
+    const tags = this.props.note.lable
+    event.emitEvent('addTagShow', pos, {handleTagItemClick}, tags)
+  }
+  onTagItemClick(tagText) {
+    const {note} = this.props,
+      prevTags = note.lable,
+      hasThisTag = prevTags.findIndex(v => v.text === tagText) > -1 ? true : false
+    let newTags = []
+    if (hasThisTag) {
+      newTags = prevTags.filter(v => v.text !== tagText)
+    } else {
+      newTags = [...prevTags, {text: tagText}]
+    }
+    this.setState({ tags: newTags })
+    const newNote = {...note, lable: newTags}
+    this.setNewNoteHeight(newNote).then((height) => {
+      const moreNewNote = { ...newNote, height }
+      this.dispatchNewNote(moreNewNote)
+    })
   }
   onRemoveTag(tagText) {
     return () => {
@@ -209,7 +234,7 @@ class Card extends Component {
         {tags.map(v => (
           <Tag key={v.text} handleClick={this.onRemoveTag(v.text)}>{v.text}</Tag>
         ))}
-        <MenuContainer isMoreShow={isMoreShow}>
+        <MenuContainer isMoreShow={isMoreShow} id='MenuContainer'>
           {this.state.asyncRender &&
             <Menus
               isInCard
