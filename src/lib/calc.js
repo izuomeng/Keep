@@ -41,3 +41,7 @@ export function recalcHeight(notes) {
     event.emitEvent('computeCardHeight', notes, resolve)
   })
 }
+
+export function add(m, n) {
+  return m + n
+}
