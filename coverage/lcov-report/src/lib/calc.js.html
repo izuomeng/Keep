@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/lib/calc.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/lib</a> calc.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">4.17% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/24</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">9.09% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">4.76% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/21</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import event from './events'
+import {ADD_TAG, REMOVE_TAG} from '../static/javascript/constants'
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >getNewNotesAfterEditTag(</span>tagName, chosenNotes, operate = <span class="branch-0 cbranch-no" title="branch not covered" >REMOVE_TAG)</span> {
+<span class="cstat-no" title="statement not covered" >  if (operate === REMOVE_TAG) {</span>
+<span class="cstat-no" title="statement not covered" >    return chosenNotes.map(<span class="fstat-no" title="function not covered" >no</span>te =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (note.lable.findIndex(<span class="fstat-no" title="function not covered" >v </span>=&gt; <span class="cstat-no" title="statement not covered" >v.text === tagName)</span> &gt; -1) {</span>
+        const newLable = <span class="cstat-no" title="statement not covered" >note.lable.filter(<span class="fstat-no" title="function not covered" >v </span>=&gt; <span class="cstat-no" title="statement not covered" >v.text !== tagName)</span></span>
+<span class="cstat-no" title="statement not covered" >        return {...note, lable: newLable}</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return note</span>
+    })
+  } else <span class="cstat-no" title="statement not covered" >if (operate === ADD_TAG) {</span>
+<span class="cstat-no" title="statement not covered" >    return chosenNotes.map(<span class="fstat-no" title="function not covered" >no</span>te =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (note.lable.findIndex(<span class="fstat-no" title="function not covered" >v </span>=&gt; <span class="cstat-no" title="statement not covered" >v.text === tagName)</span> &lt; 0) {</span>
+        const newLable = <span class="cstat-no" title="statement not covered" >[...note.lable, {text: tagName}]</span>
+<span class="cstat-no" title="statement not covered" >        return {...note, lable: newLable}</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return note</span>
+    })
+  } else {
+<span class="cstat-no" title="statement not covered" >    return chosenNotes</span>
+  }
+}
+export function <span class="fstat-no" title="function not covered" >getNotesNeedToRecalc(</span>prevNotes, nextNotes) {
+  const notesNeedCalc = <span class="cstat-no" title="statement not covered" >[]</span>
+<span class="cstat-no" title="statement not covered" >  nextNotes.forEach(<span class="fstat-no" title="function not covered" >(n</span>ewNote, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (newNote.lable.length !== prevNotes[index].lable.length) {</span>
+<span class="cstat-no" title="statement not covered" >      notesNeedCalc.push(newNote)</span>
+    }
+  })
+<span class="cstat-no" title="statement not covered" >  return notesNeedCalc</span>
+}
+&nbsp;
+/* 
+ * @param {Object} notes the notes need to recalc height
+ * @returns {Object} Promise
+ */
+export function <span class="fstat-no" title="function not covered" >recalcHeight(</span>notes) {
+<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    event.emitEvent('computeCardHeight', notes, resolve)</span>
+  })
+}
+&nbsp;
+export function add(m, n) {
+  return m + n
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Dec 05 2017 13:38:27 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

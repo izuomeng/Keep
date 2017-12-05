@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/components/worker/index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/worker</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/47</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/33</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React,<span class="cstat-no" title="statement not covered" > {Component} from 'react'<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span></span></span></span>
+import {findDOMN<span class="cstat-no" title="statement not covered" >ode} from 'react-dom'</span>
+import styled from 'styl<span class="cstat-no" title="statement not covered" >ed-components'<span class="cstat-no" title="statement not covered" ></span></span>
+import WorkerCard<span class="cstat-no" title="statement not covered" > from './wokerCard'<span class="cstat-no" title="statement not covered" ></span></span>
+import event f<span class="cstat-no" title="statement not covered" >rom '@/lib/events'<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+&nbsp;
+const Container = <span class="cstat-no" title="statement not covered" >styled.div`</span>
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: -100;
+  visibility: hidden;
+`
+&nbsp;
+class Worker extends Component {
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(props) {
+<span class="cstat-no" title="statement not covered" >    super(props)</span>
+<span class="cstat-no" title="statement not covered" >    this.state = {</span>
+      note: null
+    }
+<span class="cstat-no" title="statement not covered" >    this.compute = this.compute.bind(this)</span>
+<span class="cstat-no" title="statement not covered" >    this.bindDOM = this.bindDOM.bind(this)</span>
+<span class="cstat-no" title="statement not covered" >    event.addListener('computeCardHeight', this.compute)</span>
+  }
+<span class="fstat-no" title="function not covered" >  co</span>mpute(note, callback) {
+<span class="cstat-no" title="statement not covered" >    this.callback = callback</span>
+<span class="cstat-no" title="statement not covered" >    this.setState({note})</span>
+  }
+<span class="fstat-no" title="function not covered" >  bi</span>ndDOM(ref) {
+<span class="cstat-no" title="statement not covered" >    this.cardDOM = findDOMNode(ref)</span>
+  }
+<span class="fstat-no" title="function not covered" >  co</span>mponentDidUpdate() {
+    let height
+<span class="cstat-no" title="statement not covered" >    if (!Array.isArray(this.state.note)) {</span>
+<span class="cstat-no" title="statement not covered" >      height = parseInt(getComputedStyle(this.cardDOM).height, 10)</span>
+<span class="cstat-no" title="statement not covered" >      if (this.callback) {</span>
+<span class="cstat-no" title="statement not covered" >        this.callback(height)</span>
+      }
+    } else {
+<span class="cstat-no" title="statement not covered" >      height = []</span>
+      const notes = <span class="cstat-no" title="statement not covered" >Array.from(this.cardDOM.children)</span>
+<span class="cstat-no" title="statement not covered" >      notes.forEach(<span class="fstat-no" title="function not covered" >(n</span>ote, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        height[index] = parseInt(getComputedStyle(note).height, 10)</span>
+      })
+<span class="cstat-no" title="statement not covered" >      if (this.callback) {</span>
+        const noteAfterCalc = <span class="cstat-no" title="statement not covered" >this.state.note.map(<span class="fstat-no" title="function not covered" >(v</span>, i) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          return {...v, height: height[i]}</span>
+        })
+<span class="cstat-no" title="statement not covered" >        this.callback(noteAfterCalc)</span>
+      }
+    }
+  }
+<span class="fstat-no" title="function not covered" >  co</span>mponentWillUnmount() {
+<span class="cstat-no" title="statement not covered" >    event.removeListener('computeCardHeight', this.compute)</span>
+  }
+<span class="fstat-no" title="function not covered" >  re</span>nder() {
+    const {note} = th<span class="cstat-no" title="statement not covered" >is.state</span>
+<span class="cstat-no" title="statement not covered" >    if (!Array.isArray(note)) {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;Container ref={this.bindDOM}&gt;
+          &lt;WorkerCard note={note} /&gt;
+        &lt;/Container&gt;
+      )
+    }
+    else {
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;Container ref={this.bindDOM}&gt;
+          {note.map<span class="fstat-no" title="function not covered" >(v</span> =&gt; (
+<span class="cstat-no" title="statement not covered" >            &lt;WorkerCard note={v} key={v.id}/&gt;</span>
+          ))}
+        &lt;/Container&gt;
+      )
+    }
+  }<span class="cstat-no" title="statement not covered" ></span>
+}
+&nbsp;
+export default Worker</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Dec 05 2017 13:38:27 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

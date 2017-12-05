@@ -30,7 +30,8 @@ export default (state = {}, action) => {
         case Types.INTERNET_ERROR:
             return {
                 type: 'error',
-                message: '无法连接至服务器'
+                message: '无法连接至服务器',
+                time: 1e10
             }
         default:
             return state

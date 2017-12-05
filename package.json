@@ -53,7 +53,7 @@
   "scripts": {
     "start": "node scripts/start.js --hot",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom --coverage"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -105,6 +105,7 @@
     "babel-jest": "^20.0.3",
     "babel-preset-stage-0": "^6.24.1",
     "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
     "jest": "^20.0.4",
     "react-hot-loader": "^3.0.0",
     "regenerator-runtime": "^0.11.0"

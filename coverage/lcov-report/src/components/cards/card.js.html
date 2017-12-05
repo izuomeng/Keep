@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/components/cards/card.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/cards</a> card.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/139</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/38</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/35</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/111</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React,<span class="cstat-no" title="statement not covered" > { Component } from 'react'<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span></span></span></span></span></span>
+import styled from 'styl<span class="cstat-no" title="statement not covered" >ed-components'<span class="cstat-no" title="statement not covered" ></span></span>
+import PropTypes <span class="cstat-no" title="statement not covered" >from 'prop-types'<span class="cstat-no" title="statement not covered" ></span></span>
+import { Editor<span class="cstat-no" title="statement not covered" >, convertFromRaw, Ed</span>itorState } from 'draft-js'
+import { connect }<span class="cstat-no" title="statement not covered" > from 'react-redux'</span>
+import { edit<span class="cstat-no" title="statement not covered" >Note, postEditNote } from '@/sto</span>re/action/notes'
+import event f<span class="cstat-no" title="statement not covered" >rom '@/lib/events'<span class="cstat-no" title="statement not covered" ></span></span>
+import Menus fr<span class="cstat-no" title="statement not covered" >om '../commen/noteBar'<span class="cstat-no" title="statement not covered" ></span></span>
+import FixI<span class="cstat-no" title="statement not covered" >con from '../commen/icons/fix'<span class="cstat-no" title="statement not covered" ></span></span>
+import SelectI<span class="cstat-no" title="statement not covered" >con from '../commen/icons/select'<span class="cstat-no" title="statement not covered" ></span></span>
+import Tag f<span class="cstat-no" title="statement not covered" >rom '../commen/lable/tags'<span class="cstat-no" title="statement not covered" ></span></span>
+import shouldUpdate <span class="cstat-no" title="statement not covered" >from '@/lib/shouldUpdate'<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span>
+&nbsp;
+const Wrapper = <span class="cstat-no" title="statement not covered" >styled.div`</span>
+  user-select: none;
+  cursor: default;
+  position: relative;
+  width: ${<span class="fstat-no" title="function not covered" >pr</span>ops =&gt; <span class="cstat-no" title="statement not covered" >props.isList ? '' : '240px'}</span>;
+  background: ${<span class="fstat-no" title="function not covered" >pr</span>ops =&gt; <span class="cstat-no" title="statement not covered" >props.bgColor}</span>;
+  padding: 10px 0;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px darkgrey,
+  0 2px 2px darkgrey;
+  transition: .2s;
+  border-radius: 2px;
+  &amp;:hover {
+    box-shadow: 0 0 15px 0 darkgrey,
+    0 2px 5px 0 darkgrey
+  }
+  &amp;:hover #MenuContainer {
+    opacity: 1;
+  }
+  &amp;:hover #fixIcon {
+    opacity: 1;
+  }
+  &amp;:hover #selectIcon {
+    opacity: 1;
+  }
+`
+const Title = <span class="cstat-no" title="statement not covered" >styled.div`</span>
+  font-weight: bold;  
+  font-size: 17px;
+  line-height: 23px;
+  min-height: 38px;
+  padding: 4px 15px 15px 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+`
+const Body = <span class="cstat-no" title="statement not covered" >styled.div`</span>
+  font-size: 14px;
+  line-height: 19px;
+  min-height: 30px;
+  padding: 12px 15px 15px 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Roboto Slab','Times New Roman',serif;
+`
+const MenuContainer = <span class="cstat-no" title="statement not covered" >styled.div`</span>
+  padding: 0 10px;
+  transition: .3s;
+  opacity: ${<span class="fstat-no" title="function not covered" >pr</span>ops =&gt; <span class="cstat-no" title="statement not covered" >props.isMoreShow ? 1 : 0}</span>;
+  height: 30px;
+`
+class Card extends Component {
+  static propTypes = {
+    note: PropTypes.object.isRequired
+  }
+  static defaultProps = {
+    isList: false
+  }
+<span class="fstat-no" title="function not covered" >  co</span>nstructor(props) {
+<span class="cstat-no" title="statement not covered" >    super(props)</span>
+    const { note } = <span class="cstat-no" title="statement not covered" >this.props</span>
+    const titleBlocksFromRaw = <span class="cstat-no" title="statement not covered" >convertFromRaw(note.title),</span>
+      textBlocksFromRaw <span class="cstat-no" title="statement not covered" >= convertFromRaw(note.text)</span>
+<span class="cstat-no" title="statement not covered" >    this.state = {</span>
+      titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
+      textEditor: EditorState.createWithContent(textBlocksFromRaw),
+      bgColor: note.bgColor || '#FAFAFA',
+      asyncRender: false,
+      isMoreShow: false,
+      tags: note.lable
+    }
+<span class="cstat-no" title="statement not covered" >    this.tids = {}</span>
+<span class="cstat-no" title="statement not covered" >    this.titleOnChange = <span class="fstat-no" title="function not covered" >(t</span>itleEditor) =<span class="cstat-no" title="statement not covered" >&gt; this.setState({ titleEditor }</span>)</span>
+<span class="cstat-no" title="statement not covered" >    this.textOnChange = <span class="fstat-no" title="function not covered" >(t</span>extEditor) =<span class="cstat-no" title="statement not covered" >&gt; this.setState({ textEditor }</span>)</span>
+<span class="cstat-no" title="statement not covered" >    this.dispatchNewNote = this.dispatchNewNote.bind(this)</span>
+<span class="cstat-no" title="statement not covered" >    this.onColorClick = this.onColorClick.bind(this)</span>
+<span class="cstat-no" title="statement not covered" >    this.onArchiveClick = this.onArchiveClick.bind(this)</span>
+<span class="cstat-no" title="statement not covered" >    this.onMoreClick = this.onMoreClick.bind(this)</span>
+<span class="cstat-no" title="statement not covered" >    this.shouldComponentUpdate = shouldUpdate.bind(this)</span>
+    const handleDelete = <span class="cstat-no" title="statement not covered" >this.onDelete.bind(this)</span>
+    const handleAddTags = <span class="cstat-no" title="statement not covered" >this.onAddTag.bind(this)</span>
+<span class="cstat-no" title="statement not covered" >    this.moreClickHandlers = {</span>
+      handleDelete,
+      handleAddTags
+    }
+    //防止出现update a unmounted component
+    th<span class="cstat-no" title="statement not covered" >is.willUnmount = false</span>
+<span class="cstat-no" title="statement not covered" >    this.hideMore = <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (this.willUnmount) {</span>
+<span class="cstat-no" title="statement not covered" >        return</span>
+      }
+<span class="cstat-no" title="statement not covered" >      this.setState({ isMoreShow: false })</span>
+    }
+  }
+<span class="fstat-no" title="function not covered" >  co</span>mponentWillReceiveProps(nextprops) {
+<span class="cstat-no" title="statement not covered" >      this.setState({tags: nextprops.note.lable})</span>
+  }
+<span class="fstat-no" title="function not covered" >  di</span>spatchNewNote(newNote) {
+<span class="cstat-no" title="statement not covered" >    this.props.editNote(newNote)</span>
+<span class="cstat-no" title="statement not covered" >    clearTimeout(this.tids[newNote.id])</span>
+<span class="cstat-no" title="statement not covered" >    this.tids[newNote.id] = setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >this.props.postEditnote(newNote),</span> 200)</span>
+  }
+<span class="fstat-no" title="function not covered" >  se</span>tNewNoteHeight(newNote) {
+<span class="cstat-no" title="statement not covered" >    return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      clearTimeout(this.hid)</span>
+      const note = <span class="cstat-no" title="statement not covered" >{</span>
+        title: newNote.title,
+        text: newNote.text,
+        lable: newNote.lable
+      }
+<span class="cstat-no" title="statement not covered" >      event.emitEvent('computeCardHeight', note, resolve)</span>
+    })
+  }
+<span class="fstat-no" title="function not covered" >  on</span>ColorClick(color) {
+<span class="cstat-no" title="statement not covered" >    if (color === this.state.bgColor) {</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+    }
+    const { note } = <span class="cstat-no" title="statement not covered" >this.props</span>
+    const newNote = <span class="cstat-no" title="statement not covered" >{ ...note, bgColor: color }</span>
+<span class="cstat-no" title="statement not covered" >    this.setState({ bgColor: color })</span>
+<span class="cstat-no" title="statement not covered" >    this.dispatchNewNote(newNote)</span>
+  }
+<span class="fstat-no" title="function not covered" >  on</span>ArchiveClick() {
+    const { note } = <span class="cstat-no" title="statement not covered" >this.props</span>
+<span class="cstat-no" title="statement not covered" >    if (note.deleteTime) {</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+    }
+    const newNote = <span class="cstat-no" title="statement not covered" >{ ...note, isArchived: !note.isArchived }</span>
+<span class="cstat-no" title="statement not covered" >    this.dispatchNewNote(newNote)</span>
+  }
+<span class="fstat-no" title="function not covered" >  on</span>MoreClick(pos) {
+<span class="cstat-no" title="statement not covered" >    event.emitEvent('moreClick', pos, this.hideMore, this.moreClickHandlers)</span>
+<span class="cstat-no" title="statement not covered" >    this.setState({ isMoreShow: true })</span>
+  }
+<span class="fstat-no" title="function not covered" >  on</span>FixClick() {
+    const { note } = <span class="cstat-no" title="statement not covered" >this.props</span>
+<span class="cstat-no" title="statement not covered" >    if (note.isArchived || note.deleteTime) {</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+    }
+    const newNote = <span class="cstat-no" title="statement not covered" >{ ...note, isFixed: !note.isFixed }</span>
+<span class="cstat-no" title="statement not covered" >    this.dispatchNewNote(newNote)</span>
+  }
+<span class="fstat-no" title="function not covered" >  on</span>Delete() {
+    const { note } = <span class="cstat-no" title="statement not covered" >this.props</span>
+<span class="cstat-no" title="statement not covered" >    if (note.deleteTime) {</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+    }
+    const deleteTime = <span class="cstat-no" title="statement not covered" >new Date()</span>
+    const newNote = <span class="cstat-no" title="statement not covered" >{ ...note, deleteTime }</span>
+<span class="cstat-no" title="statement not covered" >    this.dispatchNewNote(newNote)</span>
+  }
+<span class="fstat-no" title="function not covered" >  on</span>AddTag(pos) {
+    const handleTagItemClick = <span class="cstat-no" title="statement not covered" >this.onTagItemClick.bind(this)</span>
+    const tags = <span class="cstat-no" title="statement not covered" >this.props.note.lable</span>
+<span class="cstat-no" title="statement not covered" >    event.emitEvent('addTagShow', pos, {handleTagItemClick}, tags)</span>
+  }
+<span class="fstat-no" title="function not covered" >  on</span>TagItemClick(tagText) {
+    const {note} = th<span class="cstat-no" title="statement not covered" >is.props,</span>
+      prevTags <span class="cstat-no" title="statement not covered" >= note.labl</span>e,
+      hasThisTag <span class="cstat-no" title="statement not covered" >= prevTags.findInde<span class="fstat-no" title="function not covered" >x(</span>v =<span class="cstat-no" title="statement not covered" >&gt; v.text === tagTex</span>t) &gt; -1 ? true : fals</span>e
+    let newTags = <span class="cstat-no" title="statement not covered" >[]</span>
+<span class="cstat-no" title="statement not covered" >    if (hasThisTag) {</span>
+<span class="cstat-no" title="statement not covered" >      newTags = prevTags.filter(<span class="fstat-no" title="function not covered" >v </span>=&gt; <span class="cstat-no" title="statement not covered" >v.text !== tagText)</span></span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      newTags = [...prevTags, {text: tagText}]</span>
+    }
+<span class="cstat-no" title="statement not covered" >    this.setState({ tags: newTags })</span>
+    const newNote = <span class="cstat-no" title="statement not covered" >{...note, lable: newTags}</span>
+<span class="cstat-no" title="statement not covered" >    this.setNewNoteHeight(newNote).then(<span class="fstat-no" title="function not covered" >(h</span>eight) =&gt; {</span>
+      const moreNewNote = <span class="cstat-no" title="statement not covered" >{ ...newNote, height }</span>
+<span class="cstat-no" title="statement not covered" >      this.dispatchNewNote(moreNewNote)</span>
+    })
+  }
+<span class="fstat-no" title="function not covered" >  on</span>RemoveTag(tagText) {
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+      const { note } = <span class="cstat-no" title="statement not covered" >this.props,</span>
+        { tags } <span class="cstat-no" title="statement not covered" >= this.stat</span>e,
+        newTags <span class="cstat-no" title="statement not covered" >= tags.filte<span class="fstat-no" title="function not covered" >r(</span>v =<span class="cstat-no" title="statement not covered" >&gt; v.text !== tagTex</span>t</span>),
+        newNote <span class="cstat-no" title="statement not covered" >= { ...note, lable: newTags }</span>
+<span class="cstat-no" title="statement not covered" >      this.setState({ tags: newTags })</span>
+<span class="cstat-no" title="statement not covered" >      this.setNewNoteHeight(newNote).then(<span class="fstat-no" title="function not covered" >(h</span>eight) =&gt; {</span>
+        const moreNewNote = <span class="cstat-no" title="statement not covered" >{ ...newNote, height }</span>
+<span class="cstat-no" title="statement not covered" >        this.dispatchNewNote(moreNewNote)</span>
+      })
+    }
+  }
+<span class="fstat-no" title="function not covered" >  co</span>mponentDidMount() {
+<span class="cstat-no" title="statement not covered" >    setTimeout(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >this.setState({ asyncRender: true }),</span> 0)</span>
+  }
+<span class="fstat-no" title="function not covered" >  co</span>mponentWillUnmount() {
+<span class="cstat-no" title="statement not covered" >    this.willUnmount = true</span>
+  }
+<span class="fstat-no" title="function not covered" >  re</span>nder() {
+    const { titleEditor, textEditor, isMoreShow, bgColor, tags } = <span class="cstat-no" title="statement not covered" >this.state</span>
+    const { note } = <span class="cstat-no" title="statement not covered" >this.props</span>
+    const titleText = <span class="cstat-no" title="statement not covered" >titleEditor.getCurrentContent().getPlainText(),</span>
+      bodyText <span class="cstat-no" title="statement not covered" >= textEditor.getCurrentContent().getPlainText(</span>)
+    const lable = <span class="cstat-no" title="statement not covered" >note.isFixed ? '取消固定' : '固定记事'</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;Wrapper
+        bgColor={bgColor}
+        isList={this.props.isList}
+      &gt;
+        &lt;SelectIcon handleClick={() =&gt; console.log('select clicked')} /<span class="fstat-no" title="function not covered" >&gt;<span class="cstat-no" title="statement not covered" ></span></span>
+        &lt;FixIcon handleClick={::this.onFixClick} lable={lable}/&gt;
+        {titleText &amp;&amp;
+          &lt;Title&gt;
+            &lt;Editor
+              editorState={titleEditor}
+              onChange={this.titleOnChange}
+              readOnly
+            /&gt;
+          &lt;/Title&gt;}
+        {bodyText &amp;&amp;
+          &lt;Body&gt;
+            &lt;Editor
+              editorState={textEditor}
+              onChange={this.textOnChange}
+              readOnly
+            /&gt;
+          &lt;/Body&gt;}
+        {tags.map<span class="fstat-no" title="function not covered" >(v</span> =&gt; (
+<span class="cstat-no" title="statement not covered" >          &lt;Tag key={v.text} handleClick={this.onRemoveTag(v.text)}&gt;{v.text}&lt;/Tag&gt;</span>
+        ))}
+        &lt;MenuContainer isMoreShow={isMoreShow} id='MenuContainer'&gt;
+          {this.state.asyncRender &amp;&amp;
+            &lt;Menus
+              isInCard
+              bgColor={bgColor}
+              onColorClick={this.onColorClick}
+              onArchiveClick={this.onArchiveClick}
+              onMoreClick={this.onMoreClick}
+            /&gt;}
+        &lt;/MenuContainer&gt;
+      &lt;/Wrapper&gt;
+    )
+  }<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span>
+}
+&nbsp;
+const mapDispatch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ispatch) =&gt;<span class="cstat-no" title="statement not covered" > ({</span></span>
+  editNote(newNote) {
+<span class="cstat-no" title="statement not covered" >    dispatch(editNote(newNote))</span>
+  },
+  postEditnote(newNote) {
+<span class="cstat-no" title="statement not covered" >    dispatch(postEditNote(newNote))</span>
+  }<span class="cstat-no" title="statement not covered" ></span>
+})
+&nbsp;
+export default connect(null, mapDispatch)(Card)
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Dec 05 2017 13:38:27 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

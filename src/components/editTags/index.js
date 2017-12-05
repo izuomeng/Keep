@@ -23,6 +23,7 @@ const Back = styled.div`
   background: rgba(10, 10, 10, 0.6);
   z-index: 999;
   vertical-align: middle;
+  visibility: visible;
 `
 
 const Main = styled.div`
