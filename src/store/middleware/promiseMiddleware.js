@@ -1,3 +1,8 @@
+import {browserHistory} from 'react-router'
+import {SYNC_STATIC} from '../actionTypes/app'
+import {AUTH_TIME_EXCEED} from '../actionTypes/popInfo'
+import {REMOVE_USER} from '../actionTypes/user'
+
 const isPromise = (obj) => obj && typeof obj.then === 'function'
 
 export default ({ dispatch }) => (next) => (action) => {
@@ -11,15 +16,22 @@ export default ({ dispatch }) => (next) => (action) => {
     ...rest
   })
   return action.promise.then((result) => {
-    dispatch({
-      type: DONE,
-      result,
-      ...rest
-    })
-    OTHER.forEach(v => dispatch({
-      type: v,
-      result
-    }))
+    if (result.type === 'error' && result.message === 'not authenticate') {
+      browserHistory.push('/login')
+      dispatch({type: SYNC_STATIC})
+      dispatch({type: AUTH_TIME_EXCEED})
+      dispatch({type: REMOVE_USER})
+    } else {
+      dispatch({
+        type: DONE,
+        result,
+        ...rest
+      })
+      OTHER.forEach(v => dispatch({
+        type: v,
+        result
+      }))
+    }
   }, (error) => {
     dispatch({
       type: FAIL,

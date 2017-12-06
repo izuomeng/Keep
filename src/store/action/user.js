@@ -6,6 +6,7 @@ export const addUser = (name) => ({
     type: Types.ADD_USER,
     name
 })
+
 export const removeUser = () => ({
     promise: axios.get('/logout').then(res => res.data),
     types: [

@@ -16,6 +16,10 @@ export default (state = {}, action) => {
                 name: state.name, //登出失败还是原来的用户
                 logout: false
             }
+        case Types.REMOVE_USER:
+            return {
+              name: ''
+            }
         default:
             return state
     }

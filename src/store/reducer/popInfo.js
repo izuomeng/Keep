@@ -33,6 +33,11 @@ export default (state = {}, action) => {
                 message: '无法连接至服务器',
                 time: 1e10
             }
+        case Types.AUTH_TIME_EXCEED:
+            return {
+              type: 'error',
+              message: '认证过期，请重新登陆',
+            }
         default:
             return state
     }
