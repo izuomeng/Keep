@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Editor, convertFromRaw, EditorState } from 'draft-js'
 import { connect } from 'react-redux'
 import { editNote, postEditNote } from '@/store/action/notes'
+import { setEditMode } from '@/store/action/app'
 import event from '@/lib/events'
 import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
@@ -12,6 +14,7 @@ import Tag from '../commen/lable/tags'
 import shouldUpdate from '@/lib/shouldUpdate'
 
 const Wrapper = styled.div`
+  opacity: ${props => props.isEditable ? '0' : '1'};
   user-select: none;
   cursor: default;
   position: relative;
@@ -21,7 +24,6 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   box-shadow: 0 1px 3px darkgrey,
   0 2px 2px darkgrey;
-  transition: .2s;
   border-radius: 2px;
   &:hover {
     box-shadow: 0 0 15px 0 darkgrey,
@@ -61,6 +63,7 @@ const MenuContainer = styled.div`
   opacity: ${props => props.isMoreShow ? 1 : 0};
   height: 30px;
 `
+
 class Card extends Component {
   static propTypes = {
     note: PropTypes.object.isRequired
@@ -79,7 +82,8 @@ class Card extends Component {
       bgColor: note.bgColor || '#FAFAFA',
       asyncRender: false,
       isMoreShow: false,
-      tags: note.lable
+      tags: note.lable,
+      isEditable: false
     }
     this.tids = {}
     this.titleOnChange = (titleEditor) => this.setState({ titleEditor })
@@ -89,6 +93,7 @@ class Card extends Component {
     this.onArchiveClick = this.onArchiveClick.bind(this)
     this.onMoreClick = this.onMoreClick.bind(this)
     this.shouldComponentUpdate = shouldUpdate.bind(this)
+    this.onCardClick = this.onCardClick.bind(this)
     const handleDelete = this.onDelete.bind(this)
     const handleAddTags = this.onAddTag.bind(this)
     this.moreClickHandlers = {
@@ -105,12 +110,14 @@ class Card extends Component {
     }
   }
   componentWillReceiveProps(nextprops) {
+    if (!this.state.isEditable) {
       this.setState({tags: nextprops.note.lable})
+    }
   }
   dispatchNewNote(newNote) {
     this.props.editNote(newNote)
     clearTimeout(this.tids[newNote.id])
-    this.tids[newNote.id] = setTimeout(() => this.props.postEditnote(newNote), 200)
+    this.tids[newNote.id] = setTimeout(() => this.props.postEditNote(newNote), 200)
   }
   setNewNoteHeight(newNote) {
     return new Promise((resolve) => {
@@ -196,25 +203,61 @@ class Card extends Component {
       })
     }
   }
-  componentDidMount() {
-    setTimeout(() => this.setState({ asyncRender: true }), 0)
+  onCardClick(e) {
+    if (e.target.dataset.id === 'newNote') {
+      return
+    }
+    const {setEditMode, note} = this.props
+    const pos = this.container.getBoundingClientRect()
+    requestAnimationFrame(() => {
+      setEditMode(true, note, pos.left, pos.top, {
+        showPrevCard: () => this.setState({isEditable: false})
+      }, this.container)
+      this.setState({isEditable: true})
+    })
+  }
+  renderMenu() {
+    if (!this.state.asyncRender) {
+      this.setState({ asyncRender: true })
+    }
   }
   componentWillUnmount() {
     this.willUnmount = true
   }
+  getRef(ref) {
+    this.container = findDOMNode(ref)
+  }
   render() {
-    const { titleEditor, textEditor, isMoreShow, bgColor, tags } = this.state
-    const { note } = this.props
+    const { titleEditor,
+            textEditor,
+            isMoreShow,
+            bgColor,
+            isEditable,
+            tags } = this.state
+    const { note, style, onCardClick } = this.props
     const titleText = titleEditor.getCurrentContent().getPlainText(),
       bodyText = textEditor.getCurrentContent().getPlainText()
     const lable = note.isFixed ? '取消固定' : '固定记事'
     return (
       <Wrapper
+        id={note.id}
         bgColor={bgColor}
         isList={this.props.isList}
+        onClick={onCardClick || this.onCardClick}
+        isEditable={isEditable}
+        style={style || {}}
+        ref={::this.getRef}
+        onMouseOver={::this.renderMenu}
       >
-        <SelectIcon handleClick={() => console.log('select clicked')} />
-        <FixIcon handleClick={::this.onFixClick} lable={lable}/>
+        <SelectIcon
+          handleClick={() => console.log('select clicked')}
+          dataID='newNote'
+        />
+        <FixIcon
+          handleClick={::this.onFixClick}
+          lable={lable}
+          dataID='newNote'
+        />
         {titleText &&
           <Title>
             <Editor
@@ -232,7 +275,13 @@ class Card extends Component {
             />
           </Body>}
         {tags.map(v => (
-          <Tag key={v.text} handleClick={this.onRemoveTag(v.text)}>{v.text}</Tag>
+          <Tag
+            key={v.text}
+            handleClick={this.onRemoveTag(v.text)}
+            dataID='newNote'
+          >
+            {v.text}
+          </Tag>
         ))}
         <MenuContainer isMoreShow={isMoreShow} id='MenuContainer'>
           {this.state.asyncRender &&
@@ -249,13 +298,10 @@ class Card extends Component {
   }
 }
 
-const mapDispatch = (dispatch) => ({
-  editNote(newNote) {
-    dispatch(editNote(newNote))
-  },
-  postEditnote(newNote) {
-    dispatch(postEditNote(newNote))
-  }
-})
+const mapDispatch = {
+  editNote,
+  postEditNote,
+  setEditMode
+}
 
 export default connect(null, mapDispatch)(Card)

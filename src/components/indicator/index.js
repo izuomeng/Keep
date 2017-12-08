@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import styled, {keyframes} from 'styled-components'
 import emmiter from '@/lib/events'
 import COLOR from '../../static/javascript/color'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const rotate = keyframes`
     from{
@@ -79,6 +80,7 @@ class FullScreenIndicator extends Component{
         }
         this.onLoading = () => this.setState({show: true})
         this.onStopLoading = () => this.setState({show: false})
+        this.shouldComponentUpdate = shouldUpdate.bind(this)
     }
     componentDidMount() {
         emmiter.addListener('loading', this.onLoading)

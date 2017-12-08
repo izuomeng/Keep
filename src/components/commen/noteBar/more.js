@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import event from '@/lib/events'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Item = styled.li`
   padding: 7px 10px 3px 17px;
@@ -16,7 +17,7 @@ const Wrapper = styled.div`
   left: ${props => props.x + 'px'};
   top: ${props => props.y + 'px'};
   visibility: ${props => props.show ? 'visible' : 'hidden'};
-  z-index: 999;
+  z-index: 1100;
 `
 const Container = styled.ul`
   font-size: 13px;
@@ -40,6 +41,7 @@ class More extends Component {
     this.show = this.show.bind(this)
     this.hide = this.hide.bind(this)
     this.onDocumentClick = this.onDocumentClick.bind(this)
+    this.shouldComponentUpdate = shouldUpdate.bind(this)
     event.addListener('moreClick', this.show)
     event.addListener('moreHide', this.hide)
     document.addEventListener('click', this.onDocumentClick)
@@ -63,7 +65,7 @@ class More extends Component {
     if (!this.state.show) {
       return
     }
-    if (data.lable === '更多') {
+    if (data.lable === '更多' || data.id === 'addNewTag') {
         return
     }
     if (this.state.callback) {

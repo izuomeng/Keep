@@ -14,6 +14,7 @@ import {LayerIcon,
 import Avatar from './avatar'
 import {StyledIconSnake as Snake} from '../indicator'
 import {toggleLayout} from '@/store/action/app'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Header = styled.header`
     z-index: 990;
@@ -41,6 +42,7 @@ class HeaderContainer extends Component {
             isWaterFall: this.props.isWaterFall,
             shadow: false
         }
+        this.shouldComponentUpdate = shouldUpdate.bind(this)
         this.onLayerClick = this.onLayerClick.bind(this)
         this.tesShadow = this.tesShadow.bind(this)
         window.addEventListener('scroll', this.tesShadow)

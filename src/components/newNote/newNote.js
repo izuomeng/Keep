@@ -135,11 +135,11 @@ class NewNote extends Component {
     return !this.titlePlainText && !this.textPlainText
   }
   componentWillUnmount() {
-    requestAnimationFrame(() => {
-      if (!this.isBlank()) {
+    if (!this.isBlank()) {
+      requestAnimationFrame(() => {
         this.uploadNoteStatus(true)
-      }
-    })
+      })
+    }
   }
   handleColorChange(color) {
     this.setState({ bgColor: color })

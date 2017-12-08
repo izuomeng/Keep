@@ -3,6 +3,7 @@ import Header from './head'
 import Pop, {PopUp} from './popup'
 import FullScreenIndicator, {NoStateIndicator} from './indicator'
 import Cards from './cards'
+import EditableCard from './cards/editableCard'
 import NewNote from './newNote'
 import More from './commen/noteBar/more'
 import AddTag from './commen/noteBar/addTag'
@@ -17,6 +18,7 @@ export {
     NoStateIndicator,
     FullScreenIndicator,
     Cards,
+    EditableCard,
     NewNote,
     More,
     AddTag,

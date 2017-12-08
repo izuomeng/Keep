@@ -3,6 +3,7 @@ import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
 import WorkerCard from './wokerCard'
 import event from '@/lib/events'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Container = styled.div`
   position: fixed;
@@ -20,6 +21,7 @@ class Worker extends Component {
     }
     this.compute = this.compute.bind(this)
     this.bindDOM = this.bindDOM.bind(this)
+    this.shouldComponentUpdate = shouldUpdate.bind(this)
     event.addListener('computeCardHeight', this.compute)
   }
   compute(note, callback) {

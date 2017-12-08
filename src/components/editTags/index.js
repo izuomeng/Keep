@@ -65,7 +65,6 @@ const Item = styled.div`
   height: 45px;
   align-items: center;
   margin: 0 10px;
-  z-index: 9999;
   & input:focus {
     border-bottom-width: .5px;
   }

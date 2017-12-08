@@ -20,6 +20,9 @@ export default (state = {}, action) => {
           return {...state, lables: action.lable}
         case Types.INIT_LABLE:
           return {...state, lables: action.result.app.lables || []}
+        case Types.SET_EDIT_MODE:
+          const {type, ...rest} = action
+          return {...state, editMode: {...rest}}
         default:
             return state
     }

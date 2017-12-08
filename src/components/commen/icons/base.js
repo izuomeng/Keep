@@ -6,7 +6,7 @@ const Icon = ({className, icon, lable, dataID, children, handleClick = ()=>{}}) 
   <div className={className} data-id={dataID} onClick={handleClick} data-lable={lable}>
       <span className={icon} data-id={dataID} data-lable={lable}></span>
       {children}
-      <Lable value={lable} />
+      <Lable value={lable} dataID={dataID}/>
   </div>
 )
 const StyledIcon = styled(Icon)`

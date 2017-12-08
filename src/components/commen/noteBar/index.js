@@ -6,6 +6,7 @@ import { getPosition } from '@/lib/DOM'
 import { TextButton } from '../button'
 import Palette from './palette'
 import Icon from './icon'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Wrapper = styled.div.attrs({
   'data-id': 'newNote'
@@ -23,6 +24,7 @@ class Menus extends Component {
   constructor(props) {
     super(props)
     this.onMoreClick = this.onMoreClick.bind(this)
+    this.shouldComponentUpdate = shouldUpdate.bind(this)
   }
   onMoreClick() {
     const pos = getPosition(this.more)

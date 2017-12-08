@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 import React, { Component } from 'react'
-import store from '@/store'
+import {connect} from 'react-redux'
 import { clearInfo } from '@/store/action/popInfo'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Pop = styled.div`
   display: ${props => props.show ? 'block' : 'none'};
@@ -23,31 +24,37 @@ class PopUp extends Component {
       show: false,
       message: ''
     }
-    this.unsubscribe = store.subscribe(() => {
-      const popInfo = store.getState()['popInfo']
-      if (popInfo.message) {
-        this.setState({
-          show: true,
-          message: popInfo.message
-        })
-        clearTimeout(this.tid)
-        this.tid = setTimeout(() => {
-          this.setState({ show: false })
-          store.dispatch(clearInfo())
-        }, popInfo.time || 2000)
-      }
-    })
+    this.shouldComponentUpdate = shouldUpdate.bind(this)
   }
-  componentWillUnmount() {
-    this.unsubscribe()
+  componentWillReceiveProps(nextProps) {
+    const {popInfo} = nextProps
+    if (popInfo.message) {
+      this.setState({
+        show: true,
+        message: popInfo.message
+      })
+      clearTimeout(this.tid)
+      this.tid = setTimeout(() => {
+        this.setState({ show: false })
+        this.props.clearInfo()
+      }, popInfo.time || 2000)
+    }
   }
   render() {
+    const {show, message} = this.state
     return (
-      <Pop show={this.state.show}>
-        {this.state.message}
+      <Pop show={show}>
+        {message}
       </Pop>
     )
   }
 }
+const mapState = (state) => ({
+  popInfo: state.popInfo
+})
+const mapDispatch = {
+  clearInfo
+}
+const connectPopUp = connect(mapState, mapDispatch)(PopUp)
 export default Pop
-export { PopUp }
+export { connectPopUp as PopUp }

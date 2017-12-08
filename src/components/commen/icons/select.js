@@ -5,7 +5,8 @@ import Icon from './base'
 
 const props = {
   icon: 'glyphicon glyphicon-ok',
-  lable: '选择记事'
+  lable: '选择记事',
+  dataID: 'newNote'
 }
 
 const SelectIcon = AddProps(Icon)(props)
@@ -27,8 +28,8 @@ const Container = styled.div`
     padding-left: 7px;
   }
 `
-export default ({handleClick}) => (
-  <Container id='selectIcon'>
+export default ({handleClick, dataID}) => (
+  <Container id='selectIcon' data-id={dataID}>
     <SelectIcon handleClick={handleClick}/>
   </Container>
 )

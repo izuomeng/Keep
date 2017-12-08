@@ -29,3 +29,12 @@ export const initLable = (lable = []) => ({
   type: Types.INIT_LABLE,
   lable
 })
+export const setEditMode = (isEditable, note, left, top, callback, cardRef) => ({
+  type: Types.SET_EDIT_MODE,
+  isEditable,
+  note,
+  left,
+  top,
+  callback,
+  cardRef
+})

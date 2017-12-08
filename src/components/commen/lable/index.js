@@ -13,9 +13,9 @@ const Lable = styled.div`
     line-height: normal;
     left: calc(-50% - 7px);
 `
-const DadLable = ({className, value}) => (
+const DadLable = ({className, value, dataID}) => (
     <div className={className}>
-        <Lable>{value}</Lable>
+        <Lable data-id={dataID}>{value}</Lable>
     </div>
 )
 

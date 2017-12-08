@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   left: ${props => props.x + 'px'};
   top: ${props => props.y + 'px'};
   visibility: ${props => props.show ? 'visible' : 'hidden'};
-  z-index: 999;
+  z-index: 1100;
 `
 const Container = styled.ul`
   font-size: 13px;
@@ -101,7 +101,7 @@ class AddTag extends Component {
     if (data.id === 'addNewTag') {
       return
     }
-    this.setState({show: false, y: -200})
+    this.setState({show: false, y: -1000})
   }
   componentWillUnmount() {
     event.removeListener('addTagShow', this.show)

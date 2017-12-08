@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import { TextButton } from '../button'
 import event from '@/lib/events'
+import shouldUpdate from '@/lib/shouldUpdate'
 
 const Back = styled.div`
   position: fixed;
@@ -43,6 +44,7 @@ class MessageBox extends Component {
       show: false,
       message: ''
     }
+    this.shouldComponentUpdate = shouldUpdate.bind(this)
     this.eventHandlers = {}
     this.onPop = this.onPop.bind(this)
     event.addListener('pop', this.onPop)
