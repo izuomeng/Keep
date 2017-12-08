@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
 import {connect} from 'react-redux'
+import { convertToRaw } from 'draft-js'
 import {setEditMode} from '@/store/action/app'
+import { editNote } from '@/store/action/notes'
 import Card from './card'
 import Back from '../commen/fullScreen'
 
@@ -32,6 +34,10 @@ const Background = styled.div`
   width: 100%;
   height: 100%;
   transition: .2s;
+  cursor: default;
+  & + div {
+    cursor: text;
+  }
 `
 class EditableCard extends Component {
   constructor(props) {
@@ -60,6 +66,32 @@ class EditableCard extends Component {
       requestAnimationFrame(() => this.props.setEditMode(false))
     }, 200)
   }
+  titleOnChange(titleEditorState) {
+    this.setState({ titleEditor: titleEditorState })
+    const nextContent = titleEditorState.getCurrentContent(),
+      nextContenInJs = convertToRaw(nextContent)
+    if (nextContent.getPlainText() === this.titleContent.getPlainText()) {
+      return
+    }
+    this.titleInJs = nextContenInJs
+    this.titleContent = nextContent
+    const {note} = this.props,
+      newNote = {...note, title: nextContenInJs}
+    this.dispatchNewNote(newNote)
+  }
+  textOnChange(textEditorState) {
+    this.setState({textEditor: textEditorState})
+    const nextContent = textEditorState.getCurrentContent(),
+      nextContenInJs = convertToRaw(nextContent)
+    if (nextContent.getPlainText() === this.textContent.getPlainText()) {
+      return
+    }
+    this.textInJs = nextContenInJs
+    this.textContent = nextContent
+    const {note} = this.props,
+      newNote = {...note, text: nextContenInJs}
+    this.dispatchNewNote(newNote)
+  }
   render() {
     const {note, isEditable} = this.props
     const {cardStyle} = this.state
@@ -75,6 +107,9 @@ class EditableCard extends Component {
           style={cardStyle}
           note={note}
           onCardClick={()=>{}}
+          inEditable
+          titleOnChange={this.titleOnChange}
+          textOnChange={this.textOnChange}
         />}
       </Container>
     )
@@ -84,6 +119,7 @@ const mapState = (state) => ({
   ...state.app.editMode
 })
 const mapDispatch = {
-  setEditMode
+  setEditMode,
+  editNote
 }
 export default connect(mapState, mapDispatch)(EditableCard)

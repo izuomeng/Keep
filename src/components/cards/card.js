@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { Editor, convertFromRaw, EditorState } from 'draft-js'
 import { connect } from 'react-redux'
@@ -17,6 +18,7 @@ const Wrapper = styled.div`
   opacity: ${props => props.isEditable ? '0' : '1'};
   user-select: none;
   cursor: default;
+  transition: height .2s;
   position: relative;
   width: ${props => props.isList ? '' : '240px'};
   background: ${props => props.bgColor};
@@ -60,7 +62,7 @@ const Body = styled.div`
 const MenuContainer = styled.div`
   padding: 0 10px;
   transition: .3s;
-  opacity: ${props => props.isMoreShow ? 1 : 0};
+  opacity: ${props => (props.isMoreShow || props.inEditable) ? 1 : 0};
   height: 30px;
 `
 
@@ -86,13 +88,22 @@ class Card extends Component {
       isEditable: false
     }
     this.tids = {}
-    this.titleOnChange = (titleEditor) => this.setState({ titleEditor })
-    this.textOnChange = (textEditor) => this.setState({ textEditor })
+    const {textOnChange, titleOnChange} = this.props
+    if (textOnChange && titleOnChange) {
+      this.titleOnChange = titleOnChange.bind(this)
+      this.textOnChange = textOnChange.bind(this)
+      this.titleContent = this.state.titleEditor.getCurrentContent()
+      this.textContent = this.state.textEditor.getCurrentContent()
+    } else {
+      this.titleOnChange = (titleEditor) => this.setState({ titleEditor })
+      this.textOnChange = (textEditor) => this.setState({ textEditor })
+    }
     this.dispatchNewNote = this.dispatchNewNote.bind(this)
     this.onColorClick = this.onColorClick.bind(this)
     this.onArchiveClick = this.onArchiveClick.bind(this)
     this.onMoreClick = this.onMoreClick.bind(this)
     this.shouldComponentUpdate = shouldUpdate.bind(this)
+    this.renderMenu = this.renderMenu.bind(this)
     this.onCardClick = this.onCardClick.bind(this)
     const handleDelete = this.onDelete.bind(this)
     const handleAddTags = this.onAddTag.bind(this)
@@ -110,14 +121,22 @@ class Card extends Component {
     }
   }
   componentWillReceiveProps(nextprops) {
-    if (!this.state.isEditable) {
-      this.setState({tags: nextprops.note.lable})
-    }
+    const {note} = nextprops
+    const titleBlocksFromRaw = convertFromRaw(note.title),
+      textBlocksFromRaw = convertFromRaw(note.text)
+    this.setState({
+      bgColor: note.bgColor || '#FAFAFA',
+      tags: note.lable,
+      titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
+      textEditor: EditorState.createWithContent(textBlocksFromRaw)
+    })
   }
   dispatchNewNote(newNote) {
-    this.props.editNote(newNote)
     clearTimeout(this.tids[newNote.id])
-    this.tids[newNote.id] = setTimeout(() => this.props.postEditNote(newNote), 200)
+    this.tids[newNote.id] = setTimeout(() => {
+      this.props.editNote(newNote)
+      this.props.postEditNote(newNote)
+    }, 200)
   }
   setNewNoteHeight(newNote) {
     return new Promise((resolve) => {
@@ -175,7 +194,7 @@ class Card extends Component {
   }
   onTagItemClick(tagText) {
     const {note} = this.props,
-      prevTags = note.lable,
+      prevTags = this.state.tags,
       hasThisTag = prevTags.findIndex(v => v.text === tagText) > -1 ? true : false
     let newTags = []
     if (hasThisTag) {
@@ -185,10 +204,14 @@ class Card extends Component {
     }
     this.setState({ tags: newTags })
     const newNote = {...note, lable: newTags}
-    this.setNewNoteHeight(newNote).then((height) => {
-      const moreNewNote = { ...newNote, height }
-      this.dispatchNewNote(moreNewNote)
-    })
+    if (!this.props.inEditable) {
+      this.setNewNoteHeight(newNote).then((height) => {
+        const moreNewNote = { ...newNote, height }
+        this.dispatchNewNote(moreNewNote)
+      })
+    } else {
+      this.dispatchNewNote(newNote)
+    }
   }
   onRemoveTag(tagText) {
     return () => {
@@ -197,10 +220,14 @@ class Card extends Component {
         newTags = tags.filter(v => v.text !== tagText),
         newNote = { ...note, lable: newTags }
       this.setState({ tags: newTags })
-      this.setNewNoteHeight(newNote).then((height) => {
-        const moreNewNote = { ...newNote, height }
-        this.dispatchNewNote(moreNewNote)
-      })
+      if (!this.props.inEditable) {
+        this.setNewNoteHeight(newNote).then((height) => {
+          const moreNewNote = { ...newNote, height }
+          this.dispatchNewNote(moreNewNote)
+        })
+      } else {
+        this.dispatchNewNote(newNote)
+      }
     }
   }
   onCardClick(e) {
@@ -208,13 +235,24 @@ class Card extends Component {
       return
     }
     const {setEditMode, note} = this.props
+    const prevNote = _.cloneDeep(note)
     const pos = this.container.getBoundingClientRect()
     requestAnimationFrame(() => {
       setEditMode(true, note, pos.left, pos.top, {
-        showPrevCard: () => this.setState({isEditable: false})
+        showPrevCard: this.showPrevCard.bind(this, prevNote)
       }, this.container)
       this.setState({isEditable: true})
     })
+  }
+  showPrevCard(prevNote) {
+    this.setState({isEditable: false})
+    const {note} = this.props
+    if (!_.isEqual(prevNote, note)) {
+      this.setNewNoteHeight(note).then((height) => {
+        const newNote = { ...note, height }
+        this.dispatchNewNote(newNote)
+      })
+    }
   }
   renderMenu() {
     if (!this.state.asyncRender) {
@@ -234,7 +272,7 @@ class Card extends Component {
             bgColor,
             isEditable,
             tags } = this.state
-    const { note, style, onCardClick } = this.props
+    const { note, style, onCardClick, inEditable } = this.props
     const titleText = titleEditor.getCurrentContent().getPlainText(),
       bodyText = textEditor.getCurrentContent().getPlainText()
     const lable = note.isFixed ? '取消固定' : '固定记事'
@@ -247,7 +285,7 @@ class Card extends Component {
         isEditable={isEditable}
         style={style || {}}
         ref={::this.getRef}
-        onMouseOver={::this.renderMenu}
+        onMouseOver={!inEditable ? this.renderMenu : ()=>{}}
       >
         <SelectIcon
           handleClick={() => console.log('select clicked')}
@@ -258,20 +296,20 @@ class Card extends Component {
           lable={lable}
           dataID='newNote'
         />
-        {titleText &&
+        {(titleText || inEditable) &&
           <Title>
             <Editor
               editorState={titleEditor}
               onChange={this.titleOnChange}
-              readOnly
+              readOnly={inEditable ? false : true}
             />
           </Title>}
-        {bodyText &&
+        {(bodyText || inEditable) &&
           <Body>
             <Editor
               editorState={textEditor}
               onChange={this.textOnChange}
-              readOnly
+              readOnly={inEditable ? false : true}
             />
           </Body>}
         {tags.map(v => (
@@ -283,8 +321,12 @@ class Card extends Component {
             {v.text}
           </Tag>
         ))}
-        <MenuContainer isMoreShow={isMoreShow} id='MenuContainer'>
-          {this.state.asyncRender &&
+        <MenuContainer
+          isMoreShow={isMoreShow}
+          id='MenuContainer'
+          inEditable={inEditable}
+        >
+          {(this.state.asyncRender || inEditable) &&
             <Menus
               isInCard
               bgColor={bgColor}
