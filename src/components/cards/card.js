@@ -18,7 +18,8 @@ const Wrapper = styled.div`
   opacity: ${props => props.isEditable ? '0' : '1'};
   user-select: none;
   cursor: default;
-  transition: height .2s;
+  max-height: 1000px;
+  transition: max-height .2s;
   position: relative;
   width: ${props => props.isList ? '' : '240px'};
   background: ${props => props.bgColor};
@@ -105,6 +106,7 @@ class Card extends Component {
     this.shouldComponentUpdate = shouldUpdate.bind(this)
     this.renderMenu = this.renderMenu.bind(this)
     this.onCardClick = this.onCardClick.bind(this)
+    this.onFixClick = this.onFixClick.bind(this)
     const handleDelete = this.onDelete.bind(this)
     const handleAddTags = this.onAddTag.bind(this)
     this.moreClickHandlers = {
@@ -272,7 +274,12 @@ class Card extends Component {
             bgColor,
             isEditable,
             tags } = this.state
-    const { note, style, onCardClick, inEditable } = this.props
+    const { note,
+            style,
+            onCardClick,
+            inEditable,
+            onArchiveClick,
+            onFixClick } = this.props
     const titleText = titleEditor.getCurrentContent().getPlainText(),
       bodyText = textEditor.getCurrentContent().getPlainText()
     const lable = note.isFixed ? '取消固定' : '固定记事'
@@ -292,7 +299,8 @@ class Card extends Component {
           dataID='newNote'
         />
         <FixIcon
-          handleClick={::this.onFixClick}
+          handleClick={onFixClick ?
+            () => onFixClick(this) : this.onFixClick}
           lable={lable}
           dataID='newNote'
         />
@@ -302,6 +310,7 @@ class Card extends Component {
               editorState={titleEditor}
               onChange={this.titleOnChange}
               readOnly={inEditable ? false : true}
+              placeholder="标题"
             />
           </Title>}
         {(bodyText || inEditable) &&
@@ -310,6 +319,7 @@ class Card extends Component {
               editorState={textEditor}
               onChange={this.textOnChange}
               readOnly={inEditable ? false : true}
+              placeholder="添加记事..."
             />
           </Body>}
         {tags.map(v => (
@@ -331,7 +341,8 @@ class Card extends Component {
               isInCard
               bgColor={bgColor}
               onColorClick={this.onColorClick}
-              onArchiveClick={this.onArchiveClick}
+              onArchiveClick={onArchiveClick ?
+                () => onArchiveClick(this) : this.onArchiveClick}
               onMoreClick={this.onMoreClick}
             />}
         </MenuContainer>

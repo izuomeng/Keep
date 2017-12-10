@@ -27,6 +27,7 @@ const Delete = styled.div`
   position: absolute;
   right: 8px;
   top: 4px;
+  cursor: pointer;
   visibility: hidden;
   &:hover {
     color: black;

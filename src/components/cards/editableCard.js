@@ -39,6 +39,13 @@ const Background = styled.div`
     cursor: text;
   }
 `
+const e = {
+  target: {
+    dataset: {
+      id: 'editableCardBack'
+    }
+  }
+}
 class EditableCard extends Component {
   constructor(props) {
     super(props)
@@ -46,6 +53,8 @@ class EditableCard extends Component {
       cardStyle: staticStyle
     }
     this.onBackClick = this.onBackClick.bind(this)
+    this.onArchiveClick = this.onArchiveClick.bind(this)
+    this.onFixClick = this.onFixClick.bind(this)
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.isEditable) {
@@ -61,10 +70,13 @@ class EditableCard extends Component {
     const {cardRef} = this.props,
       pos = cardRef.getBoundingClientRect()
     this.setState({cardStyle: readyStyle(pos.left, pos.top)})
-    setTimeout(() => {
-      this.props.callback.showPrevCard()
-      requestAnimationFrame(() => this.props.setEditMode(false))
-    }, 200)
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.props.callback.showPrevCard()
+        requestAnimationFrame(() => this.props.setEditMode(false))
+        resolve()
+      }, 200)
+    })
   }
   titleOnChange(titleEditorState) {
     this.setState({ titleEditor: titleEditorState })
@@ -92,6 +104,12 @@ class EditableCard extends Component {
       newNote = {...note, text: nextContenInJs}
     this.dispatchNewNote(newNote)
   }
+  onArchiveClick(self) {
+    this.onBackClick(e).then(() => self.onArchiveClick())
+  }
+  onFixClick(self) {
+    this.onBackClick(e).then(() => self.onFixClick())
+  }
   render() {
     const {note, isEditable} = this.props
     const {cardStyle} = this.state
@@ -110,6 +128,8 @@ class EditableCard extends Component {
           inEditable
           titleOnChange={this.titleOnChange}
           textOnChange={this.textOnChange}
+          onArchiveClick={this.onArchiveClick}
+          onFixClick={this.onFixClick}
         />}
       </Container>
     )
