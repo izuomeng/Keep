@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Cards, NewNote } from '@/components'
+import {
+  addDocumentClickHandler,
+  removeDocumentClickHandler
+} from '@/store/action/app'
 
 const CardsConntainer = styled.div`
 margin-top: 40px;
@@ -44,10 +48,10 @@ class Home extends Component {
   }
   componentDidMount() {
     setTimeout(() => this.setState({ asyncRender: true }), 0)
-    document.addEventListener('click', this.handleDocumentClick)
+    this.props.addDocumentClickHandler(this.handleDocumentClick)
   }
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClick)
+    this.props.removeDocumentClickHandler(this.handleDocumentClick)
   }
   render() {
     const { isBeforeClick } = this.state
@@ -77,5 +81,8 @@ class Home extends Component {
 const mapState = (state) => ({
   notes: state.notes.filter((v) => !v.isArchived && !v.deleteTime)
 })
-
-export default connect(mapState, null)(Home)
+const mapDispatch = {
+  addDocumentClickHandler,
+  removeDocumentClickHandler
+}
+export default connect(mapState, mapDispatch)(Home)

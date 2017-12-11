@@ -26,10 +26,19 @@ const Container = styled.div`
 		padding-left: ${props => props.sidebar ? '300px' : '20px'};
 	}
 `
-const mapState = (state) => ({
+const WrappedContainer = connect(state => ({
 	sidebar: state.app.sidebar
-})
-const WrappedContainer = connect(mapState, null)(Container)
+}), null)(Container)
+
+const EventProxy = (props) => {
+  document.onclick = function(e) {
+    props.handlers.forEach(handler => handler.call(null, e))
+  }
+  return null
+}
+const ConnectProxy = connect(state => ({
+  handlers: state.app.documentClickHandlers
+}), null)(EventProxy)
 
 class App extends Component {
 	render() {
@@ -48,6 +57,7 @@ class App extends Component {
         <Worker />
         <MessageBox />
         <EditableCard />
+        <ConnectProxy />
 			</div>
 		)
 	}

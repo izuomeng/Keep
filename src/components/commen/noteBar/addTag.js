@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import event from '@/lib/events'
 import CheckBox from '../../commen/icons/checkBox'
 import {calcTagPosition} from '@/lib/DOM'
+import {addDocumentClickHandler,
+        removeDocumentClickHandler} from '@/store/action/app'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -64,7 +66,7 @@ class AddTag extends Component {
     this.onDocumentClick = this.onDocumentClick.bind(this)
     event.addListener('addTagShow', this.show)
     event.addListener('addTagHide', this.hide)
-    document.addEventListener('click', this.onDocumentClick)
+    this.props.addDocumentClickHandler(this.onDocumentClick)
   }
   hide() {
     this.setState({show: false,x:-100})
@@ -106,7 +108,7 @@ class AddTag extends Component {
   componentWillUnmount() {
     event.removeListener('addTagShow', this.show)
     event.removeListener('addTagHide', this.hide)
-    document.removeEventListener('click', this.onDocumentClick)
+    this.props.removeDocumentClickHandler(this.onDocumentClick)
   }
   render() {
     const {show, checkStatus} = this.state
@@ -134,5 +136,8 @@ class AddTag extends Component {
 const mapState = (state) => ({
   tags: state.app.lables
 })
-
-export default connect(mapState, null)(AddTag)
+const mapDispatch = {
+  addDocumentClickHandler,
+  removeDocumentClickHandler
+}
+export default connect(mapState, mapDispatch)(AddTag)

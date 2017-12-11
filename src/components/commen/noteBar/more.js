@@ -1,7 +1,12 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
+import {connect} from 'react-redux'
 import event from '@/lib/events'
 import shouldUpdate from '@/lib/shouldUpdate'
+import {
+  addDocumentClickHandler,
+  removeDocumentClickHandler
+} from '@/store/action/app'
 
 const Item = styled.li`
   padding: 7px 10px 3px 17px;
@@ -44,7 +49,7 @@ class More extends Component {
     this.shouldComponentUpdate = shouldUpdate.bind(this)
     event.addListener('moreClick', this.show)
     event.addListener('moreHide', this.hide)
-    document.addEventListener('click', this.onDocumentClick)
+    this.props.addDocumentClickHandler(this.onDocumentClick)
   }
   hide() {
     this.setState({show: false,x:-100})
@@ -76,7 +81,7 @@ class More extends Component {
   componentWillUnmount() {
     event.removeListener('moreClick', this.show)
     event.removeListener('moreHide', this.hide)
-    document.removeEventListener('click', this.onDocumentClick)
+    this.props.removeDocumentClickHandler(this.onDocumentClick)
   }
   onAddTagsClick() {
     const {x, y, position} = this.state
@@ -97,4 +102,8 @@ class More extends Component {
     )
   }
 }
-export default More
+const mapDispatch = {
+  addDocumentClickHandler,
+  removeDocumentClickHandler
+}
+export default connect(null, mapDispatch)(More)

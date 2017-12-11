@@ -52,7 +52,8 @@ const initState = {
       left: 0,
       top: 0,
       callback: {}
-    }
+    },
+    documentClickHandlers: []
   }
 }
 

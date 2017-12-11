@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { minWidthToHideSidebar } from '@/static/javascript/constants'
 import { hideSidebar } from '@/store/action/app'
+import { addDocumentClickHandler,
+         removeDocumentClickHandler } from '@/store/action/app'
 import Top from './top'
 import Tags from './tags'
 import Trash from './trash'
@@ -41,7 +43,7 @@ class SideBar extends Component {
     this.change = this.change.bind(this)
     this.clickToHide = this.clickToHide.bind(this)
     window.addEventListener('resize', this.change)
-    document.addEventListener('click', this.clickToHide)
+    this.props.addDocumentClickHandler(this.clickToHide)
   }
   change() {
     if (window.innerWidth <= minWidthToHideSidebar) {
@@ -59,7 +61,7 @@ class SideBar extends Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.change)
     window.removeEventListener('scroll', this.scrollToHide)
-    document.removeEventListener('click', this.clickToHide)
+    this.props.removeDocumentClickHandler(this.clickToHide)
   }
   render() {
     return (
@@ -75,6 +77,8 @@ const mapState = (state) => ({
   show: state.app.sidebar
 })
 const mapDispatch = {
-  hideSidebar
+  hideSidebar,
+  addDocumentClickHandler,
+  removeDocumentClickHandler
 }
 export default connect(mapState, mapDispatch)(SideBar)

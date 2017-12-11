@@ -38,3 +38,11 @@ export const setEditMode = (isEditable, note, left, top, callback, cardRef) => (
   callback,
   cardRef
 })
+export const addDocumentClickHandler = (handler) => ({
+  type: Types.ADD_DOCUMENT_CLICK_HANDLERS,
+  handler
+})
+export const removeDocumentClickHandler = (handler) => ({
+  type: Types.REMOVE_DOCUMENT_CLICK_HANDLERS,
+  handler
+})
