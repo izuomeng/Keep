@@ -107,6 +107,7 @@ class Card extends Component {
     this.renderMenu = this.renderMenu.bind(this)
     this.onCardClick = this.onCardClick.bind(this)
     this.onFixClick = this.onFixClick.bind(this)
+    this.onReminderClick = this.onReminderClick.bind(this)
     const handleDelete = this.onDelete.bind(this)
     const handleAddTags = this.onAddTag.bind(this)
     this.moreClickHandlers = {
@@ -171,6 +172,9 @@ class Card extends Component {
   onMoreClick(pos) {
     event.emitEvent('moreClick', pos, this.hideMore, this.moreClickHandlers)
     this.setState({ isMoreShow: true })
+  }
+  onReminderClick(pos) {
+    event.emitEvent('setReminder', pos)
   }
   onFixClick() {
     const { note } = this.props
@@ -344,6 +348,7 @@ class Card extends Component {
               onArchiveClick={onArchiveClick ?
                 () => onArchiveClick(this) : this.onArchiveClick}
               onMoreClick={this.onMoreClick}
+              onReminderClick={this.onReminderClick}
             />}
         </MenuContainer>
       </Wrapper>

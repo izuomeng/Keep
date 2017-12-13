@@ -7,8 +7,8 @@ import shouldUpdate from '@/lib/shouldUpdate'
 
 const Container = styled.div`
   position: fixed;
-  left: 0;
-  top: 0;
+  left: -500;
+  top: -500;
   z-index: -100;
   visibility: hidden;
 `

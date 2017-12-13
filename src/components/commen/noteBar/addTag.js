@@ -4,8 +4,10 @@ import {connect} from 'react-redux'
 import event from '@/lib/events'
 import CheckBox from '../../commen/icons/checkBox'
 import {calcTagPosition} from '@/lib/DOM'
-import {addDocumentClickHandler,
-        removeDocumentClickHandler} from '@/store/action/app'
+import {
+  addDocumentClickHandler,
+  removeDocumentClickHandler
+} from '@/store/action/app'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -56,8 +58,8 @@ class AddTag extends Component {
     this.props.tags.forEach(v => checkStatus[v.text] = false)
     this.state = {
       show: false,
-      x: 0,
-      y: 0,
+      x: -1000,
+      y: -1000,
       checkStatus,
       clickHandlers: {}
     }

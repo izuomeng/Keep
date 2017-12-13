@@ -12,7 +12,8 @@ import {
   AddTag,
   Worker,
   MessageBox,
-  EditableCard
+  EditableCard,
+  Reminder
 } from './components'
 import {minWidthToHideSidebar} from './static/javascript/constants'
 
@@ -53,6 +54,7 @@ class App extends Component {
 				<PopUp />
 				<Indicator />
 				<More />
+        <Reminder />
         <AddTag />
         <Worker />
         <MessageBox />

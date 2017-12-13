@@ -20,14 +20,18 @@ const TextButton = styled.input.attrs({
     type: 'button',
     value: props => props.value
 })`
+    cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
     width: 54px;
     background: transparent;
     border: 0;
     padding: 0;
     line-height: 28px;
+    font-weight: 500;
     border-radius: 3px;
+    color: ${props => props.disabled ? '#808080' : ''};
+    opacity: ${props => props.disabled ? '.5' : '1'};
     &:hover{
-        background: rgba(0,0,0,0.08);;
+        background: ${props => props.disabled ? '' : 'rgba(0,0,0,0.08)'};
     }
 `
 

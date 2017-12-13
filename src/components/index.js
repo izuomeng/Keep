@@ -9,6 +9,7 @@ import More from './commen/noteBar/more'
 import AddTag from './commen/noteBar/addTag'
 import Worker from './worker'
 import MessageBox from './commen/messageBox'
+import Reminder from './remider'
 
 export {
     Sidebar, 
@@ -23,5 +24,6 @@ export {
     More,
     AddTag,
     Worker,
-    MessageBox
+    MessageBox,
+    Reminder
 }

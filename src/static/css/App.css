@@ -18,6 +18,9 @@ input:focus{
 	outline: 0;
 	text-decoration: none;
 }
+#root input[disabled], button[disabled] {
+  cursor: not-allowed;
+}
 body{
 	min-width: 600px;
 	background-color: #E8E8E8;

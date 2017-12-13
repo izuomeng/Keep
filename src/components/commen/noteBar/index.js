@@ -24,11 +24,19 @@ class Menus extends Component {
   constructor(props) {
     super(props)
     this.onMoreClick = this.onMoreClick.bind(this)
+    this.onReminderClick = this.onReminderClick.bind(this)
     this.shouldComponentUpdate = shouldUpdate.bind(this)
   }
   onMoreClick() {
-    const pos = getPosition(this.more)
+    const pos = getPosition(this.more, 135, 104)
     this.props.onMoreClick(pos)
+  }
+  onReminderClick() {
+    const pos = getPosition(this.reminder, 235, 300)
+    this.props.onReminderClick(pos)
+  }
+  getRef(name) {
+    return (ref) => this[name] = findDOMNode(ref)
   }
   render() {
     const { isInCard, bgColor, onColorClick, onArchiveClick } = this.props
@@ -36,7 +44,12 @@ class Menus extends Component {
       archiveLable = path.indexOf('archive') > -1 ? '取消归档' : '归档'
     return (
       <Wrapper>
-        <Icon icon="glyphicon glyphicon-bell" lable="提醒我" />
+        <Icon
+          icon="glyphicon glyphicon-bell"
+          lable="提醒我"
+          handleClick={this.onReminderClick}
+          ref={this.getRef('reminder')}
+        />
         <Icon icon="glyphicon glyphicon-eye-open" lable="更改颜色">
           <Palette
             handleClick={onColorClick}
@@ -53,7 +66,7 @@ class Menus extends Component {
           icon="glyphicon glyphicon-chevron-down"
           lable="更多"
           handleClick={this.onMoreClick}
-          ref={ref => this.more = findDOMNode(ref)}
+          ref={this.getRef('more')}
         >
         </Icon>
         {!isInCard && <Icon icon="glyphicon glyphicon-arrow-left" lable="撤销" />}

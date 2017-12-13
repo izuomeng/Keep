@@ -38,8 +38,8 @@ class More extends Component {
     super(props)
     this.state = {
       show: false,
-      x: 0,
-      y: 0,
+      x: -500,
+      y: -500,
       callback: null,
       clickHandlers: {}
     }
@@ -52,7 +52,7 @@ class More extends Component {
     this.props.addDocumentClickHandler(this.onDocumentClick)
   }
   hide() {
-    this.setState({show: false,x:-100})
+    this.setState({show: false,x:-500})
   }
   show(pos, callback, clickHandlers = {}) {
     if (this.state.callback) {

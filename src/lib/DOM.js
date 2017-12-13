@@ -3,7 +3,7 @@
  * @param {Bool} reference true for doucment, false for window
  * @returns {Object} left: Number, top: Number
 */
-export function getPosition(element) {
+export function getPosition(element, height, width) {
   if (!element.getBoundingClientRect || !element instanceof HTMLElement) {
     return
   }
@@ -13,15 +13,15 @@ export function getPosition(element) {
   let x, y, position
   const scrollTop = document.documentElement.scrollTop,
     scrollLeft = document.documentElement.scrollLeft
-  if (window.innerHeight - clientPos.bottom <= 135) {
-    y = top + scrollTop - 135
+  if (window.innerHeight - clientPos.bottom <= height) {
+    y = top + scrollTop - height
     position = 'up'
   } else {
     y = top + scrollTop + 30
     position = 'down'
   }
-  if (window.innerWidth - clientPos.right <= 130) {
-    x = left + scrollLeft - 70
+  if (window.innerWidth - clientPos.right <= width) {
+    x = left + scrollLeft - width + 34
   } else {
     x = left + scrollLeft
   }
