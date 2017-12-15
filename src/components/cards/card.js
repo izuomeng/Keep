@@ -65,6 +65,8 @@ const MenuContainer = styled.div`
   transition: .3s;
   opacity: ${props => (props.isMoreShow || props.inEditable) ? 1 : 0};
   height: 30px;
+  position: relative;
+  z-index: 999;
 `
 
 class Card extends Component {

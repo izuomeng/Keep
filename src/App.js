@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {connect} from 'react-redux'
 import './static/css/App.css'
 import './static/css/Draft.css'
+import './static/javascript/color'
 import {
 	Header,
 	Sidebar,

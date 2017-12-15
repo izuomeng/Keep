@@ -33,9 +33,8 @@ const Title = styled.div`
   border-bottom: 1px solid rgba(0,0,0,0.2);
 `
 const Main = styled.div`
-  padding: 0 15px 15px 15px;
+  padding: 0 35px 15px 15px;
   font-size: 13px;
-  margin-right: 20px;
 `
 const Save = styled.div`
   text-align: right;
@@ -67,19 +66,23 @@ const Item = styled(NoStyleItem)`
 class Reminder extends Component {
   constructor(props) {
     super(props)
+    const today = new Date()
     this.state = {
       show: false,
       x: -500,
       y: -500,
-      year: '',
-      month: '',
-      day: '',
-      time: '',
       isDatePickerShow: false,
-      isTimePickerShow: false
+      isTimePickerShow: false,
+      selectDate: {
+        month: today.getMonth() + 1,
+        date: today.getDate(),
+        year: today.getFullYear()
+      }
     }
     this.onShow= this.onShow.bind(this)
     this.onDocumentClick = this.onDocumentClick.bind(this)
+    this.onPickerBackClick = this.onPickerBackClick.bind(this)
+    this.onSelectDate = this.onSelectDate.bind(this)
     event.addListener('setReminder', this.onShow)
     props.addDocumentClickHandler(this.onDocumentClick)
   }
@@ -99,17 +102,29 @@ class Reminder extends Component {
     })
   }
   onDatePickerClick() {
-    const show = this.state.isDatePickerShow
     this.setState({
-      isDatePickerShow: !show,
+      isDatePickerShow: true,
       isTimePickerShow: false
     })
   }
   onTimePickerClick() {
-    const show = this.state.isTimePickerShow
     this.setState({
-      isTimePickerShow: !show,
+      isTimePickerShow: true,
       isDatePickerShow: false
+    })
+  }
+  onPickerBackClick(e) {
+    const data = e.target.dataset
+    if (data.name === 'hide-picker') {
+      this.setState({
+        isTimePickerShow: false,
+        isDatePickerShow: false
+      })
+    }
+  }
+  onSelectDate(newDate) {
+    this.setState({
+      selectDate: newDate
     })
   }
   componentWillUnmount() {
@@ -117,23 +132,40 @@ class Reminder extends Component {
     this.props.removeDocumentClickHandler(this.onDocumentClick)
   }
   render() {
-    const {show, x, y, isDatePickerShow, isTimePickerShow} = this.state
+    const {
+      show,
+      x, y,
+      isDatePickerShow,
+      isTimePickerShow,
+      selectDate
+    } = this.state
     return (
       <Wrapper show={show} left={x} top={y}>
-        <Container show={show} data-id='setReminder'>
-          <Title data-id='setReminder'>选择日期和时间</Title>
-          <Main data-id='setReminder'>
+        <Container
+          show={show}
+          data-id='setReminder'
+          onClick={this.onPickerBackClick}
+        >
+          <Title data-id='setReminder' data-name='hide-picker'>
+            选择日期和时间
+          </Title>
+          <Main data-id='setReminder' data-name='hide-picker'>
             <Item onClick={::this.onDatePickerClick}>
-              2017年12月13日
-              <DatePicker show={isDatePickerShow} />
+              {`${selectDate.year}年${selectDate.month}月${selectDate.date}日`}
+              <DatePicker
+                show={isDatePickerShow}
+                onSelectDate={this.onSelectDate}
+              />
             </Item>
             <Item onClick={::this.onTimePickerClick}>
               下午8:00
-              <TimePicker show={isTimePickerShow} />
+              <TimePicker
+                show={isTimePickerShow}
+              />
             </Item>
             <Item>不重复</Item>
           </Main>
-          <Save data-id='setReminder'>
+          <Save data-id='setReminder' data-name='hide-picker'>
             <TextButton value='保存' disabled={true}/>
           </Save>
         </Container>
