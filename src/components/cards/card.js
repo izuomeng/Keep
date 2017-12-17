@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
-import { Editor, convertFromRaw, EditorState } from 'draft-js'
-import { connect } from 'react-redux'
-import { editNote, postEditNote } from '@/store/action/notes'
-import { setEditMode } from '@/store/action/app'
+import {Editor, convertFromRaw, EditorState} from 'draft-js'
+import {connect} from 'react-redux'
+import {editNote, postEditNote} from '@/store/action/notes'
+import {setEditMode} from '@/store/action/app'
 import event from '@/lib/events'
 import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
@@ -14,19 +14,23 @@ import SelectIcon from '../commen/icons/select'
 import Tag from '../commen/lable/tags'
 import shouldUpdate from '@/lib/shouldUpdate'
 
-const Wrapper = styled.div`
-  opacity: ${props => props.isEditable ? '0' : '1'};
+const Wrapper = styled.div `
+  opacity: ${props => props.isEditable
+    ? '0'
+    : '1'};
   user-select: none;
   cursor: default;
   max-height: 1000px;
   transition: max-height .2s;
   position: relative;
-  width: ${props => props.isList ? '' : '240px'};
+  width: ${props => props.isList
+      ? ''
+      : '240px'};
   background: ${props => props.bgColor};
   padding: 10px 0;
   box-sizing: border-box;
   box-shadow: 0 1px 3px darkgrey,
-  0 2px 2px darkgrey;
+    0 2px 2px darkgrey;
   border-radius: 2px;
   &:hover {
     box-shadow: 0 0 15px 0 darkgrey,
@@ -42,7 +46,7 @@ const Wrapper = styled.div`
     opacity: 1;
   }
 `
-const Title = styled.div`
+const Title = styled.div `
   font-weight: bold;  
   font-size: 17px;
   line-height: 23px;
@@ -51,7 +55,7 @@ const Title = styled.div`
   white-space: pre-wrap;
   word-wrap: break-word;
 `
-const Body = styled.div`
+const Body = styled.div `
   font-size: 14px;
   line-height: 19px;
   min-height: 30px;
@@ -60,10 +64,12 @@ const Body = styled.div`
   word-wrap: break-word;
   font-family: 'Roboto Slab','Times New Roman',serif;
 `
-const MenuContainer = styled.div`
+const MenuContainer = styled.div `
   padding: 0 10px;
   transition: .3s;
-  opacity: ${props => (props.isMoreShow || props.inEditable) ? 1 : 0};
+  opacity: ${props => (props.isMoreShow || props.inEditable)
+    ? 1
+    : 0};
   height: 30px;
   position: relative;
   z-index: 999;
@@ -78,8 +84,8 @@ class Card extends Component {
   }
   constructor(props) {
     super(props)
-    const { note } = this.props
-    const titleBlocksFromRaw = convertFromRaw(note.title),
+    const {note} = this.props,
+      titleBlocksFromRaw = convertFromRaw(note.title),
       textBlocksFromRaw = convertFromRaw(note.text)
     this.state = {
       titleEditor: EditorState.createWithContent(titleBlocksFromRaw),
@@ -95,26 +101,58 @@ class Card extends Component {
     if (textOnChange && titleOnChange) {
       this.titleOnChange = titleOnChange.bind(this)
       this.textOnChange = textOnChange.bind(this)
-      this.titleContent = this.state.titleEditor.getCurrentContent()
-      this.textContent = this.state.textEditor.getCurrentContent()
+      this.titleContent = this
+        .state
+        .titleEditor
+        .getCurrentContent()
+      this.textContent = this
+        .state
+        .textEditor
+        .getCurrentContent()
     } else {
-      this.titleOnChange = (titleEditor) => this.setState({ titleEditor })
-      this.textOnChange = (textEditor) => this.setState({ textEditor })
+      this.titleOnChange = (titleEditor) => this.setState({titleEditor})
+      this.textOnChange = (textEditor) => this.setState({textEditor})
     }
-    this.dispatchNewNote = this.dispatchNewNote.bind(this)
-    this.onColorClick = this.onColorClick.bind(this)
-    this.onArchiveClick = this.onArchiveClick.bind(this)
-    this.onMoreClick = this.onMoreClick.bind(this)
+    this.dispatchNewNote = this
+      .dispatchNewNote
+      .bind(this)
+    this.onColorClick = this
+      .onColorClick
+      .bind(this)
+    this.onArchiveClick = this
+      .onArchiveClick
+      .bind(this)
+    this.onMoreClick = this
+      .onMoreClick
+      .bind(this)
     this.shouldComponentUpdate = shouldUpdate.bind(this)
-    this.renderMenu = this.renderMenu.bind(this)
-    this.onCardClick = this.onCardClick.bind(this)
-    this.onFixClick = this.onFixClick.bind(this)
-    this.onReminderClick = this.onReminderClick.bind(this)
-    const handleDelete = this.onDelete.bind(this)
-    const handleAddTags = this.onAddTag.bind(this)
+    this.renderMenu = this
+      .renderMenu
+      .bind(this)
+    this.onCardClick = this
+      .onCardClick
+      .bind(this)
+    this.onFixClick = this
+      .onFixClick
+      .bind(this)
+    this.onReminderClick = this
+      .onReminderClick
+      .bind(this)
+    const onFinishTimePicking = this
+      .onFinishTimePicking
+      .bind(this)
+    const handleDelete = this
+      .onDelete
+      .bind(this)
+    const handleAddTags = this
+      .onAddTag
+      .bind(this)
     this.moreClickHandlers = {
       handleDelete,
       handleAddTags
+    }
+    this.reminderHandlers = {
+      onFinishTimePicking
     }
     //防止出现update a unmounted component
     this.willUnmount = false
@@ -122,12 +160,12 @@ class Card extends Component {
       if (this.willUnmount) {
         return
       }
-      this.setState({ isMoreShow: false })
+      this.setState({isMoreShow: false})
     }
   }
   componentWillReceiveProps(nextprops) {
-    const {note} = nextprops
-    const titleBlocksFromRaw = convertFromRaw(note.title),
+    const {note} = nextprops,
+      titleBlocksFromRaw = convertFromRaw(note.title),
       textBlocksFromRaw = convertFromRaw(note.text)
     this.setState({
       bgColor: note.bgColor || '#FAFAFA',
@@ -139,8 +177,12 @@ class Card extends Component {
   dispatchNewNote(newNote) {
     clearTimeout(this.tids[newNote.id])
     this.tids[newNote.id] = setTimeout(() => {
-      this.props.editNote(newNote)
-      this.props.postEditNote(newNote)
+      this
+        .props
+        .editNote(newNote)
+      this
+        .props
+        .postEditNote(newNote)
     }, 200)
   }
   setNewNoteHeight(newNote) {
@@ -149,7 +191,8 @@ class Card extends Component {
       const note = {
         title: newNote.title,
         text: newNote.text,
-        lable: newNote.lable
+        lable: newNote.lable,
+        reminderInfo: newNote.reminderInfo
       }
       event.emitEvent('computeCardHeight', note, resolve)
     })
@@ -158,84 +201,154 @@ class Card extends Component {
     if (color === this.state.bgColor) {
       return
     }
-    const { note } = this.props
-    const newNote = { ...note, bgColor: color }
-    this.setState({ bgColor: color })
+    const {note} = this.props
+    const newNote = {
+      ...note,
+      bgColor: color
+    }
+    this.setState({bgColor: color})
     this.dispatchNewNote(newNote)
   }
   onArchiveClick() {
-    const { note } = this.props
+    const {note} = this.props
     if (note.deleteTime) {
       return
     }
-    const newNote = { ...note, isArchived: !note.isArchived }
+    const newNote = {
+      ...note,
+      isArchived: !note.isArchived
+    }
     this.dispatchNewNote(newNote)
   }
   onMoreClick(pos) {
-    event.emitEvent('moreClick', pos, this.hideMore, this.moreClickHandlers)
-    this.setState({ isMoreShow: true })
+    event.emitEvent(
+      'moreClick',
+      pos,
+      this.hideMore,
+      this.moreClickHandlers
+    )
+    this.setState({isMoreShow: true})
   }
   onReminderClick(pos) {
-    event.emitEvent('setReminder', pos)
+    event.emitEvent('setReminder', pos, this.reminderHandlers)
+  }
+  onFinishTimePicking(time, repeat) {
+    const {note} = this.props,
+      newNote = {...note, reminderInfo: {
+        date: time,
+        repeat
+      }}
+    this.dispatchNewNote(newNote)
   }
   onFixClick() {
-    const { note } = this.props
+    const {note} = this.props
     if (note.isArchived || note.deleteTime) {
       return
     }
-    const newNote = { ...note, isFixed: !note.isFixed }
+    const newNote = {
+      ...note,
+      isFixed: !note.isFixed
+    }
     this.dispatchNewNote(newNote)
   }
   onDelete() {
-    const { note } = this.props
+    const {note} = this.props
     if (note.deleteTime) {
       return
     }
     const deleteTime = new Date()
-    const newNote = { ...note, deleteTime }
+    const newNote = {
+      ...note,
+      deleteTime
+    }
     this.dispatchNewNote(newNote)
   }
   onAddTag(pos) {
-    const handleTagItemClick = this.onTagItemClick.bind(this)
+    const handleTagItemClick = this
+      .onTagItemClick
+      .bind(this)
     const tags = this.props.note.lable
-    event.emitEvent('addTagShow', pos, {handleTagItemClick}, tags)
+    event.emitEvent('addTagShow', pos, {
+      handleTagItemClick
+    }, tags)
   }
   onTagItemClick(tagText) {
     const {note} = this.props,
       prevTags = this.state.tags,
-      hasThisTag = prevTags.findIndex(v => v.text === tagText) > -1 ? true : false
+      hasThisTag = prevTags.findIndex(v => v.text === tagText) > -1
+        ? true
+        : false
     let newTags = []
     if (hasThisTag) {
       newTags = prevTags.filter(v => v.text !== tagText)
     } else {
-      newTags = [...prevTags, {text: tagText}]
+      newTags = [
+        ...prevTags, {
+          text: tagText
+        }
+      ]
     }
-    this.setState({ tags: newTags })
-    const newNote = {...note, lable: newTags}
+    this.setState({tags: newTags})
+    const newNote = {
+      ...note,
+      lable: newTags
+    }
     if (!this.props.inEditable) {
-      this.setNewNoteHeight(newNote).then((height) => {
-        const moreNewNote = { ...newNote, height }
-        this.dispatchNewNote(moreNewNote)
-      })
+      this
+        .setNewNoteHeight(newNote)
+        .then((height) => {
+          const moreNewNote = {
+            ...newNote,
+            height
+          }
+          this.dispatchNewNote(moreNewNote)
+        })
     } else {
       this.dispatchNewNote(newNote)
     }
   }
   onRemoveTag(tagText) {
     return () => {
-      const { note } = this.props,
-        { tags } = this.state,
+      const {note} = this.props, {tags} = this.state,
         newTags = tags.filter(v => v.text !== tagText),
-        newNote = { ...note, lable: newTags }
-      this.setState({ tags: newTags })
+        newNote = {
+          ...note,
+          lable: newTags
+        }
+      this.setState({tags: newTags})
       if (!this.props.inEditable) {
-        this.setNewNoteHeight(newNote).then((height) => {
-          const moreNewNote = { ...newNote, height }
-          this.dispatchNewNote(moreNewNote)
-        })
+        this
+          .setNewNoteHeight(newNote)
+          .then((height) => {
+            const moreNewNote = {
+              ...newNote,
+              height
+            }
+            this.dispatchNewNote(moreNewNote)
+          })
       } else {
         this.dispatchNewNote(newNote)
       }
+    }
+  }
+  onRemoveReminder() {
+    const {note} = this.props,
+      newNote = {...note, reminderInfo: {
+        date: null,
+        repeat: 0
+      }}
+    if (!this.props.inEditable) {
+      this
+        .setNewNoteHeight(newNote)
+        .then((height) => {
+          const moreNewNote = {
+            ...newNote,
+            height
+          }
+          this.dispatchNewNote(moreNewNote)
+        })
+    } else {
+      this.dispatchNewNote(newNote)
     }
   }
   onCardClick(e) {
@@ -244,10 +357,14 @@ class Card extends Component {
     }
     const {setEditMode, note} = this.props
     const prevNote = _.cloneDeep(note)
-    const pos = this.container.getBoundingClientRect()
+    const pos = this
+      .container
+      .getBoundingClientRect()
     requestAnimationFrame(() => {
       setEditMode(true, note, pos.left, pos.top, {
-        showPrevCard: this.showPrevCard.bind(this, prevNote)
+        showPrevCard: this
+          .showPrevCard
+          .bind(this, prevNote)
       }, this.container)
       this.setState({isEditable: true})
     })
@@ -256,15 +373,20 @@ class Card extends Component {
     this.setState({isEditable: false})
     const {note} = this.props
     if (!_.isEqual(prevNote, note)) {
-      this.setNewNoteHeight(note).then((height) => {
-        const newNote = { ...note, height }
-        this.dispatchNewNote(newNote)
-      })
+      this
+        .setNewNoteHeight(note)
+        .then((height) => {
+          const newNote = {
+            ...note,
+            height
+          }
+          this.dispatchNewNote(newNote)
+        })
     }
   }
   renderMenu() {
     if (!this.state.asyncRender) {
-      this.setState({ asyncRender: true })
+      this.setState({asyncRender: true})
     }
   }
   componentWillUnmount() {
@@ -274,21 +396,33 @@ class Card extends Component {
     this.container = findDOMNode(ref)
   }
   render() {
-    const { titleEditor,
-            textEditor,
-            isMoreShow,
-            bgColor,
-            isEditable,
-            tags } = this.state
-    const { note,
-            style,
-            onCardClick,
-            inEditable,
-            onArchiveClick,
-            onFixClick } = this.props
-    const titleText = titleEditor.getCurrentContent().getPlainText(),
-      bodyText = textEditor.getCurrentContent().getPlainText()
-    const lable = note.isFixed ? '取消固定' : '固定记事'
+    const {
+        titleEditor,
+        textEditor,
+        isMoreShow,
+        bgColor,
+        isEditable,
+        tags
+      } = this.state
+    const {
+        note,
+        style,
+        onCardClick,
+        inEditable,
+        onArchiveClick,
+        onFixClick
+      } = this.props
+    const titleText = titleEditor
+        .getCurrentContent()
+        .getPlainText(),
+      bodyText = textEditor
+        .getCurrentContent()
+        .getPlainText()
+    const lable = note.isFixed
+      ? '取消固定'
+      : '固定记事'
+    let date = note.reminderInfo.date
+    if (date) date = new Date(date)
     return (
       <Wrapper
         id={note.id}
@@ -297,61 +431,65 @@ class Card extends Component {
         onClick={onCardClick || this.onCardClick}
         isEditable={isEditable}
         style={style || {}}
-        ref={::this.getRef}
-        onMouseOver={!inEditable ? this.renderMenu : ()=>{}}
-      >
+        ref={:: this.getRef}
+        onMouseOver={!inEditable
+        ? this.renderMenu
+        : () => {}}>
         <SelectIcon
           handleClick={() => console.log('select clicked')}
-          dataID='newNote'
-        />
+          dataID='newNote'/>
         <FixIcon
-          handleClick={onFixClick ?
-            () => onFixClick(this) : this.onFixClick}
+          handleClick={onFixClick
+          ? () => onFixClick(this)
+          : this.onFixClick}
           lable={lable}
+          dataID='newNote'/> {(titleText || inEditable) && <Title>
+          <Editor
+            editorState={titleEditor}
+            onChange={this.titleOnChange}
+            readOnly={inEditable
+            ? false
+            : true}
+            placeholder="标题"/>
+        </Title>}
+        {(bodyText || inEditable) && <Body>
+          <Editor
+            editorState={textEditor}
+            onChange={this.textOnChange}
+            readOnly={inEditable
+            ? false
+            : true}
+            placeholder="添加记事..."/>
+        </Body>}
+        {date && date.getMonth && <Tag
+          isReminder
           dataID='newNote'
-        />
-        {(titleText || inEditable) &&
-          <Title>
-            <Editor
-              editorState={titleEditor}
-              onChange={this.titleOnChange}
-              readOnly={inEditable ? false : true}
-              placeholder="标题"
-            />
-          </Title>}
-        {(bodyText || inEditable) &&
-          <Body>
-            <Editor
-              editorState={textEditor}
-              onChange={this.textOnChange}
-              readOnly={inEditable ? false : true}
-              placeholder="添加记事..."
-            />
-          </Body>}
+          dataLable='提醒我'
+          handleDelete={:: this.onRemoveReminder}>
+          {`${date.getMonth()+1}月${date.getDate()}日${date.getHours()}:${date.getMinutes()}`}
+        </Tag>}
         {tags.map(v => (
           <Tag
             key={v.text}
-            handleClick={this.onRemoveTag(v.text)}
             dataID='newNote'
-          >
+            handleDelete={this.onRemoveTag(v.text)}>
             {v.text}
           </Tag>
         ))}
         <MenuContainer
           isMoreShow={isMoreShow}
           id='MenuContainer'
-          inEditable={inEditable}
-        >
-          {(this.state.asyncRender || inEditable) &&
-            <Menus
-              isInCard
-              bgColor={bgColor}
-              onColorClick={this.onColorClick}
-              onArchiveClick={onArchiveClick ?
-                () => onArchiveClick(this) : this.onArchiveClick}
-              onMoreClick={this.onMoreClick}
-              onReminderClick={this.onReminderClick}
-            />}
+          inEditable={inEditable}>
+          {(this.state.asyncRender || inEditable) && <Menus
+            isInCard
+            bgColor={bgColor}
+            onColorClick={this.onColorClick}
+            onArchiveClick={onArchiveClick
+            ? () => onArchiveClick(this)
+            : this.onArchiveClick}
+            onMoreClick={this.onMoreClick}
+            onReminderClick={this.onReminderClick}
+            onFinishTimePicking={this.onFinishTimePicking}/>}
         </MenuContainer>
       </Wrapper>
     )

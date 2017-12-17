@@ -40,12 +40,35 @@ const Label = styled.div`
   border-radius: 2px;
   line-height: 19px;
 `
-
-export default ({children, handleClick = () => {}, dataID}) => (
-  <Container data-id={dataID}>
-    <Label data-id={dataID}>
+const clockStyle = {
+  marginRight: '3px',
+  verticalAlign: '-0.5px'
+}
+export default ({
+  dataID,
+  dataLable,
+  children,
+  isReminder,
+  handleDelete = () => {},
+  handleClick = () => {}}
+) => (
+  <Container
+    data-id={dataID}
+    onClick={handleClick}
+    data-lable={dataLable}>
+    <Label
+      data-lable={dataLable}
+      data-id={dataID}>
+      {isReminder && 
+      <span
+        className='glyphicon glyphicon-time'
+        data-id={dataID}
+        style={clockStyle} />}
       {children}
-      <Delete id='delete' onClick={handleClick} data-id={dataID}>X</Delete>
+      <Delete
+        id='delete'
+        onClick={handleDelete}
+        data-id={dataID}>X</Delete>
     </Label>
   </Container>
 )

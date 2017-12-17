@@ -60,7 +60,6 @@ class SideBar extends Component {
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this.change)
-    window.removeEventListener('scroll', this.scrollToHide)
     this.props.removeDocumentClickHandler(this.clickToHide)
   }
   render() {

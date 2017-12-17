@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Editor, convertFromRaw, EditorState } from 'draft-js'
+import {Editor, convertFromRaw, EditorState} from 'draft-js'
 import Menus from '../commen/noteBar'
 import Tag from '../commen/lable/tags'
 
-const Wrapper = styled.div`
+const Wrapper = styled.div `
   user-select: none;
   cursor: default;
   position: relative;
@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   transition: .2s;
   border-radius: 2px;
 `
-const Title = styled.div`
+const Title = styled.div `
   font-weight: bold;  
   font-size: 17px;
   line-height: 23px;
@@ -27,7 +27,7 @@ const Title = styled.div`
   word-wrap: break-word;
   font-family: 'Roboto Condensed',arial,sans-serif;
 `
-const Body = styled.div`
+const Body = styled.div `
   font-size: 14px;
   line-height: 19px;
   min-height: 30px;
@@ -36,15 +36,15 @@ const Body = styled.div`
   word-wrap: break-word;
   font-family: 'Roboto Slab','Times New Roman',serif;
 `
-const MenuContainer = styled.div.attrs({
-  id: 'MenuContainer'
-}) `
+const MenuContainer = styled
+  .div
+  .attrs({id: 'MenuContainer'})`
   padding: 0 10px;
   transition: .3s;
   height: 30px;
 `
 const Card = (props) => {
-  const { note } = props
+  const {note} = props
   if (!note || !note.title) {
     return null
   }
@@ -52,31 +52,32 @@ const Card = (props) => {
     textBlocksFromRaw = convertFromRaw(note.text),
     titleEditor = EditorState.createWithContent(titleBlocksFromRaw),
     textEditor = EditorState.createWithContent(textBlocksFromRaw),
-    titleText = titleEditor.getCurrentContent().getPlainText(),
-    bodyText = textEditor.getCurrentContent().getPlainText()
+    titleText = titleEditor
+      .getCurrentContent()
+      .getPlainText(),
+    bodyText = textEditor
+      .getCurrentContent()
+      .getPlainText()
+    let date = note.reminderInfo.date
+    if (date) date = new Date(date)
   return (
     <Wrapper>
-      {titleText &&
-        <Title>
-          <Editor
-            editorState={titleEditor}
-            onChange={this.titleOnChange}
-            readOnly
-          />
-        </Title>}
-      {bodyText &&
-        <Body>
-          <Editor
-            editorState={textEditor}
-            onChange={this.textOnChange}
-            readOnly
-          />
-        </Body>}
-      {note.lable.map(v => (
-        <Tag key={v.text}>{v.text}</Tag>
-      ))}
+      {titleText && <Title>
+        <Editor editorState={titleEditor} readOnly/>
+      </Title>}
+      {bodyText && <Body>
+        <Editor editorState={textEditor} readOnly/>
+      </Body>}
+      {note.reminderInfo.date && <Tag>
+        {`${date.getMonth()+1}月${date.getDate()}日${date.getHours()}:${date.getMinutes()}`}
+      </Tag>}
+      {note
+        .lable
+        .map(v => (
+          <Tag key={v.text}>{v.text}</Tag>
+        ))}
       <MenuContainer>
-        <Menus isInCard />
+        <Menus isInCard/>
       </MenuContainer>
     </Wrapper>
   )

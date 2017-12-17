@@ -10,15 +10,19 @@ import {
   removeDocumentClickHandler
 } from '@/store/action/app'
 
-const Wrapper = styled.div`
+const Wrapper = styled.div `
   position: absolute;
   left: ${props => `${props.left}px`};
   top: ${props => `${props.top}px`};
-  visibility: ${props => props.show ? 'visible' : 'hidden'};
+  visibility: ${props => props.show
+  ? 'visible'
+  : 'hidden'};
   z-index: 1200;
 `
-const Container = styled.div`
-  opacity: ${props => props.show ? '1' : '0'};
+const Container = styled.div `
+  opacity: ${props => props.show
+  ? '1'
+  : '0'};
   transition: opacity .2s;
   min-width: 300px;
   min-height: 235px;
@@ -27,20 +31,20 @@ const Container = styled.div`
   border-radius: 2px;
   cursor: default;
 `
-const Title = styled.div`
+const Title = styled.div `
   font-size: 14px;
   padding: 15px;
   border-bottom: 1px solid rgba(0,0,0,0.2);
 `
-const Main = styled.div`
+const Main = styled.div `
   padding: 0 35px 15px 15px;
   font-size: 13px;
 `
-const Save = styled.div`
+const Save = styled.div `
   text-align: right;
   padding: 5px 15px;
 `
-const Triangle = styled.div`
+const Triangle = styled.div `
   border: 4px solid transparent;
   width: 0;
   height: 0;
@@ -50,9 +54,11 @@ const Triangle = styled.div`
   bottom: 8px;
 `
 const NoStyleItem = ({className, children, onClick}) => (
-  <div className={className} data-id='setReminder' onClick={onClick}>
-    <Triangle data-id='setReminder'/>
-    {children}
+  <div
+    className={className}
+    data-id='setReminder'
+    onClick={onClick}>
+    <Triangle data-id='setReminder'/> {children}
   </div>
 )
 const Item = styled(NoStyleItem)`
@@ -77,17 +83,54 @@ class Reminder extends Component {
         month: today.getMonth() + 1,
         date: today.getDate(),
         year: today.getFullYear()
-      }
+      },
+      selectTime: {
+        hour: today.getHours(),
+        minute: today.getMinutes()
+      },
+      repeat: 0,
+      canISubmit: false
     }
-    this.onShow= this.onShow.bind(this)
-    this.onDocumentClick = this.onDocumentClick.bind(this)
-    this.onPickerBackClick = this.onPickerBackClick.bind(this)
-    this.onSelectDate = this.onSelectDate.bind(this)
+    this.onShow = this
+      .onShow
+      .bind(this)
+    this.onDocumentClick = this
+      .onDocumentClick
+      .bind(this)
+    this.onPickerBackClick = this
+      .onPickerBackClick
+      .bind(this)
+    this.onSelectDate = this
+      .onSelectDate
+      .bind(this)
+    this.onSelectTime = this
+      .onSelectTime
+      .bind(this)
     event.addListener('setReminder', this.onShow)
     props.addDocumentClickHandler(this.onDocumentClick)
   }
-  onShow(pos) {
+  canISubmit() {
+    const date = this.getDateObject()
+    return date.getTime() > Date.now()
+  }
+  getDateObject() {
+    const timePicked = new Date(),
+      {selectDate, selectTime} = this.state
+    timePicked.setFullYear(selectDate.year)
+    timePicked.setMonth(selectDate.month - 1)
+    timePicked.setDate(selectDate.date)
+    timePicked.setHours(selectTime.hour)
+    timePicked.setMinutes(selectTime.minute)
+    return timePicked
+  }
+  onShow(pos, handlers) {
+    this.handlers = handlers
     this.setState({show: true, x: pos.x, y: pos.y})
+  }
+  onFinish() {
+    const {repeat} = this.state,
+      date = this.getDateObject()
+    this.handlers.onFinishTimePicking(date, repeat)
   }
   onDocumentClick(e) {
     const data = e.target.dataset
@@ -96,7 +139,7 @@ class Reminder extends Component {
     }
     this.setState({
       x: -500,
-      show: false, 
+      show: false,
       isDatePickerShow: false,
       isTimePickerShow: false
     })
@@ -123,50 +166,65 @@ class Reminder extends Component {
     }
   }
   onSelectDate(newDate) {
-    this.setState({
-      selectDate: newDate
-    })
+    this.setState({selectDate: newDate})
+  }
+  onSelectTime(type, value) {
+    if (type === 'hour') {
+      this.setState({
+        selectTime: {
+          hour: value,
+          minute: this.state.selectTime.minute
+        }
+      })
+    } else if (type === 'minute') {
+      this.setState({
+        selectTime: {
+          hour: this.state.selectTime.hour,
+          minute: value
+        }
+      })
+    }
+  }
+  regular(num) {
+    if (num.toString().length < 2) {
+      return '0' + num
+    }
+    return num
   }
   componentWillUnmount() {
     event.removeListener('setReminder', this.onSet)
-    this.props.removeDocumentClickHandler(this.onDocumentClick)
+    this
+      .props
+      .removeDocumentClickHandler(this.onDocumentClick)
   }
   render() {
     const {
+      x,y,
       show,
-      x, y,
+      selectDate,
+      selectTime,
       isDatePickerShow,
-      isTimePickerShow,
-      selectDate
+      isTimePickerShow
     } = this.state
     return (
       <Wrapper show={show} left={x} top={y}>
-        <Container
-          show={show}
-          data-id='setReminder'
-          onClick={this.onPickerBackClick}
-        >
+        <Container show={show} data-id='setReminder' onClick={this.onPickerBackClick}>
           <Title data-id='setReminder' data-name='hide-picker'>
             选择日期和时间
           </Title>
           <Main data-id='setReminder' data-name='hide-picker'>
-            <Item onClick={::this.onDatePickerClick}>
+            <Item onClick={:: this.onDatePickerClick}>
               {`${selectDate.year}年${selectDate.month}月${selectDate.date}日`}
-              <DatePicker
-                show={isDatePickerShow}
-                onSelectDate={this.onSelectDate}
-              />
+              <DatePicker show={isDatePickerShow} onSelectDate={this.onSelectDate}/>
             </Item>
-            <Item onClick={::this.onTimePickerClick}>
-              下午8:00
-              <TimePicker
-                show={isTimePickerShow}
-              />
+            <Item onClick={:: this.onTimePickerClick}>
+              {`${this.regular(selectTime.hour)}:${this.regular(selectTime.minute)}`}
+              <TimePicker show={isTimePickerShow} onSelectTime={this.onSelectTime}/>
             </Item>
             <Item>不重复</Item>
           </Main>
           <Save data-id='setReminder' data-name='hide-picker'>
-            <TextButton value='保存' disabled={true}/>
+            <TextButton value='保存' disabled={!this.canISubmit()} onClick={::this.onFinish}/>
           </Save>
         </Container>
       </Wrapper>

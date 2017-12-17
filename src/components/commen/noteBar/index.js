@@ -8,9 +8,7 @@ import Palette from './palette'
 import Icon from './icon'
 import shouldUpdate from '@/lib/shouldUpdate'
 
-const Wrapper = styled.div.attrs({
-  'data-id': 'newNote'
-}) `
+const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   max-width: 350px;
@@ -43,7 +41,7 @@ class Menus extends Component {
     const path = browserHistory.getCurrentLocation().pathname,
       archiveLable = path.indexOf('archive') > -1 ? '取消归档' : '归档'
     return (
-      <Wrapper>
+      <Wrapper data-id='newNote'>
         <Icon
           icon="glyphicon glyphicon-bell"
           lable="提醒我"
