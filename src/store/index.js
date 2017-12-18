@@ -73,7 +73,7 @@ const reducer = combineReducers({
 const storeEnhancers = compose(
   applyMiddleware(...middlewares),
   // 注意！！！下面这玩意儿在其他浏览器会报错
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 export default createStore(
   reducer,

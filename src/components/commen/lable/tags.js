@@ -36,7 +36,6 @@ const Delete = styled.div`
 `
 const Label = styled.div`
   font-size: 12px;
-  margin: 0;
   border-radius: 2px;
   line-height: 19px;
 `

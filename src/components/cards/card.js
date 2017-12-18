@@ -8,6 +8,8 @@ import {connect} from 'react-redux'
 import {editNote, postEditNote} from '@/store/action/notes'
 import {setEditMode} from '@/store/action/app'
 import event from '@/lib/events'
+import {regular} from '@/lib/calc'
+import {fireNotification} from '@/lib/notification'
 import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
 import SelectIcon from '../commen/icons/select'
@@ -16,16 +18,16 @@ import shouldUpdate from '@/lib/shouldUpdate'
 
 const Wrapper = styled.div `
   opacity: ${props => props.isEditable
-    ? '0'
-    : '1'};
+  ? '0'
+  : '1'};
   user-select: none;
   cursor: default;
   max-height: 1000px;
   transition: max-height .2s;
   position: relative;
   width: ${props => props.isList
-      ? ''
-      : '240px'};
+    ? ''
+    : '240px'};
   background: ${props => props.bgColor};
   padding: 10px 0;
   box-sizing: border-box;
@@ -68,8 +70,8 @@ const MenuContainer = styled.div `
   padding: 0 10px;
   transition: .3s;
   opacity: ${props => (props.isMoreShow || props.inEditable)
-    ? 1
-    : 0};
+  ? 1
+  : 0};
   height: 30px;
   position: relative;
   z-index: 999;
@@ -221,24 +223,72 @@ class Card extends Component {
     this.dispatchNewNote(newNote)
   }
   onMoreClick(pos) {
-    event.emitEvent(
-      'moreClick',
-      pos,
-      this.hideMore,
-      this.moreClickHandlers
-    )
+    event.emitEvent('moreClick', pos, this.hideMore, this.moreClickHandlers)
     this.setState({isMoreShow: true})
   }
   onReminderClick(pos) {
     event.emitEvent('setReminder', pos, this.reminderHandlers)
   }
   onFinishTimePicking(time, repeat) {
+    let title = this
+      .state
+      .titleEditor
+      .getCurrentContent()
+      .getPlainText()
+    if (!title) {
+      title = this
+        .state
+        .textEditor
+        .getCurrentContent()
+        .getPlainText()
+    }
+    let notiID = fireNotification(time, title, {})
     const {note} = this.props,
-      newNote = {...note, reminderInfo: {
-        date: time,
-        repeat
-      }}
-    this.dispatchNewNote(newNote)
+      newNote = {
+        ...note,
+        reminderInfo: {
+          date: time,
+          repeat,
+          notiID
+        }
+      }
+    if (!this.props.inEditable) {
+      this
+        .setNewNoteHeight(newNote)
+        .then((height) => {
+          const moreNewNote = {
+            ...newNote,
+            height
+          }
+          this.dispatchNewNote(moreNewNote)
+        })
+    } else {
+      this.dispatchNewNote(newNote)
+    }
+  }
+  onRemoveReminder() {
+    const {note} = this.props,
+      newNote = {
+        ...note,
+        reminderInfo: {
+          date: null,
+          repeat: 0
+        }
+      }
+    clearTimeout(note.reminderInfo.notiID)
+    if (!this.props.inEditable) {
+      this
+        .setNewNoteHeight(newNote)
+        .then((height) => {
+          const moreNewNote = {
+            ...newNote,
+            height
+          }
+          this.dispatchNewNote(moreNewNote)
+        })
+    } else {
+      this.dispatchNewNote(newNote)
+    }
   }
   onFixClick() {
     const {note} = this.props
@@ -331,26 +381,6 @@ class Card extends Component {
       }
     }
   }
-  onRemoveReminder() {
-    const {note} = this.props,
-      newNote = {...note, reminderInfo: {
-        date: null,
-        repeat: 0
-      }}
-    if (!this.props.inEditable) {
-      this
-        .setNewNoteHeight(newNote)
-        .then((height) => {
-          const moreNewNote = {
-            ...newNote,
-            height
-          }
-          this.dispatchNewNote(moreNewNote)
-        })
-    } else {
-      this.dispatchNewNote(newNote)
-    }
-  }
   onCardClick(e) {
     if (e.target.dataset.id === 'newNote') {
       return
@@ -395,6 +425,13 @@ class Card extends Component {
   getRef(ref) {
     this.container = findDOMNode(ref)
   }
+  getTimeStr(date) {
+    const month = date.getMonth() + 1,
+      day = date.getDate(),
+      hour = regular(date.getHours()),
+      min = regular(date.getMinutes())
+    return `${month}月${day}日${hour}:${min}`
+  }
   render() {
     const {
         titleEditor,
@@ -404,102 +441,98 @@ class Card extends Component {
         isEditable,
         tags
       } = this.state
-    const {
-        note,
-        style,
-        onCardClick,
-        inEditable,
-        onArchiveClick,
-        onFixClick
-      } = this.props
-    const titleText = titleEditor
-        .getCurrentContent()
-        .getPlainText(),
-      bodyText = textEditor
-        .getCurrentContent()
-        .getPlainText()
-    const lable = note.isFixed
-      ? '取消固定'
-      : '固定记事'
-    let date = note.reminderInfo.date
-    if (date) date = new Date(date)
-    return (
-      <Wrapper
-        id={note.id}
-        bgColor={bgColor}
-        isList={this.props.isList}
-        onClick={onCardClick || this.onCardClick}
-        isEditable={isEditable}
-        style={style || {}}
-        ref={:: this.getRef}
-        onMouseOver={!inEditable
-        ? this.renderMenu
-        : () => {}}>
-        <SelectIcon
-          handleClick={() => console.log('select clicked')}
-          dataID='newNote'/>
-        <FixIcon
-          handleClick={onFixClick
-          ? () => onFixClick(this)
-          : this.onFixClick}
-          lable={lable}
-          dataID='newNote'/> {(titleText || inEditable) && <Title>
-          <Editor
-            editorState={titleEditor}
-            onChange={this.titleOnChange}
-            readOnly={inEditable
-            ? false
-            : true}
-            placeholder="标题"/>
-        </Title>}
-        {(bodyText || inEditable) && <Body>
-          <Editor
-            editorState={textEditor}
-            onChange={this.textOnChange}
-            readOnly={inEditable
-            ? false
-            : true}
-            placeholder="添加记事..."/>
-        </Body>}
-        {date && date.getMonth && <Tag
-          isReminder
-          dataID='newNote'
-          dataLable='提醒我'
-          handleDelete={:: this.onRemoveReminder}>
-          {`${date.getMonth()+1}月${date.getDate()}日${date.getHours()}:${date.getMinutes()}`}
-        </Tag>}
-        {tags.map(v => (
-          <Tag
-            key={v.text}
-            dataID='newNote'
-            handleDelete={this.onRemoveTag(v.text)}>
-            {v.text}
-          </Tag>
-        ))}
-        <MenuContainer
-          isMoreShow={isMoreShow}
-          id='MenuContainer'
-          inEditable={inEditable}>
-          {(this.state.asyncRender || inEditable) && <Menus
-            isInCard
+      const {
+          note,
+          style,
+          onCardClick,
+          inEditable,
+          onArchiveClick,
+          onFixClick
+        } = this.props
+        const titleText = titleEditor
+            .getCurrentContent()
+            .getPlainText(),
+          bodyText = textEditor
+            .getCurrentContent()
+            .getPlainText()
+        const lable = note.isFixed
+          ? '取消固定'
+          : '固定记事'
+        let date = note.reminderInfo.date
+        if (date) 
+          date = new Date(date)
+        return (
+          <Wrapper
+            id={note.id}
             bgColor={bgColor}
-            onColorClick={this.onColorClick}
-            onArchiveClick={onArchiveClick
-            ? () => onArchiveClick(this)
-            : this.onArchiveClick}
-            onMoreClick={this.onMoreClick}
-            onReminderClick={this.onReminderClick}
-            onFinishTimePicking={this.onFinishTimePicking}/>}
-        </MenuContainer>
-      </Wrapper>
-    )
-  }
-}
+            isList={this.props.isList}
+            onClick={onCardClick || this.onCardClick}
+            isEditable={isEditable}
+            style={style || {}}
+            ref={:: this.getRef}
+            onMouseOver={!inEditable
+            ? this.renderMenu
+            : () => {}}>
+            <SelectIcon handleClick={() => console.log('select clicked')} dataID='newNote'/>
+            <FixIcon
+              handleClick={onFixClick
+              ? () => onFixClick(this)
+              : this.onFixClick}
+              lable={lable}
+              dataID='newNote'/> {(titleText || inEditable) && <Title>
+              <Editor
+                editorState={titleEditor}
+                onChange={this.titleOnChange}
+                readOnly={inEditable
+                ? false
+                : true}
+                placeholder="标题"/>
+            </Title>}
+            {(bodyText || inEditable) && <Body>
+              <Editor
+                editorState={textEditor}
+                onChange={this.textOnChange}
+                readOnly={inEditable
+                ? false
+                : true}
+                placeholder="添加记事..."/>
+            </Body>}
+            {date && date.getMonth && <Tag
+              isReminder
+              dataID='newNote'
+              dataLable='提醒我'
+              handleDelete={:: this.onRemoveReminder}>
+              {this.getTimeStr(date)}
+            </Tag>}
+            {tags.map(v => (
+              <Tag key={v.text} dataID='newNote' handleDelete={this.onRemoveTag(v.text)}>
+                {v.text}
+              </Tag>
+            ))}
+            <MenuContainer
+              isMoreShow={isMoreShow}
+              id='MenuContainer'
+              inEditable={inEditable}>
+              {(this.state.asyncRender || inEditable) && <Menus
+                isInCard
+                bgColor={bgColor}
+                onColorClick={this.onColorClick}
+                onArchiveClick={onArchiveClick
+                ? () => onArchiveClick(this)
+                : this.onArchiveClick}
+                onMoreClick={this.onMoreClick}
+                onReminderClick={this.onReminderClick}
+                onFinishTimePicking={this.onFinishTimePicking}/>}
+            </MenuContainer>
+          </Wrapper>
+        )
+      }
+    }
 
-const mapDispatch = {
-  editNote,
-  postEditNote,
-  setEditMode
-}
+    const mapDispatch = {
+      editNote,
+      postEditNote,
+      setEditMode
+    }
 
-export default connect(null, mapDispatch)(Card)
+    export default connect(null, mapDispatch)(Card)

@@ -7,6 +7,8 @@ import { addNote, deleteNoteInDB } from '@/store/action/notes'
 import { DoNotUpdate } from '@/lib/highOrderComponents'
 import shouldUpdate from '@/lib/shouldUpdate'
 import event from '@/lib/events'
+import {regular} from '@/lib/calc'
+import {fireNotification} from '@/lib/notification'
 import COLOR from '../commen/color'
 import Title from './title'
 import Text from './text'
@@ -44,7 +46,8 @@ class NewNote extends Component {
       titleEditorState: EditorState.createEmpty(),
       textEditorState: EditorState.createEmpty(),
       bgColor: COLOR.WHITE,
-      tags: []
+      tags: [],
+      reminder: ''
     }
     this.note = {
       id: Math.random().toString(16).slice(2, 8),
@@ -66,14 +69,23 @@ class NewNote extends Component {
     this.textPlainText = textContent.getPlainText()
     this.handleMoreClick = this.handleMoreClick.bind(this)
     this.uploadNoteStatus = this.uploadNoteStatus.bind(this)
+    this.onReminderClick = this
+      .onReminderClick
+      .bind(this)
     // setup clickHandlers for more click
     const handleDelete = this.handleDelete.bind(this)
     const handleAddTags = this.handleAddTags.bind(this)
     const handleTagItemClick = this.handleTagItemClick.bind(this)
+    const onFinishTimePicking = this
+      .onFinishTimePicking
+      .bind(this)
     this.moreClickHandlers = {
       handleDelete,
       handleAddTags,
       handleTagItemClick
+    }
+    this.reminderHandlers = {
+      onFinishTimePicking
     }
   }
   getContainer(ref) {
@@ -94,7 +106,8 @@ class NewNote extends Component {
         const note = {
           title,
           text,
-          lable: this.state.tags
+          lable: this.state.tags,
+          reminderInfo: this.note.reminderInfo
         }
         event.emitEvent('computeCardHeight', note, (height) => {
           this.note.height = height
@@ -136,9 +149,16 @@ class NewNote extends Component {
   }
   componentWillUnmount() {
     if (!this.isBlank()) {
-      requestAnimationFrame(() => {
+      const {reminderInfo} = this.note,
+        time = reminderInfo.date
+      let title = this.titlePlainText
+      if (!title) {
+        title = this.textPlainText
+      } 
+      this.note.reminderInfo.notiID = fireNotification(time, title, {})
+      this.setNewNoteHeight().then(() => requestAnimationFrame(() => {
         this.uploadNoteStatus(true)
-      })
+      }))
     }
   }
   handleColorChange(color) {
@@ -199,8 +219,40 @@ class NewNote extends Component {
     this.uploadNoteStatus(true)
     this.props.hideEditor()
   }
+  onReminderClick(pos) {
+    event.emitEvent('setReminder', pos, this.reminderHandlers)
+  }
+  onFinishTimePicking(time, repeat) {
+    this.note.reminderInfo = {
+      date: time,
+      repeat
+    }
+    const month = time.getMonth() + 1,
+      date = time.getDate(),
+      hour = time.getHours(),
+      minute = time.getMinutes()
+    this.setState({
+      reminder: `${month}月${date}日${regular(hour)}:${regular(minute)}`
+    })
+    this.uploadNoteStatus(false)
+  }
+  onDeleteReminder() {
+    this.setState({reminder: ''})
+    this.note.reminderInfo = {
+      date: null,
+      repeat: 0
+    }
+    this.uploadNoteStatus()
+  }
+  getTimeStr(date) {
+    const month = date.getMonth() + 1,
+      day = date.getDate(),
+      hour = regular(date.getHours()),
+      min = regular(date.getMinutes())
+    return `${month}月${day}日${hour}:${min}`
+  }
   render() {
-    const {tags} = this.state
+    const {tags, reminder} = this.state
     return (
       <Wrapper
         data-id="newNote"
@@ -221,11 +273,15 @@ class NewNote extends Component {
           editorOnChange={this.textOnChange}
           editorState={this.state.textEditorState}
         />
+        {reminder && <Tag
+          isReminder
+          dataID='newNote'
+          handleDelete={::this.onDeleteReminder}>{reminder}</Tag>}
         {tags.map(v => (
           <Tag
             key={v.text}
             dataID='newNote'
-            handleClick={this.handleRemoveTag(v.text)}
+            handleDelete={this.handleRemoveTag(v.text)}
           >
             {v.text}
           </Tag>
@@ -237,6 +293,8 @@ class NewNote extends Component {
             onColorClick={this.handleColorChange}
             onArchiveClick={this.handleArchiveChange}
             onMoreClick={this.handleMoreClick}
+            onReminderClick={this.onReminderClick}
+            onFinishTimePicking={this.onFinishTimePicking}
           />
         </MenuWrapper>
       </Wrapper>

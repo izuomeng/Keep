@@ -54,3 +54,11 @@ export function equal(a, b) {
 export function isLeapYear(year) {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
 }
+export function regular(num, len = 2) {
+  if (num.toString().length < len) {
+    const timesOf0 = len - num.toString().length,
+      addon = (Math.pow(10, timesOf0)).toString().slice(1)
+    return addon + num
+  }
+  return num
+}

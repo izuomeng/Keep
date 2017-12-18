@@ -8,7 +8,7 @@ import {
 } from '@/store/action/app'
 
 const CardsConntainer = styled.div`
-margin-top: 40px;
+  margin-top: 40px;
 `
 class Home extends Component {
   constructor(props) {
@@ -28,17 +28,16 @@ class Home extends Component {
     this.setState({ isBeforeClick: false })
   }
   handleDocumentClick(e) {
-    const data = e.target.dataset
+    const data = e.target.dataset,
+      whiteList = ['newNote', 'addNewTag', 'setReminder', 'setReminderEnd']
     if (this.state.isBeforeClick) {
       return
     }
-    if (data.id === 'newNote') {
+    if (whiteList.indexOf(data.id) > -1) {
       return
     } else if (e.target.className.indexOf('DraftStyleDefault') > -1) {
       return
     } else if (data.text) {
-      return
-    } else if (data.id === 'addNewTag') {
       return
     }
     this.setState({ isBeforeClick: true })

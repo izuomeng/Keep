@@ -58,7 +58,7 @@ const Card = (props) => {
     bodyText = textEditor
       .getCurrentContent()
       .getPlainText()
-    let date = note.reminderInfo.date
+    let date = note.reminderInfo && note.reminderInfo.date
     if (date) date = new Date(date)
   return (
     <Wrapper>
@@ -68,7 +68,7 @@ const Card = (props) => {
       {bodyText && <Body>
         <Editor editorState={textEditor} readOnly/>
       </Body>}
-      {note.reminderInfo.date && <Tag>
+      {date && <Tag>
         {`${date.getMonth()+1}月${date.getDate()}日${date.getHours()}:${date.getMinutes()}`}
       </Tag>}
       {note
