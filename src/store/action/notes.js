@@ -56,3 +56,7 @@ export const batchUpdateNote = (notes) => ({
   type: Types.BATCH_UPDATE_NOTES,
   notes
 })
+export const removeNote = (id) => ({
+  type: Types.REMOVE_NOTE,
+  id
+})

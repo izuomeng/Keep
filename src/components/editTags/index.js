@@ -164,9 +164,12 @@ class EditTag extends Component {
     this.setState({inputNewTag: '', isRepeat: false})
   }
   onDeleteClick(tagText) {
-    const {tags, editLable, batchUpdateNote, notes} = this.props
-    const newTags = tags.filter(v => v.text !== tagText)
-    MessageBox.confirm(DELETE_TAG_CONFIRM).then(() => {
+    const {tags, editLable, batchUpdateNote, notes} = this.props,
+      newTags = tags.filter(v => v.text !== tagText),
+      option = {
+        confirmText: '删除'
+      }
+    MessageBox.confirm(DELETE_TAG_CONFIRM, option).then(() => {
       editLable(newTags)
       const newNote = getNewNotesAfterEditTag(tagText, notes)
       const notesToRecalc = getNotesNeedToRecalc(notes, newNote)

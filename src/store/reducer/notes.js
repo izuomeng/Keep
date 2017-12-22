@@ -40,6 +40,13 @@ export default (state = [], action) => {
               }
               return note
             })
+        case Types.REMOVE_NOTE:
+            if (Array.isArray(action.id)) {
+              return state.filter(note => {
+                return action.id.indexOf(note.id) < 0
+              })
+            }
+            return state.filter(note => note.id !== action.id)
         default:
             return state
     }

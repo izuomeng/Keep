@@ -7,6 +7,7 @@ import { TextButton } from '../button'
 import Palette from './palette'
 import Icon from './icon'
 import shouldUpdate from '@/lib/shouldUpdate'
+import NoteBarInTrash from './inTrash'
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,9 +38,16 @@ class Menus extends Component {
     return (ref) => this[name] = findDOMNode(ref)
   }
   render() {
-    const { isInCard, bgColor, onColorClick, onArchiveClick } = this.props
+    const { isInCard, bgColor, onColorClick, onArchiveClick, inTrash, onDelete, onRestore } = this.props
     const path = browserHistory.getCurrentLocation().pathname,
       archiveLable = path.indexOf('archive') > -1 ? '取消归档' : '归档'
+    if (inTrash) {
+      return (
+        <NoteBarInTrash
+          onDelete={onDelete}
+          onRestore={onRestore}/>
+      )
+    }
     return (
       <Wrapper data-id='newNote'>
         <Icon

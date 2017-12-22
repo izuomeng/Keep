@@ -16,12 +16,7 @@ const Container = Back.extend `
 const staticStyle = {
   display: 'none'
 }
-const readyStyle = (left, top) => ({
-  position: 'fixed',
-  left: `${left}px`,
-  top: `${top}px`,
-  transition: '.2s'
-})
+const readyStyle = (left, top) => ({position: 'fixed', left: `${left}px`, top: `${top}px`, transition: '.2s'})
 const editableStyle = {
   width: '600px',
   position: 'fixed',
@@ -32,16 +27,17 @@ const editableStyle = {
 }
 const Background = styled.div `
   background-color: #e5e5e5;
-  opacity: ${props => 
-    props.cardStyle === editableStyle
-    ? '.8'
-    : '0'};
+  opacity: ${props => props.cardStyle === editableStyle
+  ? '.8'
+  : '0'};
   width: 100%;
   height: 100%;
   transition: .2s;
   cursor: default;
   & + div {
-    cursor: text;
+    cursor: ${props => props.isInTrash
+    ? 'default'
+    : 'text'};
   }
 `
 const e = {
@@ -60,11 +56,8 @@ class EditableCard extends Component {
     this.onBackClick = this
       .onBackClick
       .bind(this)
-    this.onArchiveClick = this
-      .onArchiveClick
-      .bind(this)
-    this.onFixClick = this
-      .onFixClick
+    this.mapHandlers = this
+      .mapHandlers
       .bind(this)
   }
   componentWillReceiveProps(nextProps) {
@@ -73,9 +66,7 @@ class EditableCard extends Component {
       this.setState({
         cardStyle: readyStyle(left, top)
       })
-      requestAnimationFrame(() => this.setState({
-        cardStyle: editableStyle
-      }))
+      requestAnimationFrame(() => this.setState({cardStyle: editableStyle}))
     }
   }
   onBackClick(e) {
@@ -130,15 +121,12 @@ class EditableCard extends Component {
       }
     this.dispatchNewNote(newNote)
   }
-  onArchiveClick(self) {
-    this
-      .onBackClick(e)
-      .then(() => self.onArchiveClick())
-  }
-  onFixClick(self) {
-    this
-      .onBackClick(e)
-      .then(() => self.onFixClick())
+  mapHandlers(name) {
+    return (self) => {
+      this
+        .onBackClick(e)
+        .then(() => self[name].call(null))
+    }
   }
   render() {
     const {note, isEditable} = this.props
@@ -146,19 +134,20 @@ class EditableCard extends Component {
     return (
       <Container isEditable={isEditable}>
         <Background
+          isInTrash={note && note.deleteTime}
           cardStyle={cardStyle}
           data-id='editableCardBack'
-          onClick={this.onBackClick}/> 
-          {isEditable && 
-          <Card
-            inEditable
-            note={note}
-            style={cardStyle}
-            onCardClick={() => {}}
-            onFixClick={this.onFixClick}
-            textOnChange={this.textOnChange}
-            titleOnChange={this.titleOnChange}
-            onArchiveClick={this.onArchiveClick}/>}
+          onClick={this.onBackClick}/> {isEditable && <Card
+          inEditable
+          note={note}
+          style={cardStyle}
+          onCardClick={() => {}}
+          textOnChange={this.textOnChange}
+          titleOnChange={this.titleOnChange}
+          onFixClick={this.mapHandlers('onFixClick')}
+          onArchiveClick={this.mapHandlers('onArchiveClick')}
+          onRestore={this.mapHandlers('onRestore')}
+          onDeleteThoroughly={this.mapHandlers('onDeleteThoroughly')}/>}
       </Container>
     )
   }

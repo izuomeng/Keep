@@ -10,6 +10,9 @@ const props = {
 const FixIcon = AddProps(Icon)(props)
 
 const Container = styled.div`
+  display: ${props => props.show
+  ? 'block'
+  : 'none'};
   position: absolute;
   right: 8px;
   top: 6px;
@@ -17,7 +20,7 @@ const Container = styled.div`
   transition: .3s;
   z-index: 200;
 `
-export default ({handleClick, style, dataID, lable}) => (
+export default({handleClick, style, dataID, lable}) => (
   <Container id='fixIcon' style={style}>
     <FixIcon handleClick={handleClick} dataID={dataID} lable={lable}/>
   </Container>

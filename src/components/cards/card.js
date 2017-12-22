@@ -5,7 +5,7 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import {Editor, convertFromRaw, EditorState} from 'draft-js'
 import {connect} from 'react-redux'
-import {editNote, postEditNote} from '@/store/action/notes'
+import {editNote, postEditNote, deleteNoteInDB, removeNote} from '@/store/action/notes'
 import {setEditMode} from '@/store/action/app'
 import event from '@/lib/events'
 import {regular} from '@/lib/calc'
@@ -15,6 +15,8 @@ import FixIcon from '../commen/icons/fix'
 import SelectIcon from '../commen/icons/select'
 import Tag from '../commen/lable/tags'
 import shouldUpdate from '@/lib/shouldUpdate'
+import MessageBox from '@/lib/messageBox'
+import {DELETE_NOTE_CONFIRM} from '@/static/javascript/constants'
 
 const Wrapper = styled.div `
   opacity: ${props => props.isEditable
@@ -140,6 +142,12 @@ class Card extends Component {
     this.onReminderClick = this
       .onReminderClick
       .bind(this)
+    this.onDeleteThoroughly = this
+      .onDeleteThoroughly
+      .bind(this)
+    this.onRestore = this
+      .onRestore
+      .bind(this)
     const onFinishTimePicking = this
       .onFinishTimePicking
       .bind(this)
@@ -231,10 +239,11 @@ class Card extends Component {
   }
   onFinishTimePicking(time, repeat) {
     let title = this
-      .state
-      .titleEditor
-      .getCurrentContent()
-      .getPlainText()
+        .state
+        .titleEditor
+        .getCurrentContent()
+        .getPlainText(),
+      notiID = fireNotification(time, title, {})
     if (!title) {
       title = this
         .state
@@ -242,7 +251,6 @@ class Card extends Component {
         .getCurrentContent()
         .getPlainText()
     }
-    let notiID = fireNotification(time, title, {})
     const {note} = this.props,
       newNote = {
         ...note,
@@ -399,6 +407,23 @@ class Card extends Component {
       this.setState({isEditable: true})
     })
   }
+  onDeleteThoroughly() {
+    const {note, deleteNoteInDB, removeNote} = this.props
+    MessageBox.confirm(DELETE_NOTE_CONFIRM, {confirmText: '删除'}).then(() => {
+      setTimeout(() => {
+        removeNote(note.id)
+        deleteNoteInDB(note.id)
+      }, 0)
+    })
+  }
+  onRestore() {
+    const {note} = this.props
+    const newNote = {
+      ...note,
+      deleteTime: null
+    }
+    this.dispatchNewNote(newNote)
+  }
   showPrevCard(prevNote) {
     this.setState({isEditable: false})
     const {note} = this.props
@@ -440,99 +465,112 @@ class Card extends Component {
         bgColor,
         isEditable,
         tags
-      } = this.state
-      const {
-          note,
-          style,
-          onCardClick,
-          inEditable,
-          onArchiveClick,
-          onFixClick
-        } = this.props
-        const titleText = titleEditor
-            .getCurrentContent()
-            .getPlainText(),
-          bodyText = textEditor
-            .getCurrentContent()
-            .getPlainText()
-        const lable = note.isFixed
-          ? '取消固定'
-          : '固定记事'
-        let date = note.reminderInfo.date
-        if (date) 
-          date = new Date(date)
-        return (
-          <Wrapper
-            id={note.id}
+      } = this.state, {
+        note,
+        style,
+        onCardClick,
+        inEditable,
+        onArchiveClick,
+        onFixClick,
+        onRestore,
+        onDeleteThoroughly
+      } = this.props,
+      titleText = titleEditor
+        .getCurrentContent()
+        .getPlainText(),
+      bodyText = textEditor
+        .getCurrentContent()
+        .getPlainText(),
+      lable = note.isFixed
+        ? '取消固定'
+        : '固定记事'
+    let date = note.reminderInfo.date
+    if (date) 
+      date = new Date(date)
+    return (
+      <Wrapper
+        id={note.id}
+        bgColor={bgColor}
+        isList={this.props.isList}
+        onClick={onCardClick || this.onCardClick}
+        isEditable={isEditable}
+        style={style || {}}
+        ref={:: this.getRef}
+        onMouseOver={!inEditable
+        ? this.renderMenu
+        : () => {}}>
+        <SelectIcon handleClick={() => console.log('select clicked')} dataID='newNote'/>
+        <FixIcon
+          show={note.deleteTime
+          ? false
+          : true}
+          handleClick={onFixClick
+          ? () => onFixClick(this)
+          : this.onFixClick}
+          lable={lable}
+          dataID='newNote'/> {(titleText || inEditable) && <Title>
+          <Editor
+            editorState={titleEditor}
+            onChange={this.titleOnChange}
+            readOnly={inEditable && !note.deleteTime
+            ? false
+            : true}
+            placeholder="标题"/>
+        </Title>}
+        {(bodyText || inEditable) && <Body>
+          <Editor
+            editorState={textEditor}
+            onChange={this.textOnChange}
+            readOnly={inEditable && !note.deleteTime
+            ? false
+            : true}
+            placeholder="添加记事..."/>
+        </Body>}
+        {date && date.getMonth && <Tag
+          isReminder
+          dataID='newNote'
+          dataLable='提醒我'
+          handleDelete={:: this.onRemoveReminder}>
+          {this.getTimeStr(date)}
+        </Tag>}
+        {tags.map(v => (
+          <Tag key={v.text} dataID='newNote' handleDelete={this.onRemoveTag(v.text)}>
+            {v.text}
+          </Tag>
+        ))}
+        <MenuContainer
+          isMoreShow={isMoreShow}
+          id='MenuContainer'
+          inEditable={inEditable}>
+          {(this.state.asyncRender || inEditable) && <Menus
+            isInCard
             bgColor={bgColor}
-            isList={this.props.isList}
-            onClick={onCardClick || this.onCardClick}
-            isEditable={isEditable}
-            style={style || {}}
-            ref={:: this.getRef}
-            onMouseOver={!inEditable
-            ? this.renderMenu
-            : () => {}}>
-            <SelectIcon handleClick={() => console.log('select clicked')} dataID='newNote'/>
-            <FixIcon
-              handleClick={onFixClick
-              ? () => onFixClick(this)
-              : this.onFixClick}
-              lable={lable}
-              dataID='newNote'/> {(titleText || inEditable) && <Title>
-              <Editor
-                editorState={titleEditor}
-                onChange={this.titleOnChange}
-                readOnly={inEditable
-                ? false
-                : true}
-                placeholder="标题"/>
-            </Title>}
-            {(bodyText || inEditable) && <Body>
-              <Editor
-                editorState={textEditor}
-                onChange={this.textOnChange}
-                readOnly={inEditable
-                ? false
-                : true}
-                placeholder="添加记事..."/>
-            </Body>}
-            {date && date.getMonth && <Tag
-              isReminder
-              dataID='newNote'
-              dataLable='提醒我'
-              handleDelete={:: this.onRemoveReminder}>
-              {this.getTimeStr(date)}
-            </Tag>}
-            {tags.map(v => (
-              <Tag key={v.text} dataID='newNote' handleDelete={this.onRemoveTag(v.text)}>
-                {v.text}
-              </Tag>
-            ))}
-            <MenuContainer
-              isMoreShow={isMoreShow}
-              id='MenuContainer'
-              inEditable={inEditable}>
-              {(this.state.asyncRender || inEditable) && <Menus
-                isInCard
-                bgColor={bgColor}
-                onColorClick={this.onColorClick}
-                onArchiveClick={onArchiveClick
-                ? () => onArchiveClick(this)
-                : this.onArchiveClick}
-                onMoreClick={this.onMoreClick}
-                onReminderClick={this.onReminderClick}
-                onFinishTimePicking={this.onFinishTimePicking}/>}
-            </MenuContainer>
-          </Wrapper>
-        )
-      }
-    }
+            inTrash={note.deleteTime}
+            onColorClick={this.onColorClick}
+            onMoreClick={this.onMoreClick}
+            onReminderClick={this.onReminderClick}
+            onFinishTimePicking={this.onFinishTimePicking}
+            onArchiveClick={onArchiveClick
+            ? () => onArchiveClick(this)
+            : this.onArchiveClick}
+            onDelete={onDeleteThoroughly
+            ? () => onDeleteThoroughly(this)
+            : this.onDeleteThoroughly}
+            onRestore={onRestore
+            ? () => onRestore(this)
+            : this.onRestore}/>}
+        </MenuContainer>
+      </Wrapper>
+    )
+  }
+}
 
-    const mapDispatch = {
-      editNote,
-      postEditNote,
-      setEditMode
-    }
+const mapDispatch = {
+  editNote,
+  postEditNote,
+  setEditMode,
+  deleteNoteInDB,
+  removeNote
+}
 
-    export default connect(null, mapDispatch)(Card)
+export default connect(null, mapDispatch)(Card)
