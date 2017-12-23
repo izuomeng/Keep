@@ -1,8 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Editor, convertFromRaw, EditorState} from 'draft-js'
+import Delta from 'quill-delta'
 import Menus from '../commen/noteBar'
 import Tag from '../commen/lable/tags'
+import Editor from '../editor'
+import {Text as Body, Title} from '../cards/card'
 
 const Wrapper = styled.div `
   user-select: none;
@@ -17,25 +19,6 @@ const Wrapper = styled.div `
   transition: .2s;
   border-radius: 2px;
 `
-const Title = styled.div `
-  font-weight: bold;  
-  font-size: 17px;
-  line-height: 23px;
-  min-height: 38px;
-  padding: 4px 15px 15px 15px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: 'Roboto Condensed',arial,sans-serif;
-`
-const Body = styled.div `
-  font-size: 14px;
-  line-height: 19px;
-  min-height: 30px;
-  padding: 12px 15px 15px 15px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: 'Roboto Slab','Times New Roman',serif;
-`
 const MenuContainer = styled
   .div
   .attrs({id: 'MenuContainer'})`
@@ -43,30 +26,24 @@ const MenuContainer = styled
   transition: .3s;
   height: 30px;
 `
+function isBlank(content) {
+  const delta = new Delta(content)
+  return delta.length() < 2
+}
 const Card = (props) => {
   const {note} = props
   if (!note || !note.title) {
     return null
   }
-  const titleBlocksFromRaw = convertFromRaw(note.title),
-    textBlocksFromRaw = convertFromRaw(note.text),
-    titleEditor = EditorState.createWithContent(titleBlocksFromRaw),
-    textEditor = EditorState.createWithContent(textBlocksFromRaw),
-    titleText = titleEditor
-      .getCurrentContent()
-      .getPlainText(),
-    bodyText = textEditor
-      .getCurrentContent()
-      .getPlainText()
-    let date = note.reminderInfo && note.reminderInfo.date
-    if (date) date = new Date(date)
+  let date = note.reminderInfo && note.reminderInfo.date
+  if (date) date = new Date(date)
   return (
     <Wrapper>
-      {titleText && <Title>
-        <Editor editorState={titleEditor} readOnly/>
+      {!isBlank(note.title) && <Title>
+        <Editor content={note.title} readOnly/>
       </Title>}
-      {bodyText && <Body>
-        <Editor editorState={textEditor} readOnly/>
+      {!isBlank(note.text) && <Body>
+        <Editor content={note.text} readOnly/>
       </Body>}
       {date && <Tag>
         {`${date.getMonth()+1}月${date.getDate()}日${date.getHours()}:${date.getMinutes()}`}

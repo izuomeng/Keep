@@ -35,6 +35,7 @@ const Main = styled.div`
   background: rgb(255, 255, 255);
   box-shadow: 0 3px 5px rgba(0,0,0,0.5);
   line-height: normal;
+  color: #767676;
 `
 const Top = styled.div`
   padding: 15px;
@@ -174,7 +175,7 @@ class EditTag extends Component {
       const newNote = getNewNotesAfterEditTag(tagText, notes)
       const notesToRecalc = getNotesNeedToRecalc(notes, newNote)
       return recalcHeight(notesToRecalc)
-    }).then((result) => batchUpdateNote(result))
+    }).then((result) => batchUpdateNote(result)).catch(()=>null)
   }
   onEditClick(index) {
     return () => {

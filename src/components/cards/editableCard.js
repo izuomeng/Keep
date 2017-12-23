@@ -1,9 +1,8 @@
 import React, {Component} from 'react'
+import _ from 'lodash'
 import styled from 'styled-components'
 import {connect} from 'react-redux'
-import {convertToRaw} from 'draft-js'
 import {setEditMode} from '@/store/action/app'
-import {editNote} from '@/store/action/notes'
 import Card from './card'
 import Back from '../commen/fullScreen'
 
@@ -16,7 +15,15 @@ const Container = Back.extend `
 const staticStyle = {
   display: 'none'
 }
-const readyStyle = (left, top) => ({position: 'fixed', left: `${left}px`, top: `${top}px`, transition: '.2s'})
+const readyStyle = (left, top) => ({
+  position: 'fixed',
+  left: `${left}px`,
+  top: `${top}px`,
+  transition: '.2s',
+  overflow: 'hidden',
+  opacity: '0',
+  color: 'transparent'
+})
 const editableStyle = {
   width: '600px',
   position: 'fixed',
@@ -84,42 +91,25 @@ class EditableCard extends Component {
           .props
           .callback
           .showPrevCard()
-        requestAnimationFrame(() => this.props.setEditMode(false))
+      }, 180)
+      setTimeout(() => {
+        this.props.setEditMode(false)
         resolve()
-      }, 200)
+      }, 250)
     })
   }
-  titleOnChange(titleEditorState) {
-    this.setState({titleEditor: titleEditorState})
-    const nextContent = titleEditorState.getCurrentContent(),
-      nextContenInJs = convertToRaw(nextContent)
-    if (nextContent.getPlainText() === this.titleContent.getPlainText()) {
-      return
-    }
-    this.titleInJs = nextContenInJs
-    this.titleContent = nextContent
-    const {note} = this.props,
-      newNote = {
-        ...note,
-        title: nextContenInJs
+  onChange(name) {
+    return function(value) {
+      const {note} = this.props
+      if (_.isEqual(note[name], value)) {
+        return
       }
-    this.dispatchNewNote(newNote)
-  }
-  textOnChange(textEditorState) {
-    this.setState({textEditor: textEditorState})
-    const nextContent = textEditorState.getCurrentContent(),
-      nextContenInJs = convertToRaw(nextContent)
-    if (nextContent.getPlainText() === this.textContent.getPlainText()) {
-      return
-    }
-    this.textInJs = nextContenInJs
-    this.textContent = nextContent
-    const {note} = this.props,
-      newNote = {
+      const newNote = {
         ...note,
-        text: nextContenInJs
+        [name]: value
       }
-    this.dispatchNewNote(newNote)
+      this.dispatchNewNote(newNote)
+    }
   }
   mapHandlers(name) {
     return (self) => {
@@ -137,26 +127,27 @@ class EditableCard extends Component {
           isInTrash={note && note.deleteTime}
           cardStyle={cardStyle}
           data-id='editableCardBack'
-          onClick={this.onBackClick}/> {isEditable && <Card
-          inEditable
-          note={note}
-          style={cardStyle}
-          onCardClick={() => {}}
-          textOnChange={this.textOnChange}
-          titleOnChange={this.titleOnChange}
-          onFixClick={this.mapHandlers('onFixClick')}
-          onArchiveClick={this.mapHandlers('onArchiveClick')}
-          onRestore={this.mapHandlers('onRestore')}
-          onDeleteThoroughly={this.mapHandlers('onDeleteThoroughly')}/>}
+          onClick={this.onBackClick}/> 
+          {isEditable && <Card
+            inEditable
+            note={note}
+            style={cardStyle}
+            onCardClick={() => {}}
+            textOnChange={this.onChange('text')}
+            titleOnChange={this.onChange('title')}
+            onFixClick={this.mapHandlers('onFixClick')}
+            onArchiveClick={this.mapHandlers('onArchiveClick')}
+            onRestore={this.mapHandlers('onRestore')}
+            onDeleteThoroughly={this.mapHandlers('onDeleteThoroughly')}/>}
       </Container>
     )
   }
 }
 const mapState = (state) => ({
-  ...state.app.editMode
+  ...state.app.editMode,
+  note: state.notes.find(note => note.id === state.app.editMode.noteID)
 })
 const mapDispatch = {
-  setEditMode,
-  editNote
+  setEditMode
 }
 export default connect(mapState, mapDispatch)(EditableCard)

@@ -20,8 +20,8 @@ const Container = styled.div`
   transition: .3s;
   z-index: 200;
 `
-export default({handleClick, style, dataID, lable}) => (
-  <Container id='fixIcon' style={style}>
+export default({handleClick, style, dataID, lable, show}) => (
+  <Container id='fixIcon' style={style} show={show}>
     <FixIcon handleClick={handleClick} dataID={dataID} lable={lable}/>
   </Container>
 )

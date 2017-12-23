@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import styled from 'styled-components'
 import {findDOMNode} from 'react-dom'
 import {connect} from 'react-redux'
-import {EditorState, convertToRaw} from 'draft-js'
 import {addNote, deleteNoteInDB} from '@/store/action/notes'
 import {DoNotUpdate} from '@/lib/highOrderComponents'
 import shouldUpdate from '@/lib/shouldUpdate'
@@ -36,15 +35,10 @@ const Wrapper = BeforeClick.extend `
   background: ${props => props.bgColor};
   position: relative;
 `
-const MenuWrapper = styled.div `
-
-`
 class NewNote extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      titleEditorState: EditorState.createEmpty(),
-      textEditorState: EditorState.createEmpty(),
       bgColor: COLOR.WHITE,
       tags: [],
       reminder: ''
@@ -75,19 +69,6 @@ class NewNote extends Component {
     this.setNewNoteHeight = this
       .setNewNoteHeight
       .bind(this)
-    //set upload editorContent
-    const titleContent = this
-      .state
-      .titleEditorState
-      .getCurrentContent()
-    this.titleContentInJs = convertToRaw(titleContent)
-    this.titlePlainText = titleContent.getPlainText()
-    const textContent = this
-      .state
-      .textEditorState
-      .getCurrentContent()
-    this.textContentInJs = convertToRaw(textContent)
-    this.textPlainText = textContent.getPlainText()
     this.handleMoreClick = this
       .handleMoreClick
       .bind(this)
@@ -97,6 +78,11 @@ class NewNote extends Component {
     this.onReminderClick = this
       .onReminderClick
       .bind(this)
+    //set upload editorContent
+      this.titleContent = {}
+      this.textContent = {}
+      this.titlePlainText = ''
+      this.textPlainText = ''
     // setup clickHandlers for more click
     const handleDelete = this
       .handleDelete
@@ -127,12 +113,12 @@ class NewNote extends Component {
       .props
       .addNote(
         shouldAddIntoView,
-        this.titleContentInJs,
-        this.textContentInJs,
+        this.titleContent,
+        this.textContent,
         this.note
       )
   }
-  setNewNoteHeight(title = this.titleContentInJs, text = this.textContentInJs) {
+  setNewNoteHeight(title = this.titleContent, text = this.textContent) {
     return new Promise((resolve) => {
       clearTimeout(this.hid)
       this.hid = setTimeout(() => {
@@ -149,46 +135,26 @@ class NewNote extends Component {
       }, 100)
     })
   }
-  titleOnChange(titleEditorState) {
-    const prevContent = this
-        .state
-        .titleEditorState
-        .getCurrentContent(),
-      nextContent = titleEditorState.getCurrentContent(),
-      nextContenInJs = convertToRaw(nextContent)
-    this.setState({titleEditorState})
-    this.titleContentInJs = nextContenInJs
-    this.titlePlainText = nextContent.getPlainText()
-    if (nextContent.getPlainText() === prevContent.getPlainText()) {
-      return
-    }
+  titleOnChange(content, text) {
+    this.titleContent = content
+    this.titlePlainText = text
     this
-      .setNewNoteHeight(nextContenInJs)
+      .setNewNoteHeight(content)
       .then(() => {
         this.uploadNoteStatus(false)
       })
   }
-  textOnChange(textEditorState) {
-    const prevContent = this
-        .state
-        .textEditorState
-        .getCurrentContent(),
-      nextContent = textEditorState.getCurrentContent(),
-      nextContentInJs = convertToRaw(nextContent)
-    this.setState({textEditorState})
-    this.textContentInJs = nextContentInJs
-    this.textPlainText = nextContent.getPlainText()
-    if (nextContent.getPlainText() === prevContent.getPlainText()) {
-      return
-    }
+  textOnChange(content, text) {
+    this.textContent = content
+    this.textPlainText = text
     this
-      .setNewNoteHeight(this.titleContentInJs, nextContentInJs)
+      .setNewNoteHeight(this.titleContent, content)
       .then(() => {
         this.uploadNoteStatus(false)
       })
   }
   isBlank() {
-    return !this.titlePlainText && !this.textPlainText
+    return this.titlePlainText.length < 2 && this.textPlainText.length < 2
   }
   componentWillUnmount() {
     if (!this.isBlank()) {
@@ -334,12 +300,8 @@ class NewNote extends Component {
           right: '5px'
         }}
           handleClick={:: this.handleFixClick}/>
-        <Title
-          editorOnChange={this.titleOnChange}
-          editorState={this.state.titleEditorState}/>
-        <Text
-          editorOnChange={this.textOnChange}
-          editorState={this.state.textEditorState}/> 
+        <Title editorOnChange={this.titleOnChange}/>
+        <Text editorOnChange={this.textOnChange}/> 
         {reminder && <Tag
           isReminder
           dataID='newNote'
@@ -354,7 +316,7 @@ class NewNote extends Component {
             {v.text}
           </Tag>
         ))}
-        <MenuWrapper data-id="newNote">
+        <div data-id="newNote">
           <CompleteButton value='完成'/>
           <Menus
             bgColor={this.state.bgColor}
@@ -363,7 +325,7 @@ class NewNote extends Component {
             onMoreClick={this.handleMoreClick}
             onReminderClick={this.onReminderClick}
             onFinishTimePicking={this.onFinishTimePicking}/>
-        </MenuWrapper>
+        </div>
       </Wrapper>
     )
   }

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import {browserHistory} from 'react-router'
 
 const Input = styled
   .input
@@ -24,13 +25,16 @@ const StyledGlass = styled(Glass)`
   color: ${props => props.glassColor};
   cursor: pointer;
   &:hover{
-      color: black;
+    color: ${props => props.hovColor};
   }
 `
-const Search = ({className, glassColor = '#715313', seachBgColor}) => (
-  <div className={className}>
+function toSearch() {
+  browserHistory.push('/search')
+}
+const Search = ({className, glassColor, seachBgColor, hovColor}) => (
+  <div className={className} onClick={toSearch}>
     <Input placeholder="搜索" bgColor={seachBgColor}/>
-    <StyledGlass glassColor={glassColor}/>
+    <StyledGlass glassColor={glassColor} hovColor={hovColor}/>
   </div>
 )
 const StyledSearch = styled(Search)`

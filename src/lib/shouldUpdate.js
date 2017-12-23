@@ -1,9 +1,7 @@
-import Immutable, {is} from 'immutable'
+import _ from 'lodash'
 
 export default (nextProps, nextState) => {
-  const thisProps = Immutable.fromJS(this.props || {})
-  const thisState = Immutable.fromJS(this.state || {})
-  const nextP = Immutable.fromJS(nextProps)
-  const nextS = Immutable.fromJS(nextState)
-  return !is(thisProps, nextP) || !is(thisState, nextS)
+  const thisProps = this.props
+  const thisState = this.state
+  return !_.isEqual(thisProps, nextProps) || !_.isEqual(thisState, nextState)
 }

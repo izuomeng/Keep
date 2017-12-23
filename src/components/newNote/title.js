@@ -1,34 +1,33 @@
 import React, {Component} from 'react'
-import {Editor} from 'draft-js'
+import Editor from '../editor'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
-    & .public-DraftEditorPlaceholder-root {
-        color: #737373;
-    }
-    & .public-DraftEditorPlaceholder-hasFocus {
-        color: #737373;
-    }
+const Wrapper = styled.div `
+  & .ql-container {
+    padding: 0;
+  }
+  & .ql-editor {
+    padding: 0 10px;
     font-size: 17px;
     font-weight: bold;
-    line-height: 23px;
-    margin: 0 10px 20px 10px
+  }
+  & .ql-editor::before {
+    left: 10px;
+  }
 `
 
-class Title extends Component{
-    render() {
-        const {editorState, editorOnChange} = this.props
-        return (
-            <Wrapper>
-                <Editor
-                    editorState={editorState}
-                    onChange={editorOnChange}
-                    placeholder="标题"
-                    spellCheck
-                />
-            </Wrapper>
-        )
-    }
+class Title extends Component {
+  render() {
+    const {editorOnChange} = this.props
+    return (
+      <Wrapper>
+        <Editor
+          onChange={editorOnChange}
+          placeholder="标题"/>
+      </Wrapper>
+    )
+  }
 }
 
 export default Title
+export {Wrapper}

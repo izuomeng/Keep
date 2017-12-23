@@ -91,14 +91,19 @@ class HeaderContainer extends Component {
   getBgColor(path) {
     if (path === '/trash') {
       return COLOR.HEAD_TRASH
-    } else if (path === '/') {
+    } else if (path === '/' || path === '/login' || path === '/register') {
+      return COLOR.HEAD
+    } else if (path === '/search') {
+      return COLOR.BLUE_HEAD
+    } else if (path.indexOf('loading') > -1){
       return COLOR.HEAD
     } else {
       return COLOR.HEAD_REMINDER
     }
   }
   getColor(path, home, other = 'white') {
-    if (path === '/') {
+    if (path === '/' || path === '/login' || path === '/register' ||
+    path.indexOf('loading') > -1) {
       return home
     }
     return other
@@ -109,9 +114,10 @@ class HeaderContainer extends Component {
       {pathname} = this.props.location,
       bgColor = this.getBgColor(pathname),
       color = this.getColor(pathname, COLOR.ICON),
+      hovColor = this.getColor(pathname, 'black', 'lightgrey'),
       title = this.getTitle(pathname),
       titleColor = this.getColor(pathname, 'black'),
-      placeholderColor = this.getColor(pathname, COLOR.SEARCH_PLH, COLOR.SEARCH_PLH_OTHER),
+      plhColor = this.getColor(pathname, COLOR.SEARCH_PLH, COLOR.SEARCH_PLH_OTHER),
       glassColor = this.getColor(pathname, COLOR.SEARCH_PLH, 'white'),
       seachBgColor = this.getColor(pathname, COLOR.SEARCH_BG, COLOR.SEARCH_BG_OTHER)
     if (progress === 'SUCCESS' || progress === 'FAIL') {
@@ -125,24 +131,28 @@ class HeaderContainer extends Component {
           {title}
         </Title>
         <Search
-          plhColor={placeholderColor}
+          hovColor={hovColor}
           glassColor={glassColor}
+          plhColor={plhColor}
           seachBgColor={seachBgColor}/> 
-        {(progress === 'STATIC') && <RefreshIcon/>}
+        {(progress === 'STATIC') && <RefreshIcon hovColor={hovColor}/>}
         {(progress === 'PENDING') && <Snake/>}
         {(progress === 'SUCCESS') && <SycnSuccess/>}
         {(progress === 'FAIL') && <SyncFail/>}
         {isWaterFall
-          ? <LayerIcon handleClick={this.onLayerClick}/>
-          : <LayerIconII handleClick={this.onLayerClick}/>}
-        <MyReminder/>
+          ? <LayerIcon handleClick={this.onLayerClick} hovColor={hovColor}/>
+          : <LayerIconII handleClick={this.onLayerClick} hovColor={hovColor}/>}
+        <MyReminder hovColor={hovColor}/>
         <Avatar/> {this.props.children}
       </Header>
     )
   }
 }
 
-const mapState = (state) => ({syncProgress: state.app.syncProgress, isWaterFall: state.app.isWaterFall})
+const mapState = (state) => ({
+  syncProgress: state.app.syncProgress,
+  isWaterFall: state.app.isWaterFall
+})
 const mapDispatch = (dispatch) => ({
   setStatic() {
     dispatch({type: 'SYNC_STATIC'})
