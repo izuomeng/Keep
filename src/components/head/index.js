@@ -76,6 +76,7 @@ class HeaderContainer extends Component {
   }
   getTitle(path) {
     switch (path) {
+      case '/search':
       case '/':
         return 'Keep'
       case '/reminders':

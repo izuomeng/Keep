@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import Editor from '../editor'
 import styled from 'styled-components'
 
@@ -16,18 +16,13 @@ const Wrapper = styled.div `
   }
 `
 
-class Title extends Component {
-  render() {
-    const {editorOnChange} = this.props
-    return (
-      <Wrapper>
-        <Editor
-          onChange={editorOnChange}
-          placeholder="标题"/>
-      </Wrapper>
-    )
-  }
+export default ({editorOnChange}) => {
+  return (
+    <Wrapper>
+      <Editor
+        onChange={editorOnChange}
+        placeholder="标题"/>
+    </Wrapper>
+  )
 }
-
-export default Title
 export {Wrapper}

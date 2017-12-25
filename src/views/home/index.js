@@ -36,6 +36,9 @@ class Home extends Component {
       className = (parent && parent.className) || '',
       selfClass = itself.className || '',
       whiteList = ['ql-editor', 'ql-tooltip-editor', 'ql-tooltip']
+    if (!parent) {
+      return
+    }
     if (parent.tagName === 'svg' || itself.tagName === 'svg') {
       return true
     }

@@ -69,9 +69,12 @@ class EditableCard extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.isEditable) {
-      const {left, top} = nextProps
+      const {left, top, isWaterFall} = nextProps
       this.setState({
-        cardStyle: readyStyle(left, top)
+        cardStyle: {
+          ...readyStyle(left, top),
+          width: isWaterFall ? '240px' : '600px'
+        }
       })
       requestAnimationFrame(() => this.setState({cardStyle: editableStyle}))
     }
@@ -80,10 +83,13 @@ class EditableCard extends Component {
     if (e.target.dataset.id !== 'editableCardBack') {
       return
     }
-    const {cardRef} = this.props,
+    const {cardRef, isWaterFall} = this.props,
       pos = cardRef.getBoundingClientRect()
     this.setState({
-      cardStyle: readyStyle(pos.left, pos.top)
+      cardStyle: {
+        ...readyStyle(pos.left, pos.top),
+        width: isWaterFall ? '240px' : '600px'
+      }
     })
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -145,7 +151,8 @@ class EditableCard extends Component {
 }
 const mapState = (state) => ({
   ...state.app.editMode,
-  note: state.notes.find(note => note.id === state.app.editMode.noteID)
+  note: state.notes.find(note => note.id === state.app.editMode.noteID),
+  isWaterFall: state.app.isWaterFall
 })
 const mapDispatch = {
   setEditMode

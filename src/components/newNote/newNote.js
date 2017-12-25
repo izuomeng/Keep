@@ -278,6 +278,9 @@ class NewNote extends Component {
     }
     this.uploadNoteStatus()
   }
+  onUndo() {
+
+  }
   getTimeStr(date) {
     const month = date.getMonth() + 1,
       day = date.getDate(),
@@ -296,9 +299,9 @@ class NewNote extends Component {
           dataID='newNote'
           lable='固定记事'
           style={{
-          opacity: 1,
-          right: '5px'
-        }}
+            opacity: 1,
+            right: '5px'
+          }}
           handleClick={:: this.handleFixClick}/>
         <Title editorOnChange={this.titleOnChange}/>
         <Text editorOnChange={this.textOnChange}/> 

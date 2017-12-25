@@ -56,8 +56,8 @@ const SycnSuccess = () =>
 const SyncFail = () => 
   (<StyledSimpleIcon iconClass="glyphicon glyphicon-remove-sign"/>)
 
-const LayerIcon = iconFactory('glyphicon glyphicon-th-list', '切换布局')
-const LayerIconII = iconFactory('glyphicon glyphicon-th', '切换布局')
+const LayerIcon = iconFactory('glyphicon glyphicon-th-list', '列表视图')
+const LayerIconII = iconFactory('glyphicon glyphicon-th', '网格视图')
 const RefreshIcon = iconFactory('glyphicon glyphicon-repeat', '刷新')
 const MyReminder = iconFactory('glyphicon glyphicon-time', '通知')
 

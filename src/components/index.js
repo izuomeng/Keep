@@ -11,6 +11,7 @@ import Worker from './worker'
 import MessageBox from './commen/messageBox'
 import Reminder from './remider'
 import {TextButton} from './commen/button'
+import SearchFilter from './searchFilter'
 
 export {
     Sidebar, 
@@ -27,5 +28,6 @@ export {
     Worker,
     MessageBox,
     Reminder,
-    TextButton
+    TextButton,
+    SearchFilter
 }
