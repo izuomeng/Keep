@@ -1,9 +1,11 @@
-import addNoteMw from './addNoteMiddleware'
-import promiseMw from './promiseMiddleware'
-import uploadAppMw from './uploadAppMw'
+import addNoteMw from './addNote'
+import promiseMw from './promise'
+import uploadAppMw from './uploadApp'
+import batchUpdateMw from './batchUpdate'
 
 export {
   addNoteMw,
   promiseMw,
-  uploadAppMw
+  uploadAppMw,
+  batchUpdateMw
 }

@@ -4,10 +4,10 @@ import * as Types from '../actionTypes/app'
 import axios from 'axios'
 
 export default ({ dispatch }) => (next) => (action) => {
-  const { updateState, type, ...note } = action
-  if (type !== ADD_NOTE) {
+  if (action.type !== ADD_NOTE) {
     return next(action)
   }
+  const { updateState, type, ...note } = action
   if (updateState) {
     return next({
       type,

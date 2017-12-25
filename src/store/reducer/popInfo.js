@@ -36,7 +36,7 @@ export default (state = {}, action) => {
         case Types.AUTH_TIME_EXCEED:
             return {
               type: 'error',
-              message: '认证过期，请重新登陆',
+              message: '认证失败，请重新登陆',
             }
         default:
             return state
