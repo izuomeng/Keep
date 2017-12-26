@@ -31,7 +31,7 @@ const Header = styled.header `
   flex-flow: row nowrap;
   align-items: center;
   position: fixed;
-  transition: .4s;
+  transition: .2s;
   box-shadow: ${props => props.shadow
   ? `0 4px 5px 0 rgba(0,0,0,0.14),
         0 1px 10px 0 rgba(0,0,0,0.12),
@@ -71,8 +71,7 @@ class HeaderContainer extends Component {
     this.setState({
       isWaterFall: !this.state.isWaterFall
     })
-    clearTimeout(this.tid)
-    this.tid = setTimeout(this.props.toggleLayout, 100)
+    requestAnimationFrame(this.props.toggleLayout)
   }
   getTitle(path) {
     switch (path) {

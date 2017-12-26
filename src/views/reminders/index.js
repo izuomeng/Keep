@@ -17,7 +17,7 @@ class Reminders extends Component {
     }
   }
   componentDidMount() {
-    setTimeout(() => this.setState({asyncRender: true}))
+    setTimeout(() => this.setState({asyncRender: true}), 200)
   }
   render() {
     const {notes} = this.props

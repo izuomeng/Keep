@@ -68,7 +68,7 @@ class Home extends Component {
     this.setState({isBeforeClick: true})
   }
   componentDidMount() {
-    setTimeout(() => this.setState({asyncRender: true}), 0)
+    setTimeout(() => this.setState({asyncRender: true}), 200)
     this
       .props
       .addDocumentClickHandler(this.handleDocumentClick)

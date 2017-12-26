@@ -26,7 +26,7 @@ class Trash extends Component {
     }
   }
   componentDidMount() {
-    setTimeout(() => this.setState({asyncRender: true}))
+    setTimeout(() => this.setState({asyncRender: true}), 200)
   }
   onClear() {
     const {notes, removeNote} = this.props,

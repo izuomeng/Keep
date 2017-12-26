@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
+import {findDOMNode} from 'react-dom'
 import styled from 'styled-components'
+import {withRouter} from 'react-router'
 import {browserHistory} from 'react-router'
 import event from '@/lib/events'
 
@@ -10,11 +12,12 @@ const Input = styled
     background-color: ${props => props.bgColor};
     border: 0;
     padding-left: 70px;
-    width: calc(100% - 22px);
+    width: 100%;
     height: 48px;
+    padding-right: 50px;
 `
-const Glass = ({className}) => (
-  <span className={className + ' glyphicon glyphicon-search'}></span>
+const Glass = ({className, icon, onClick}) => (
+  <span className={className + ' ' + icon} onClick={onClick} ></span>
 )
 const StyledGlass = styled(Glass)`
   height: 19px;
@@ -28,6 +31,10 @@ const StyledGlass = styled(Glass)`
   &:hover{
     color: ${props => props.hovColor};
   }
+`
+const Remove = StyledGlass.extend`
+  left: auto;
+  right: 20px;
 `
 const Container = styled.div `
   position: relative;
@@ -60,6 +67,9 @@ class SearchBar extends Component {
     this.handleInput = this
       .handleInput
       .bind(this)
+    this.getInputRef = this
+      .getInputRef
+      .bind(this)
   }
   handleInputClick() {
     requestAnimationFrame(() => browserHistory.push('/search'))
@@ -70,18 +80,50 @@ class SearchBar extends Component {
     clearTimeout(this.tid)
     this.tid = setTimeout(() => event.emitEvent('search', value), 200)
   }
+  getInputRef(ref) {
+    this.input = findDOMNode(ref)
+  }
+  onGlassClick() {
+    this.input.focus()
+  }
+  onRemoveClick() {
+    if (!this.state.value) {
+      return
+    }
+    this.setState({value: ''})
+    this.input.focus()
+    event.emitEvent('search', '')
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.pathname !== '/search') {
+      this.setState({value: ''})
+    }
+  }
   render() {
-    const {glassColor, seachBgColor, hovColor, plhColor} = this.props, {value} = this.state
+    const {glassColor, seachBgColor, hovColor, plhColor} = this.props,
+      {value} = this.state
     return (
-      <Container onClick={this.handleInputClick} plhColor={plhColor}>
+      <Container
+        plhColor={plhColor}
+        onClick={::this.handleInputClick}>
         <Input
           value={value}
           placeholder="搜索"
           bgColor={seachBgColor}
+          ref={this.getInputRef}
           onChange={this.handleInput}/>
-        <StyledGlass glassColor={glassColor} hovColor={hovColor}/>
+        <StyledGlass
+          hovColor={hovColor}
+          glassColor={glassColor}
+          onClick={::this.onGlassClick}
+          icon='glyphicon glyphicon-search'/>
+        {value && <Remove
+          hovColor={hovColor}
+          glassColor={glassColor}
+          onClick={::this.onRemoveClick}
+          icon='glyphicon glyphicon-remove'/>}
       </Container>
     )
   }
 }
-export default SearchBar
+export default withRouter(SearchBar)
