@@ -29,7 +29,7 @@ const StyledGlass = styled(Glass)`
   }
 `
 function toSearch() {
-  browserHistory.push('/search')
+  requestAnimationFrame(() => browserHistory.push('/search'))
 }
 const Search = ({className, glassColor, seachBgColor, hovColor}) => (
   <div className={className} onClick={toSearch}>

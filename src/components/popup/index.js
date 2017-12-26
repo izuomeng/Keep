@@ -13,7 +13,7 @@ const Pop = styled.div`
   padding: 10px;
   color: white;
   position: absolute;
-  z-index: 999;
+  z-index: 1800;
   top: 10px;
   left: calc(50% - 100px);
 `
