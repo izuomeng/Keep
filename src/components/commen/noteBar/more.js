@@ -70,8 +70,8 @@ class More extends Component {
     if (!this.state.show) {
       return
     }
-    if (data.lable === '更多' || data.id === 'addNewTag') {
-        return
+    if (data.lable === '更多') {
+      return
     }
     if (this.state.callback) {
       this.state.callback()

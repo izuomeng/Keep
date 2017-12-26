@@ -2,7 +2,10 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import styled from 'styled-components'
 import {Cards, NewNote} from '@/components'
-import {addDocumentClickHandler, removeDocumentClickHandler} from '@/store/action/app'
+import {
+  addDocumentClickHandler,
+  removeDocumentClickHandler
+} from '@/store/action/app'
 
 const CardsConntainer = styled.div `
   margin-top: 40px;

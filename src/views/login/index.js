@@ -114,11 +114,13 @@ class Form extends Component {
       <form className={className} onSubmit={this.handleSubmit}>
         <StyledTitle>{name}</StyledTitle>
         <Input
+          autocomplete
           placeholder="输入用户名"
           type="text"
           onChange={this.handleNameInput}
           value={this.state.username}/>
         <Input
+          autocomplete
           placeholder="输入密码"
           type="password"
           onChange={this.handlePassInput}

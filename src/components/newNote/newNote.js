@@ -9,12 +9,17 @@ import event from '@/lib/events'
 import {regular} from '@/lib/calc'
 import {fireNotification} from '@/lib/notification'
 import COLOR from '../commen/color'
+import {TextButton} from '../commen/button'
 import Title from './title'
 import Text from './text'
-import Menus, {CompleteButton} from '../commen/noteBar'
+import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
 import Tag from '../commen/lable/tags'
 
+const CompleteButton = TextButton.extend`
+  float: right;
+  font-weight: bold;
+`
 const BeforeClick = styled.div `
   max-width: 600px;
   margin: 10px auto;

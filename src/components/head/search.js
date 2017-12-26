@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {Component} from 'react'
 import styled from 'styled-components'
 import {browserHistory} from 'react-router'
+import event from '@/lib/events'
 
 const Input = styled
   .input
@@ -28,23 +29,15 @@ const StyledGlass = styled(Glass)`
     color: ${props => props.hovColor};
   }
 `
-function toSearch() {
-  requestAnimationFrame(() => browserHistory.push('/search'))
-}
-const Search = ({className, glassColor, seachBgColor, hovColor}) => (
-  <div className={className} onClick={toSearch}>
-    <Input placeholder="搜索" bgColor={seachBgColor}/>
-    <StyledGlass glassColor={glassColor} hovColor={hovColor}/>
-  </div>
-)
-const StyledSearch = styled(Search)`
+const Container = styled.div `
   position: relative;
   display: inline-block;
   margin: 0 20px;
-  color: black;
+  color: ${props => props.plhColor};
   flex: 1;
   font: normal 16px Roboto,sans-serif;
   & input:focus {
+    color: black;
     background-color: white;
     box-shadow: 0 0 5px darkgrey;
   }
@@ -58,5 +51,37 @@ const StyledSearch = styled(Search)`
     color: #757575;
   }
 `
-
-export default StyledSearch
+class SearchBar extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: ''
+    }
+    this.handleInput = this
+      .handleInput
+      .bind(this)
+  }
+  handleInputClick() {
+    requestAnimationFrame(() => browserHistory.push('/search'))
+  }
+  handleInput(e) {
+    const value = e.target.value
+    this.setState({value})
+    clearTimeout(this.tid)
+    this.tid = setTimeout(() => event.emitEvent('search', value), 200)
+  }
+  render() {
+    const {glassColor, seachBgColor, hovColor, plhColor} = this.props, {value} = this.state
+    return (
+      <Container onClick={this.handleInputClick} plhColor={plhColor}>
+        <Input
+          value={value}
+          placeholder="搜索"
+          bgColor={seachBgColor}
+          onChange={this.handleInput}/>
+        <StyledGlass glassColor={glassColor} hovColor={hovColor}/>
+      </Container>
+    )
+  }
+}
+export default SearchBar

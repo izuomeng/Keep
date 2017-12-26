@@ -20,12 +20,12 @@ import MessageBox from '@/lib/messageBox'
 import {DELETE_NOTE_CONFIRM} from '@/static/javascript/constants'
 import {Wrapper as TextWrapper} from '../newNote/text'
 import {Wrapper as TitleWrapper} from '../newNote/title'
+import {TextButton} from '../commen/button'
 
 const Wrapper = styled.div `
   opacity: ${props => props.isEditable
   ? '0'
   : '1'};
-  user-select: none;
   cursor: default;
   max-height: 1000px;
   transition: max-height .2s;
@@ -63,7 +63,7 @@ const MenuContainer = styled.div `
   position: relative;
   z-index: 999;
 `
-const Title = TitleWrapper.extend`
+const Title = TitleWrapper.extend `
   & .ql-editor {
     padding: 5px 15px 20px 15px;
   }
@@ -71,13 +71,17 @@ const Title = TitleWrapper.extend`
     left: 15px;
   }
 `
-const Text = TextWrapper.extend`
+const Text = TextWrapper.extend `
   & .ql-editor {
     padding: 5px 15px 20px 15px;
   }
   & .ql-editor::before {
     left: 15px;
   }
+`
+const CompleteButton = TextButton.extend `
+  float: right;
+  font-weight: bold;
 `
 class Card extends Component {
   static propTypes = {
@@ -135,7 +139,9 @@ class Card extends Component {
     this.onRestore = this
       .onRestore
       .bind(this)
-    this.getInstence = this.getInstence.bind(this)
+    this.getInstence = this
+      .getInstence
+      .bind(this)
     const onFinishTimePicking = this
       .onFinishTimePicking
       .bind(this)
@@ -165,7 +171,7 @@ class Card extends Component {
     const {note} = nextprops
     this.setState({
       bgColor: note.bgColor || '#FAFAFA',
-      tags: note.lable,
+      tags: note.lable
     })
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -174,8 +180,36 @@ class Card extends Component {
   }
   componentDidMount() {
     if (this.props.inEditable) {
-      const pos = this.textInstence.getLength() - 1
-      this.textInstence.setSelection(pos, 0)
+      const pos = this
+        .textInstence
+        .getLength() - 1
+      this
+        .textInstence
+        .setSelection(pos, 0)
+    } else if (this.props.selectInfo) {
+      this.selectText()
+    }
+  }
+  componentDidUpdate() {
+    if (this.props.selectInfo) {
+      this.selectText()
+    }
+  }
+  selectText() {
+    const {selectInfo} = this.props
+    if (selectInfo.titleFrom > -1) {
+      this.titleInstence.formatText(
+        selectInfo.titleFrom,
+        selectInfo.length,
+        {'background': 'darkgrey'}
+      )
+    }
+    if (selectInfo.textFrom > -1) {
+      this.textInstence.formatText(
+        selectInfo.textFrom,
+        selectInfo.length,
+        {'background': 'darkgrey'}
+      )
     }
   }
   dispatchNewNote(newNote) {
@@ -231,12 +265,15 @@ class Card extends Component {
     event.emitEvent('setReminder', pos, this.reminderHandlers)
   }
   onFinishTimePicking(time, repeat) {
-    let title = this.titleInstence.getText()
+    let title = this
+        .titleInstence
+        .getText()
     if (title.length < 2) {
-      title = this.textInstence.getText()
+      title = this
+        .textInstence
+        .getText()
     }
-    const notiID = fireNotification(time, title, {})
-    const {note} = this.props,
+    const notiID = fireNotification(time, title, {}), {note} = this.props,
       newNote = {
         ...note,
         reminderInfo: {
@@ -409,12 +446,14 @@ class Card extends Component {
   }
   onDeleteThoroughly() {
     const {note, deleteNoteInDB, removeNote} = this.props
-    MessageBox.confirm(DELETE_NOTE_CONFIRM, {confirmText: '删除'}).then(() => {
-      setTimeout(() => {
-        removeNote(note.id)
-        deleteNoteInDB(note.id)
-      }, 0)
-    })
+    MessageBox
+      .confirm(DELETE_NOTE_CONFIRM, {confirmText: '删除'})
+      .then(() => {
+        setTimeout(() => {
+          removeNote(note.id)
+          deleteNoteInDB(note.id)
+        }, 0)
+      })
   }
   onRestore() {
     const {note} = this.props
@@ -443,19 +482,16 @@ class Card extends Component {
     return `${month}月${day}日${hour}:${min}`
   }
   getInstence(name) {
-    return ins => this[name] = ins
+    return ins => {
+      this[name] = ins
+    }
   }
   isBlank(content) {
     const delta = new Delta(content)
     return delta.length() < 2
   }
   render() {
-    const {
-        isMoreShow,
-        bgColor,
-        isEditable,
-        tags
-      } = this.state, {
+    const {isMoreShow, bgColor, isEditable, tags} = this.state, {
         note,
         style,
         inEditable,
@@ -463,7 +499,8 @@ class Card extends Component {
         onArchiveClick,
         onFixClick,
         onRestore,
-        onDeleteThoroughly
+        onDeleteThoroughly,
+        onFinishEdit
       } = this.props,
       hasTitle = !this.isBlank(note.title),
       hasText = !this.isBlank(note.text),
@@ -486,7 +523,9 @@ class Card extends Component {
         onMouseOver={!inEditable
         ? this.renderMenu
         : () => {}}>
-        <SelectIcon handleClick={() => console.log('select clicked')} dataID='newNote'/>
+        <SelectIcon
+          dataID='newNote'
+          handleClick={() => console.log('select clicked')}/>
         <FixIcon
           show={note.deleteTime
           ? false
@@ -495,8 +534,7 @@ class Card extends Component {
           ? () => onFixClick(this)
           : this.onFixClick}
           lable={lable}
-          dataID='newNote'/> 
-        {(hasTitle || inEditable) && <Title>
+          dataID='newNote'/> {(hasTitle || inEditable) && <Title>
           <Editor
             content={note.title}
             inEditable={inEditable}
@@ -522,7 +560,10 @@ class Card extends Component {
           {this.getTimeStr(date)}
         </Tag>}
         {tags.map(v => (
-          <Tag key={v.text} dataID='newNote' handleDelete={this.onRemoveTag(v.text)}>
+          <Tag
+            key={v.text}
+            dataID='newNote'
+            handleDelete={this.onRemoveTag(v.text)}>
             {v.text}
           </Tag>
         ))}
@@ -530,8 +571,12 @@ class Card extends Component {
           isMoreShow={isMoreShow}
           id='MenuContainer'
           inEditable={inEditable}>
+          {inEditable && <CompleteButton
+            value='完成'
+            onClick={onFinishEdit}
+            data-id='editableCardBack'/>}
           {(this.state.asyncRender || inEditable) && <Menus
-            isInCard
+            isInCard={!inEditable}
             bgColor={bgColor}
             inTrash={note.deleteTime}
             onColorClick={this.onColorClick}

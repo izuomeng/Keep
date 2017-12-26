@@ -3,7 +3,6 @@ import { findDOMNode } from 'react-dom'
 import styled from 'styled-components'
 import { browserHistory } from 'react-router'
 import { getPosition } from '@/lib/DOM'
-import { TextButton } from '../button'
 import Palette from './palette'
 import Icon from './icon'
 import shouldUpdate from '@/lib/shouldUpdate'
@@ -13,10 +12,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   max-width: 350px;
-`
-const CompleteButton = TextButton.extend`
-  float: right;
-  font-weight: bold;
 `
 
 class Menus extends Component {
@@ -82,4 +77,3 @@ class Menus extends Component {
   }
 }
 export default Menus
-export { CompleteButton }

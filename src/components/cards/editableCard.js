@@ -139,6 +139,7 @@ class EditableCard extends Component {
             note={note}
             style={cardStyle}
             onCardClick={() => {}}
+            onFinishEdit={this.onBackClick}
             textOnChange={this.onChange('text')}
             titleOnChange={this.onChange('title')}
             onFixClick={this.mapHandlers('onFixClick')}

@@ -118,7 +118,7 @@ class AddTag extends Component {
     return (
       <Wrapper {...this.state}>
         <Container show={show} data-id='addNewTag'>
-          <Title>为记事添加标签</Title>
+          <Title data-id='addNewTag'>为记事添加标签</Title>
           {tags.map(v => (
             <Item
               key={v.text}
