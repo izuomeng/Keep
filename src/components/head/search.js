@@ -5,9 +5,13 @@ import {withRouter} from 'react-router'
 import {browserHistory} from 'react-router'
 import event from '@/lib/events'
 
+const InputContainer = styled.div`
+  max-width: 720px;
+  position: relative;
+`
 const Input = styled
   .input
-  .attrs({type: 'text', name: 'search'})`
+  .attrs({type: 'text', name: 'search', id: 'search-bar'})`
     border-radius: 3px;
     background-color: ${props => props.bgColor};
     border: 0;
@@ -34,7 +38,7 @@ const StyledGlass = styled(Glass)`
 `
 const Remove = StyledGlass.extend`
   left: auto;
-  right: 20px;
+  right: 18px;
 `
 const Container = styled.div `
   position: relative;
@@ -62,7 +66,8 @@ class SearchBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: ''
+      value: '',
+      rangeSearch: false
     }
     this.handleInput = this
       .handleInput
@@ -70,6 +75,14 @@ class SearchBar extends Component {
     this.getInputRef = this
       .getInputRef
       .bind(this)
+    this.handleRangeSearch = this
+      .handleRangeSearch
+      .bind(this)
+    event.addListener('range-search', this.handleRangeSearch)
+  }
+  handleRangeSearch(callback) {
+    this.setState({rangeSearch: true})
+    this.callback = callback
   }
   handleInputClick() {
     requestAnimationFrame(() => browserHistory.push('/search'))
@@ -87,41 +100,48 @@ class SearchBar extends Component {
     this.input.focus()
   }
   onRemoveClick() {
-    if (!this.state.value) {
+    if (!this.state.value && this.input.placeholder === '搜索') {
       return
     }
-    this.setState({value: ''})
+    this.setState({value: '', rangeSearch: false})
     this.input.focus()
     event.emitEvent('search', '')
+    if (this.callback) {
+      this.callback.call(null)
+      this.callback = null
+    }
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.pathname !== '/search') {
-      this.setState({value: ''})
+      this.input.placeholder = '搜索'
+      this.setState({value: '', rangeSearch: false})
     }
   }
   render() {
     const {glassColor, seachBgColor, hovColor, plhColor} = this.props,
-      {value} = this.state
+      {value, rangeSearch} = this.state
     return (
       <Container
         plhColor={plhColor}
         onClick={::this.handleInputClick}>
-        <Input
-          value={value}
-          placeholder="搜索"
-          bgColor={seachBgColor}
-          ref={this.getInputRef}
-          onChange={this.handleInput}/>
-        <StyledGlass
-          hovColor={hovColor}
-          glassColor={glassColor}
-          onClick={::this.onGlassClick}
-          icon='glyphicon glyphicon-search'/>
-        {value && <Remove
-          hovColor={hovColor}
-          glassColor={glassColor}
-          onClick={::this.onRemoveClick}
-          icon='glyphicon glyphicon-remove'/>}
+        <InputContainer>
+          <Input
+            value={value}
+            placeholder="搜索"
+            bgColor={seachBgColor}
+            ref={this.getInputRef}
+            onChange={this.handleInput}/>
+          <StyledGlass
+            hovColor={hovColor}
+            glassColor={glassColor}
+            onClick={::this.onGlassClick}
+            icon='glyphicon glyphicon-search'/>
+          {(value || rangeSearch) && <Remove
+            hovColor={hovColor}
+            glassColor={glassColor}
+            onClick={::this.onRemoveClick}
+            icon='glyphicon glyphicon-remove'/>}
+        </InputContainer>
       </Container>
     )
   }

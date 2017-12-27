@@ -34,6 +34,8 @@ const Container = styled.div `
 `
 const Title = styled.div `
   padding: 10px 10px 5px 10px;
+  font-size: 15px;
+  font-weight: bold;
 `
 const typeOptions = [
   {
@@ -51,13 +53,18 @@ const typeOptions = [
   }
 ]
 export default({
-  filters = []
+  filters = [],
+  handleTypeClick,
+  handleTagClick,
+  handleColorClick
 }) => (
   <div>
     {filters.map((filter, index) => (
       <Container key={filter.title} index={index}>
         <Title>{filter.title}</Title>
-        {filter.title === '类型' && typeOptions.map((option, index) => (<Block
+        {filter.title === '类型' && 
+        typeOptions.map((option, index) => (<Block
+          onClick={handleTypeClick(option.text)}
           key={option.text}
           type='type'
           options={{
@@ -67,6 +74,7 @@ export default({
         {filter.title === '标签' && filter
           .tags
           .map((tag, index) => (<Block
+            onClick={handleTagClick(tag)}
             key={tag}
             first={index === 0}
             type='tag'
@@ -76,9 +84,11 @@ export default({
           }}/>))}
         {filter.title === '颜色' && filter
           .colors
-          .map(color => (<Block key={color} type='circle' options={{
-            background: color
-          }}/>))}
+          .map(color => (<Block
+            key={color}
+            type='circle'
+            options={{background: color}}
+            onClick={handleColorClick(color)}/>))}
       </Container>
     ))}
   </div>

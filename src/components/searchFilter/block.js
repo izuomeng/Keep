@@ -64,16 +64,16 @@ const Circle = styled.div`
     border: 1px solid grey;
   }
 `
-export default({type, options, first}) => {
+export default({type, options, first, onClick}) => {
   if (type === 'circle') {
     return (
       <CircleContainer>
-        <Circle background={options.background}/>
+        <Circle background={options.background} onClick={onClick}/>
       </CircleContainer>
     )
   }
   return (
-    <Container type={type} first={first}>
+    <Container type={type} first={first} onClick={onClick}>
       <span className={options.icon}></span>
       <Text>{options.text}</Text>
     </Container>

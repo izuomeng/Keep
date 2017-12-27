@@ -23,6 +23,7 @@ const Header = styled.header `
   color: ${props => props.color || COLOR.ICON};
   z-index: 990;
   width: 100%;
+  min-width: 600px;
   background-color: ${props => props.bgColor};
   padding: 8px;
   font-size: 22px;
