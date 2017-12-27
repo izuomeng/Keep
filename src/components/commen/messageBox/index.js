@@ -66,6 +66,14 @@ class MessageBox extends Component {
       }
     }
   }
+  onConfirm() {
+    this.setState({show: false})
+    this.eventHandlers.onConfirm()
+  }
+  onCancel() {
+    this.setState({show: false})
+    this.eventHandlers.onCancel()
+  }
   onPop(message, eventHandlers, option) {
     this.setState({
       show: true,
@@ -73,9 +81,6 @@ class MessageBox extends Component {
       cancelText: option.cancelText || '取消',
       confirmText: option.confirmText || '确认'
     })
-    for (let item in eventHandlers) {
-      eventHandlers[item] = this.closeBoxAfterHandler(eventHandlers[item])
-    }
     this.eventHandlers = eventHandlers
   }
   componentWillUnmount() {
@@ -90,8 +95,8 @@ class MessageBox extends Component {
             {message}
           </Text>
           <ButtonContainer>
-            <TextButton value={cancelText} onClick={this.eventHandlers.onCancel}/>
-            <DeleteButton value={confirmText} onClick={this.eventHandlers.onConfirm}/>
+            <TextButton value={cancelText} onClick={::this.onCancel}/>
+            <DeleteButton value={confirmText} onClick={::this.onConfirm}/>
           </ButtonContainer>
         </Confirm>
       </Back>

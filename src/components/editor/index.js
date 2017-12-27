@@ -30,10 +30,12 @@ class Editor extends Component {
     this.onChange = this.onChange.bind(this)
     this.getRef = this.getRef.bind(this)
   }
-  onChange(delta, prevdelta) {
-    const content = this.Editor.getContents(),
-      text = this.Editor.getText()
-    this.props.onChange(content, text)
+  onChange(delta, prevdelta, source) {
+    if (source === 'user') {
+      const content = this.Editor.getContents(),
+        text = this.Editor.getText()
+      this.props.onChange(content, text)
+    }
   }
   getRef(ref) {
     this.div = findDOMNode(ref)

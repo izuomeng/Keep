@@ -121,7 +121,7 @@ class EditableCard extends Component {
     return (self) => {
       this
         .onBackClick(e)
-        .then(() => self[name].call(null))
+        .then(() => self[name]())
     }
   }
   render() {

@@ -72,7 +72,7 @@ class HeaderContainer extends Component {
     this.setState({
       isWaterFall: !this.state.isWaterFall
     })
-    requestAnimationFrame(this.props.toggleLayout)
+    setTimeout(this.props.toggleLayout, 0)
   }
   getTitle(path) {
     switch (path) {

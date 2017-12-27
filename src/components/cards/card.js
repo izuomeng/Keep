@@ -27,6 +27,7 @@ const Wrapper = styled.div `
   ? '0'
   : '1'};
   cursor: default;
+  user-select: none;
   max-height: 1000px;
   transition: max-height .2s;
   position: relative;
@@ -51,6 +52,11 @@ const Wrapper = styled.div `
   }
   &:hover #selectIcon {
     opacity: 1;
+  }
+  & .ql-editor > * {
+    cursor: ${props => props.inEditable && !props.inTrash
+      ? 'text'
+      : 'default'};
   }
 `
 const MenuContainer = styled.div `
@@ -453,7 +459,7 @@ class Card extends Component {
           removeNote(note.id)
           deleteNoteInDB(note.id)
         }, 0)
-      })
+      }).catch(() => null)
   }
   onRestore() {
     const {note} = this.props
@@ -518,6 +524,8 @@ class Card extends Component {
         isList={this.props.isList}
         onClick={onCardClick || this.onCardClick}
         isEditable={isEditable}
+        inEditable={inEditable}
+        inTrash={note.deleteTime}
         style={style || {}}
         ref={:: this.getRef}
         onMouseOver={!inEditable

@@ -36,7 +36,7 @@ class Trash extends Component {
       }
     MessageBox.confirm(CLEAR_TRASH_CONFIRM, option).then(() => {
       removeNote(ids)
-    })
+    }).catch(() => null)
   }
   render() {
     const {notes} = this.props
