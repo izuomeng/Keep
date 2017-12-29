@@ -33,8 +33,11 @@ const initState = {
         repeat: ''
       },
       deleteTime: new Date(),
-      height: 134
-    },
+      height: 134,
+      images: ['/image/:id/0.png', '/image/:id/1.jpg'],
+      uploadTotol: 0,
+      uploadLoaded: 0
+    }
   ],
   popInfo: {
     type: '',

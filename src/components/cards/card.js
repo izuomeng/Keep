@@ -584,9 +584,10 @@ class Card extends Component {
             onClick={onFinishEdit}
             data-id='editableCardBack'/>}
           {(this.state.asyncRender || inEditable) && <Menus
-            isInCard={!inEditable}
             bgColor={bgColor}
+            isInCard={!inEditable}
             inTrash={note.deleteTime}
+            editor={this.textInstence}
             onColorClick={this.onColorClick}
             onMoreClick={this.onMoreClick}
             onReminderClick={this.onReminderClick}

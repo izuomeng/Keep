@@ -13,9 +13,9 @@ const Wrapper = styled.div`
   justify-content: space-between;
   max-width: 350px;
 `
-
 class Menus extends Component {
   constructor(props) {
+    // console.log(props.editor)
     super(props)
     this.onMoreClick = this.onMoreClick.bind(this)
     this.onReminderClick = this.onReminderClick.bind(this)
