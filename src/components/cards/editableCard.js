@@ -27,10 +27,12 @@ const readyStyle = (left, top) => ({
 const editableStyle = {
   width: '600px',
   position: 'fixed',
-  top: '20%',
+  top: '50%',
+  transform: 'translateY(-50%)',
   left: 'calc(50% - 300px)',
   transition: '.2s',
-  opacity: '1'
+  opacity: '1',
+  zIndex: '999'
 }
 const Background = styled.div `
   background-color: #e5e5e5;
@@ -105,7 +107,7 @@ class EditableCard extends Component {
     })
   }
   onChange(name) {
-    return function(value) {
+    return function(value, plainText, hasImg) {
       const {note} = this.props
       if (_.isEqual(note[name], value)) {
         return
@@ -114,7 +116,7 @@ class EditableCard extends Component {
         ...note,
         [name]: value
       }
-      this.dispatchNewNote(newNote)
+      this.dispatchNewNote(newNote, hasImg)
     }
   }
   mapHandlers(name) {

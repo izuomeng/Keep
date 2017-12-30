@@ -34,7 +34,6 @@ const initState = {
       },
       deleteTime: new Date(),
       height: 134,
-      images: ['/image/:id/0.png', '/image/:id/1.jpg'],
       uploadTotol: 0,
       uploadLoaded: 0
     }
