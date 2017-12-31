@@ -34,7 +34,13 @@ class Editor extends Component {
     if (source === 'user') {
       const content = this.Editor.getContents(),
         text = this.Editor.getText()
-      this.props.onChange(content, text)
+      let hasImg = false
+      delta.forEach(op => {
+        if (op.insert && op.insert.image) {
+          hasImg = true
+        }
+      })
+      this.props.onChange(content, text, hasImg)
     }
   }
   getRef(ref) {
@@ -42,7 +48,7 @@ class Editor extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.content && this.Editor) {
-      this.Editor.setContents(nextProps.content)
+      this.Editor.setContents(nextProps.content, 'silent')
       if (nextProps.inEditable) {
         this.focusEnd()
         this.componentWillReceiveProps = null
@@ -76,4 +82,3 @@ class Editor extends Component {
 }
 
 export default Editor
-// export default () => 1234567890

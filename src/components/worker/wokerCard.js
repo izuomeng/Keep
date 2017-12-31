@@ -24,7 +24,7 @@ const MenuContainer = styled
   .attrs({id: 'MenuContainer'})`
   padding: 0 10px;
   transition: .3s;
-  height: 30px;
+  height: 40px;
 `
 function isBlank(content) {
   const delta = new Delta(content)

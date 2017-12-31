@@ -15,11 +15,12 @@ const Wrapper = styled.div `
   }
 `
 
-export default ({editorOnChange}) => {
+export default ({editorOnChange, getInstence}) => {
   return (
     <Wrapper>
       <Editor
         autofocus
+        getInstence={getInstence}
         onChange={editorOnChange}
         placeholder="添加记事..."/>
     </Wrapper>
