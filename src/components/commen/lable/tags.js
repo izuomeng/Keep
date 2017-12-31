@@ -6,7 +6,8 @@ const Container  = styled.div`
   cursor: pointer;
   display: inline-block;
   padding: 3px 7px;
-  margin: 0 0 10px 10px;
+  margin-left: 10px;
+  margin-top: 10px;
   background: rgba(0, 0, 0, 0.08);
   position: relative;
   border-radius: 2px;

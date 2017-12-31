@@ -33,8 +33,8 @@ const initState = {
         repeat: ''
       },
       deleteTime: new Date(),
-      height: 134
-    },
+      height: 134,
+    }
   ],
   popInfo: {
     type: '',
@@ -51,7 +51,8 @@ const initState = {
       noteID: '',
       left: 0,
       top: 0,
-      callback: {}
+      callback: {},
+      cardRef: null
     },
     documentClickHandlers: []
   }

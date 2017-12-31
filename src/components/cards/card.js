@@ -10,6 +10,7 @@ import {editNote, postEditNote, deleteNoteInDB, removeNote} from '@/store/action
 import {setEditMode} from '@/store/action/app'
 import event from '@/lib/events'
 import {regular} from '@/lib/calc'
+import {uploadFile} from '@/lib/utils'
 import {fireNotification} from '@/lib/notification'
 import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
@@ -17,10 +18,11 @@ import SelectIcon from '../commen/icons/select'
 import Tag from '../commen/lable/tags'
 import shouldUpdate from '@/lib/shouldUpdate'
 import MessageBox from '@/lib/messageBox'
-import {DELETE_NOTE_CONFIRM} from '@/static/javascript/constants'
+import {DELETE_NOTE_CONFIRM, BASE_IMG_PATH} from '@/static/javascript/constants'
 import {Wrapper as TextWrapper} from '../newNote/text'
 import {Wrapper as TitleWrapper} from '../newNote/title'
 import {TextButton} from '../commen/button'
+import Progress from './progress'
 
 const Wrapper = styled.div `
   opacity: ${props => props.isEditable
@@ -28,7 +30,6 @@ const Wrapper = styled.div `
   : '1'};
   cursor: default;
   user-select: none;
-  max-height: 1000px;
   transition: max-height .2s;
   position: relative;
   width: ${props => props.isList
@@ -65,9 +66,10 @@ const MenuContainer = styled.div `
   opacity: ${props => (props.isMoreShow || props.inEditable)
   ? 1
   : 0};
-  height: 30px;
+  height: 40px;
   position: relative;
   z-index: 999;
+  box-shadow: ${props => props.bottomShadow ? '0 -4px 4px rgba(0,0,0,0.2)' : ''}
 `
 const Title = TitleWrapper.extend `
   & .ql-editor {
@@ -76,6 +78,10 @@ const Title = TitleWrapper.extend `
   & .ql-editor::before {
     left: 15px;
   }
+  max-height: ${props => props.inEditable ? '10vh' : ''};
+  overflow: auto;
+  transition: .3s;
+  box-shadow: ${props => props.topShadow ? '0 4px 4px rgba(0,0,0,0.2)' : ''}
 `
 const Text = TextWrapper.extend `
   & .ql-editor {
@@ -84,10 +90,13 @@ const Text = TextWrapper.extend `
   & .ql-editor::before {
     left: 15px;
   }
+  max-height: ${props => props.inEditable ? '70vh' : ''};
+  overflow: auto;
 `
 const CompleteButton = TextButton.extend `
   float: right;
   font-weight: bold;
+  margin-top: 10px;
 `
 class Card extends Component {
   static propTypes = {
@@ -104,7 +113,11 @@ class Card extends Component {
       asyncRender: false,
       isMoreShow: false,
       tags: note.lable,
-      isEditable: false
+      isEditable: false,
+      topShadow: false,
+      bottomShadow: false,
+      uploadTotol: 0,
+      uploadLoaded: 0
     }
     this.tids = {}
     const {textOnChange, titleOnChange} = this.props
@@ -147,6 +160,12 @@ class Card extends Component {
       .bind(this)
     this.getInstence = this
       .getInstence
+      .bind(this)
+    this.textScroll = this
+      .textScroll
+      .bind(this)
+    this.uploadImg = this
+      .uploadImg
       .bind(this)
     const onFinishTimePicking = this
       .onFinishTimePicking
@@ -218,15 +237,26 @@ class Card extends Component {
       )
     }
   }
-  dispatchNewNote(newNote) {
+  dispatchNewNote(newNote, hasImg) {
     clearTimeout(this.tids[newNote.id])
     this.tids[newNote.id] = setTimeout(() => {
       this
         .props
         .editNote(newNote)
+      const delta = new Delta(JSON.parse(JSON.stringify(newNote.text)))
+      delta.forEach(op => {
+        if (op.insert && op.insert.image) {
+          const type = op.insert.image.match(/;base64,/)
+          if (type) {
+            const name = op.attributes.alt
+            op.insert.image = `${BASE_IMG_PATH}/${name}`
+          }
+        }
+      })
+      const newerNote = {...newNote, text: delta}
       this
         .props
-        .postEditNote(newNote)
+        .postEditNote(newerNote)
     }, 200)
   }
   setNewNoteHeight(newNote) {
@@ -431,7 +461,7 @@ class Card extends Component {
         showPrevCard: this
           .showPrevCard
           .bind(this, prevNote)
-      }, this.container)
+      }, this)
       this.setState({isEditable: true})
     })
   }
@@ -496,8 +526,53 @@ class Card extends Component {
     const delta = new Delta(content)
     return delta.length() < 2
   }
+  textScroll(e) {
+    const top = e.target.scrollTop,
+      height = e.target.scrollHeight,
+      clientHeight = e.target.clientHeight
+    if (top === 0) {
+      this.setState({topShadow: false})
+    } else if (top >= height - clientHeight) {
+      this.setState({bottomShadow: false})
+    } else {
+      if (this.state.topShadow && this.state.bottomShadow) {
+        return
+      }
+      this.setState({topShadow: true, bottomShadow: true})
+    }
+  }
+  uploadImg(file) {
+    const data = {
+      id: this.props.note.id,
+      file
+    }, self = this, {prev} = this.props
+    uploadFile(data, '/notes/upload', function(e) {
+      if (e.loaded / e.total === 1) {
+        setTimeout(() => {
+          self.setState({uploadLoaded: 0})
+          if (prev) {
+            prev.setState({uploadLoaded: 0})
+          }
+        }, 200)
+      }
+      self.setState({uploadLoaded: e.loaded, uploadTotol: e.total})
+      if (prev) {
+        prev.setState({uploadLoaded: e.loaded, uploadTotol: e.total})
+      }
+    })
+  }
   render() {
-    const {isMoreShow, bgColor, isEditable, tags} = this.state, {
+    const {
+      isMoreShow,
+      bgColor,
+      isEditable, 
+      tags, 
+      topShadow, 
+      bottomShadow,
+      uploadLoaded,
+      uploadTotol
+    } = this.state,
+      {
         note,
         style,
         inEditable,
@@ -531,6 +606,7 @@ class Card extends Component {
         onMouseOver={!inEditable
         ? this.renderMenu
         : () => {}}>
+        <Progress percent={uploadLoaded/uploadTotol}/>
         <SelectIcon
           dataID='newNote'
           handleClick={() => console.log('select clicked')}/>
@@ -542,7 +618,10 @@ class Card extends Component {
           ? () => onFixClick(this)
           : this.onFixClick}
           lable={lable}
-          dataID='newNote'/> {(hasTitle || inEditable) && <Title>
+          dataID='newNote'/> 
+        {(hasTitle || inEditable) && <Title 
+          topShadow={topShadow}
+          inEditable={inEditable}>
           <Editor
             content={note.title}
             inEditable={inEditable}
@@ -551,7 +630,9 @@ class Card extends Component {
             readOnly={!(inEditable && !note.deleteTime)}
             placeholder="标题"/>
         </Title>}
-        {(hasText || inEditable) && <Text>
+        {(hasText || inEditable) && <Text 
+          inEditable={inEditable}
+          onScroll={this.textScroll}>
           <Editor
             content={note.text}
             inEditable={inEditable}
@@ -559,23 +640,24 @@ class Card extends Component {
             getInstence={this.getInstence('textInstence')}
             readOnly={!(inEditable && !note.deleteTime)}
             placeholder="添加记事..."/>
-        </Text>}
-        {date && date.getMonth && <Tag
-          isReminder
-          dataID='newNote'
-          dataLable='提醒我'
-          handleDelete={:: this.onRemoveReminder}>
-          {this.getTimeStr(date)}
-        </Tag>}
-        {tags.map(v => (
-          <Tag
-            key={v.text}
+          {date && date.getMonth && <Tag
+            isReminder
             dataID='newNote'
-            handleDelete={this.onRemoveTag(v.text)}>
-            {v.text}
-          </Tag>
-        ))}
+            dataLable='提醒我'
+            handleDelete={:: this.onRemoveReminder}>
+            {this.getTimeStr(date)}
+          </Tag>}
+          {tags.map(v => (
+            <Tag
+              key={v.text}
+              dataID='newNote'
+              handleDelete={this.onRemoveTag(v.text)}>
+              {v.text}
+            </Tag>
+          ))}
+        </Text>}
         <MenuContainer
+          bottomShadow={bottomShadow}
           isMoreShow={isMoreShow}
           id='MenuContainer'
           inEditable={inEditable}>
@@ -584,11 +666,13 @@ class Card extends Component {
             onClick={onFinishEdit}
             data-id='editableCardBack'/>}
           {(this.state.asyncRender || inEditable) && <Menus
-            isInCard={!inEditable}
             bgColor={bgColor}
+            isInCard={!inEditable}
             inTrash={note.deleteTime}
-            onColorClick={this.onColorClick}
+            uploadImg={this.uploadImg}
+            editor={this.textInstence}
             onMoreClick={this.onMoreClick}
+            onColorClick={this.onColorClick}
             onReminderClick={this.onReminderClick}
             onFinishTimePicking={this.onFinishTimePicking}
             onArchiveClick={onArchiveClick

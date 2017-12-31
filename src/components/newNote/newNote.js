@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import styled from 'styled-components'
+import Delta from 'quill-delta'
 import {findDOMNode} from 'react-dom'
 import {connect} from 'react-redux'
 import {addNote, deleteNoteInDB} from '@/store/action/notes'
@@ -9,16 +10,19 @@ import event from '@/lib/events'
 import {regular} from '@/lib/calc'
 import {fireNotification} from '@/lib/notification'
 import COLOR from '../commen/color'
+import {BASE_IMG_PATH} from '@/static/javascript/constants'
 import {TextButton} from '../commen/button'
 import Title from './title'
 import Text from './text'
 import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
 import Tag from '../commen/lable/tags'
+import {uploadFile} from '@/lib/utils'
 
 const CompleteButton = TextButton.extend`
   float: right;
   font-weight: bold;
+  margin-top: 10px;
 `
 const BeforeClick = styled.div `
   max-width: 600px;
@@ -46,7 +50,8 @@ class NewNote extends Component {
     this.state = {
       bgColor: COLOR.WHITE,
       tags: [],
-      reminder: ''
+      reminder: '',
+      asyncRender: false
     }
     this.note = {
       id: Math
@@ -83,6 +88,12 @@ class NewNote extends Component {
     this.onReminderClick = this
       .onReminderClick
       .bind(this)
+    this.uploadImg = this
+      .uploadImg
+      .bind(this)
+    this.getInstence = this
+      .getInstence
+      .bind(this)
     //set upload editorContent
       this.titleContent = {}
       this.textContent = {}
@@ -114,14 +125,35 @@ class NewNote extends Component {
     this.DOMContainer = findDOMNode(ref)
   }
   uploadNoteStatus(shouldAddIntoView) {
-    this
-      .props
-      .addNote(
-        shouldAddIntoView,
-        this.titleContent,
-        this.textContent,
-        this.note
-      )
+    if (shouldAddIntoView) {
+      this
+        .props
+        .addNote(
+          shouldAddIntoView,
+          this.titleContent,
+          this.textContent,
+          this.note
+        )
+    } else {
+      const delta = new Delta(JSON.parse(JSON.stringify(this.textContent)))
+      delta.forEach(op => {
+        if (op.insert && op.insert.image) {
+          const type = op.insert.image.match(/;base64,/)
+          if (type) {
+            const name = op.attributes.alt
+            op.insert.image = `${BASE_IMG_PATH}/${name}`
+          }
+        }
+      })
+      this
+        .props
+        .addNote(
+          shouldAddIntoView,
+          this.titleContent,
+          delta,
+          this.note
+        )
+    }
   }
   setNewNoteHeight(title = this.titleContent, text = this.textContent) {
     return new Promise((resolve) => {
@@ -159,7 +191,14 @@ class NewNote extends Component {
       })
   }
   isBlank() {
-    return this.titlePlainText.length < 2 && this.textPlainText.length < 2
+    let blank = true
+    const delta = new Delta(this.textContent)
+    delta.forEach((op) => {
+      if (op.insert && op.insert.image) {
+        blank = false
+      }
+    })
+    return this.titlePlainText.length < 2 && this.textPlainText.length < 2 && blank
   }
   componentWillUnmount() {
     if (!this.isBlank()) {
@@ -293,8 +332,23 @@ class NewNote extends Component {
       min = regular(date.getMinutes())
     return `${month}月${day}日${hour}:${min}`
   }
+  getInstence(ins) {
+    this.textInstence = ins
+  }
+  uploadImg(file) {
+    const data = {
+      id: this.note.id,
+      file
+    }
+    uploadFile(data, '/notes/upload', function(e) {
+      // this.onprogress(e), etc.
+    })
+  }
+  componentDidMount() {
+    this.setState({asyncRender: true})
+  }
   render() {
-    const {tags, reminder} = this.state
+    const {tags, reminder, asyncRender} = this.state
     return (
       <Wrapper
         data-id="newNote"
@@ -309,7 +363,9 @@ class NewNote extends Component {
           }}
           handleClick={:: this.handleFixClick}/>
         <Title editorOnChange={this.titleOnChange}/>
-        <Text editorOnChange={this.textOnChange}/> 
+        <Text
+          editorOnChange={this.textOnChange}
+          getInstence={this.getInstence}/> 
         {reminder && <Tag
           isReminder
           dataID='newNote'
@@ -324,16 +380,18 @@ class NewNote extends Component {
             {v.text}
           </Tag>
         ))}
-        <div data-id="newNote">
+        {asyncRender && <div data-id="newNote">
           <CompleteButton value='完成'/>
           <Menus
+            uploadImg={this.uploadImg}
+            editor={this.textInstence}
             bgColor={this.state.bgColor}
             onColorClick={this.handleColorChange}
             onArchiveClick={this.handleArchiveChange}
             onMoreClick={this.handleMoreClick}
             onReminderClick={this.onReminderClick}
             onFinishTimePicking={this.onFinishTimePicking}/>
-        </div>
+        </div>}
       </Wrapper>
     )
   }
