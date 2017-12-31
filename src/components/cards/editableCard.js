@@ -86,7 +86,7 @@ class EditableCard extends Component {
       return
     }
     const {cardRef, isWaterFall} = this.props,
-      pos = cardRef.getBoundingClientRect()
+      pos = cardRef.container.getBoundingClientRect()
     this.setState({
       cardStyle: {
         ...readyStyle(pos.left, pos.top),
@@ -127,7 +127,7 @@ class EditableCard extends Component {
     }
   }
   render() {
-    const {note, isEditable} = this.props
+    const {note, isEditable, cardRef} = this.props
     const {cardStyle} = this.state
     return (
       <Container isEditable={isEditable}>
@@ -139,14 +139,15 @@ class EditableCard extends Component {
           {isEditable && <Card
             inEditable
             note={note}
+            prev={cardRef}
             style={cardStyle}
             onCardClick={() => {}}
             onFinishEdit={this.onBackClick}
             textOnChange={this.onChange('text')}
             titleOnChange={this.onChange('title')}
+            onRestore={this.mapHandlers('onRestore')}
             onFixClick={this.mapHandlers('onFixClick')}
             onArchiveClick={this.mapHandlers('onArchiveClick')}
-            onRestore={this.mapHandlers('onRestore')}
             onDeleteThoroughly={this.mapHandlers('onDeleteThoroughly')}/>}
       </Container>
     )

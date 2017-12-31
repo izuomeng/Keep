@@ -22,6 +22,7 @@ import {DELETE_NOTE_CONFIRM, BASE_IMG_PATH} from '@/static/javascript/constants'
 import {Wrapper as TextWrapper} from '../newNote/text'
 import {Wrapper as TitleWrapper} from '../newNote/title'
 import {TextButton} from '../commen/button'
+import Progress from './progress'
 
 const Wrapper = styled.div `
   opacity: ${props => props.isEditable
@@ -114,7 +115,9 @@ class Card extends Component {
       tags: note.lable,
       isEditable: false,
       topShadow: false,
-      bottomShadow: false
+      bottomShadow: false,
+      uploadTotol: 0,
+      uploadLoaded: 0
     }
     this.tids = {}
     const {textOnChange, titleOnChange} = this.props
@@ -246,7 +249,7 @@ class Card extends Component {
           const type = op.insert.image.match(/;base64,/)
           if (type) {
             const name = op.attributes.alt
-            op.insert.image = `${BASE_IMG_PATH}/${newNote.id}-${name}`
+            op.insert.image = `${BASE_IMG_PATH}/${name}`
           }
         }
       })
@@ -458,7 +461,7 @@ class Card extends Component {
         showPrevCard: this
           .showPrevCard
           .bind(this, prevNote)
-      }, this.container)
+      }, this)
       this.setState({isEditable: true})
     })
   }
@@ -542,10 +545,20 @@ class Card extends Component {
     const data = {
       id: this.props.note.id,
       file
-    }
+    }, self = this, {prev} = this.props
     uploadFile(data, '/notes/upload', function(e) {
-      // this.onprogress(e), etc.
-      console.log(e.loaded/e.total * 100 + '%')
+      if (e.loaded / e.total === 1) {
+        setTimeout(() => {
+          self.setState({uploadLoaded: 0})
+          if (prev) {
+            prev.setState({uploadLoaded: 0})
+          }
+        }, 200)
+      }
+      self.setState({uploadLoaded: e.loaded, uploadTotol: e.total})
+      if (prev) {
+        prev.setState({uploadLoaded: e.loaded, uploadTotol: e.total})
+      }
     })
   }
   render() {
@@ -555,7 +568,9 @@ class Card extends Component {
       isEditable, 
       tags, 
       topShadow, 
-      bottomShadow
+      bottomShadow,
+      uploadLoaded,
+      uploadTotol
     } = this.state,
       {
         note,
@@ -591,6 +606,7 @@ class Card extends Component {
         onMouseOver={!inEditable
         ? this.renderMenu
         : () => {}}>
+        <Progress percent={uploadLoaded/uploadTotol}/>
         <SelectIcon
           dataID='newNote'
           handleClick={() => console.log('select clicked')}/>

@@ -44,35 +44,36 @@ class Menus extends Component {
   }
   onImageClick() {
     const {editor, uploadImg} = this.props
-    let fileInput = document.createElement('input')
-    fileInput.setAttribute('type', 'file')
-    fileInput.setAttribute('accept', 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon')
-    fileInput.style.display = 'none'
-    fileInput.addEventListener('change', () => {
-      if (fileInput.files != null && fileInput.files[0] != null) {
-        // TODO: 开始上传图片的逻辑
-        uploadImg(fileInput.files[0])
-        const reader = new FileReader()
-        reader.onload = function (e) {
-          const range = editor.getSelection(true)
-          editor
-            .updateContents((new Delta())
-            .retain(range.index)
-            .delete(range.length)
-            .insert({image: e.target.result}, {alt: fileInput.files[0].name}), 'user')
-          editor.setSelection(range.index + 1, 'silent')
-          document
-            .body
-            .removeChild(fileInput)
-          fileInput = null
+    if (this.fileInput) {
+      this.fileInput.click()
+    } else {
+      let fileInput = document.createElement('input')
+      fileInput.setAttribute('type', 'file')
+      fileInput.setAttribute('accept', 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon')
+      fileInput.style.display = 'none'
+      fileInput.setAttribute('data-id', 'newNote')
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files != null && fileInput.files[0] != null) {
+          uploadImg(fileInput.files[0])
+          const reader = new FileReader()
+          reader.onload = function (e) {
+            const range = editor.getSelection(true)
+            editor
+              .updateContents((new Delta())
+              .retain(range.index)
+              .delete(range.length)
+              .insert({image: e.target.result}, {alt: fileInput.files[0].name}), 'user')
+            editor.setSelection(range.index + 1, 'silent')
+          }
+          reader.readAsDataURL(fileInput.files[0])
         }
-        reader.readAsDataURL(fileInput.files[0])
-      }
-    })
-    document
-      .body
-      .appendChild(fileInput)
-    fileInput.click()
+      })
+      document
+        .body
+        .appendChild(fileInput)
+      this.fileInput = fileInput
+      fileInput.click()
+    }
   }
   getRef(name) {
     return (ref) => this[name] = findDOMNode(ref)
