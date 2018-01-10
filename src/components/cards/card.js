@@ -14,7 +14,7 @@ import {uploadFile} from '@/lib/utils'
 import {fireNotification} from '@/lib/notification'
 import Menus from '../commen/noteBar'
 import FixIcon from '../commen/icons/fix'
-import SelectIcon from '../commen/icons/select'
+// import SelectIcon from '../commen/icons/select'
 import Tag from '../commen/lable/tags'
 import shouldUpdate from '@/lib/shouldUpdate'
 import MessageBox from '@/lib/messageBox'
@@ -607,9 +607,6 @@ class Card extends Component {
         ? this.renderMenu
         : () => {}}>
         <Progress percent={uploadLoaded/uploadTotol}/>
-        <SelectIcon
-          dataID='newNote'
-          handleClick={() => console.log('select clicked')}/>
         <FixIcon
           show={note.deleteTime
           ? false

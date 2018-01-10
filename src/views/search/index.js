@@ -52,6 +52,9 @@ class Search extends Component {
       .bind(this)
     event.addListener('search', this.handleSearch)
   }
+  componentWillReceiveProps(newProps) {
+    this.prevOperation && this.prevOperation.call(this)
+  }
   getAllTags() {
     const result = this.props.notes.reduce((prev, next) => {
       next.lable.forEach(v => prev.add(v.text))
@@ -136,6 +139,7 @@ class Search extends Component {
           break
       }
       this.callRange(result, type)
+      this.prevOperation = handler.bind(this)
     }
     return handler.bind(this)
   }
@@ -145,6 +149,7 @@ class Search extends Component {
       this.callRange(notes.filter(note => {
         return note.lable.find(v => v.text === tag)
       }), tag)
+      this.prevOperation = handler.bind(this)
     }
     return handler.bind(this)
   }
@@ -152,6 +157,7 @@ class Search extends Component {
     const handler = function() {
       const {notes} = this.props
       this.callRange(notes.filter(note => note.bgColor === color), '颜色')
+      this.prevOperation = handler.bind(this)
     }
     return handler.bind(this)
   }

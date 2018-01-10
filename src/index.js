@@ -6,6 +6,9 @@ import {Provider} from 'react-redux'
 import registerServiceWorker from './registerServiceWorker'
 import store from './store'
 import Routes from './router'
+import axios from 'axios'
+
+axios.defaults.baseURL = '/api'
 
 ReactDOM.render(
     <AppContainer>
@@ -15,7 +18,6 @@ ReactDOM.render(
     </AppContainer>,
     document.getElementById('root')
 )
-
 if (module.hot) {
     module.hot.accept('./router', () => {
         const NextRootContainer = require('./router').default

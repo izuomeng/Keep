@@ -55,7 +55,8 @@ class AddTag extends Component {
   constructor(props) {
     super(props)
     const checkStatus = {}
-    this.props.tags.forEach(v => checkStatus[v.text] = false)
+    props.tags.forEach(v => checkStatus[v.text] = false)
+    this.initCheckStatus = checkStatus
     this.state = {
       show: false,
       x: -1000,
@@ -70,8 +71,13 @@ class AddTag extends Component {
     event.addListener('addTagHide', this.hide)
     this.props.addDocumentClickHandler(this.onDocumentClick)
   }
+  componentWillReceiveProps(nextProps) {
+    const checkStatus = {}
+    nextProps.tags.forEach(v => checkStatus[v.text] = false)
+    this.initCheckStatus = checkStatus
+  }
   hide() {
-    this.setState({show: false,x:-100})
+    this.setState({show: false,x:-100, checkStatus: this.initCheckStatus})
   }
   show(pos, clickHandlers = {}, tags) {
     const {checkStatus} = this.state
@@ -83,6 +89,7 @@ class AddTag extends Component {
         newCheckStatus[tag] = false
       }
     }
+    console.log(checkStatus, newCheckStatus)
     calcTagPosition(this.props.tags.length, pos)
     this.setState({
       ...pos,
@@ -105,7 +112,7 @@ class AddTag extends Component {
     if (data.id === 'addNewTag') {
       return
     }
-    this.setState({show: false, y: -1000})
+    this.setState({show: false, y: -1000, checkStatus: this.initCheckStatus})
   }
   componentWillUnmount() {
     event.removeListener('addTagShow', this.show)

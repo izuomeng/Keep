@@ -38,7 +38,7 @@ const Card = (props) => {
   let date = note.reminderInfo && note.reminderInfo.date
   if (date) date = new Date(date)
   return (
-    <Wrapper>
+    <Wrapper id='workerCard'>
       {!isBlank(note.title) && <Title>
         <Editor content={note.title} readOnly/>
       </Title>}

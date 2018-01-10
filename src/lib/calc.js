@@ -1,5 +1,4 @@
 import event from './events'
-import Immutable, {is} from 'immutable'
 import {ADD_TAG, REMOVE_TAG} from '../static/javascript/constants'
 
 export function getNewNotesAfterEditTag(tagName, chosenNotes, operate = REMOVE_TAG) {
@@ -45,11 +44,6 @@ export function recalcHeight(notes) {
 
 export function add(m, n) {
   return m + n
-}
-export function equal(a, b) {
-  const x = Immutable.fromJS(a),
-    y = Immutable.fromJS(b)
-  return is(x, y)
 }
 export function isLeapYear(year) {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
