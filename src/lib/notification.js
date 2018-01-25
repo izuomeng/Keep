@@ -37,3 +37,6 @@ export function fireNotification(time, title, option) {
     new Notification(title, option)
   }, noteTime - now) 
 }
+export {
+  isSafari
+}

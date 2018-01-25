@@ -66,6 +66,7 @@ class AddTag extends Component {
     }
     this.show = this.show.bind(this)
     this.hide = this.hide.bind(this)
+    this.onCheckBoxClick = this.onCheckBoxClick.bind(this)
     this.onDocumentClick = this.onDocumentClick.bind(this)
     event.addListener('addTagShow', this.show)
     event.addListener('addTagHide', this.hide)
@@ -89,7 +90,6 @@ class AddTag extends Component {
         newCheckStatus[tag] = false
       }
     }
-    console.log(checkStatus, newCheckStatus)
     calcTagPosition(this.props.tags.length, pos)
     this.setState({
       ...pos,
@@ -130,7 +130,7 @@ class AddTag extends Component {
             <Item
               key={v.text}
               data-id='addNewTag'
-              onClick={::this.onCheckBoxClick(v.text)}
+              onClick={this.onCheckBoxClick(v.text)}
             >
               <CheckBox isChecked={checkStatus[v.text]} data-id='addNewTag'/>
               <Text data-id='addNewTag'>{v.text}</Text>

@@ -17,7 +17,6 @@ const Wrapper = styled.div `
 `
 class Menus extends Component {
   constructor(props) {
-    // console.log(props.editor)
     super(props)
     this.onMoreClick = this
       .onMoreClick
@@ -45,7 +44,9 @@ class Menus extends Component {
   onImageClick() {
     const {editor, uploadImg} = this.props
     if (this.fileInput) {
-      this.fileInput.click()
+      this
+        .fileInput
+        .click()
     } else {
       let fileInput = document.createElement('input')
       fileInput.setAttribute('type', 'file')
@@ -58,11 +59,9 @@ class Menus extends Component {
           const reader = new FileReader()
           reader.onload = function (e) {
             const range = editor.getSelection(true)
-            editor
-              .updateContents((new Delta())
-              .retain(range.index)
-              .delete(range.length)
-              .insert({image: e.target.result}, {alt: fileInput.files[0].name}), 'user')
+            editor.updateContents((new Delta()).retain(range.index).delete(range.length).insert({
+              image: e.target.result
+            }, {alt: fileInput.files[0].name}), 'user')
             editor.setSelection(range.index + 1, 'silent')
           }
           reader.readAsDataURL(fileInput.files[0])
@@ -86,44 +85,52 @@ class Menus extends Component {
         onArchiveClick,
         inTrash,
         onDelete,
-        onRestore
+        onRestore,
+        onUndo,
+        onRedo
       } = this.props
-      const path = browserHistory
-          .getCurrentLocation()
-          .pathname,
-        archiveLable = path.indexOf('archive') > -1
-          ? '取消归档'
-          : '归档'
-      if (inTrash) {
-        return <NoteBarInTrash onDelete={onDelete} onRestore={onRestore}/>
-      }
-      return (
-        <Wrapper data-id='newNote'>
-          <Icon
-            icon="glyphicon glyphicon-bell"
-            lable="提醒我"
-            handleClick={this.onReminderClick}
-            ref={this.getRef('reminder')}/>
-          <Icon icon="glyphicon glyphicon-eye-open" lable="更改颜色">
-            <Palette handleClick={onColorClick} bgColor={bgColor}/>
-          </Icon>
-          <Icon
-            handleClick={this.onImageClick}
-            icon="glyphicon glyphicon-picture"
-            lable="插入图片"/>
-          <Icon
-            icon="glyphicon glyphicon-folder-close"
-            lable={archiveLable}
-            handleClick={onArchiveClick}/>
-          <Icon
-            icon="glyphicon glyphicon-chevron-down"
-            lable="更多"
-            handleClick={this.onMoreClick}
-            ref={this.getRef('more')}></Icon>
-          {!isInCard && <Icon icon="glyphicon glyphicon-arrow-left" lable="撤销"/>}
-          {!isInCard && <Icon icon="glyphicon glyphicon-arrow-right" lable="重做"/>}
-        </Wrapper>
-      )
+    const path = browserHistory
+        .getCurrentLocation()
+        .pathname,
+      archiveLable = path.indexOf('archive') > -1
+        ? '取消归档'
+        : '归档'
+    if (inTrash) {
+      return <NoteBarInTrash onDelete={onDelete} onRestore={onRestore}/>
     }
+    return (
+      <Wrapper data-id='newNote'>
+        <Icon
+          icon="glyphicon glyphicon-bell"
+          lable="提醒我"
+          handleClick={this.onReminderClick}
+          ref={this.getRef('reminder')}/>
+        <Icon icon="glyphicon glyphicon-eye-open" lable="更改颜色">
+          <Palette handleClick={onColorClick} bgColor={bgColor}/>
+        </Icon>
+        <Icon
+          handleClick={this.onImageClick}
+          icon="glyphicon glyphicon-picture"
+          lable="插入图片"/>
+        <Icon
+          icon="glyphicon glyphicon-folder-close"
+          lable={archiveLable}
+          handleClick={onArchiveClick}/>
+        <Icon
+          icon="glyphicon glyphicon-chevron-down"
+          lable="更多"
+          handleClick={this.onMoreClick}
+          ref={this.getRef('more')}></Icon>
+        {!isInCard && <Icon
+          icon="glyphicon glyphicon-arrow-left"
+          lable="撤销"
+          handleClick={onUndo}/>}
+        {!isInCard && <Icon 
+          icon="glyphicon glyphicon-arrow-right"
+          lable="重做"
+          handleClick={onRedo}/>}
+      </Wrapper>
+    )
   }
-  export default Menus
+}
+export default Menus

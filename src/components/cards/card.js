@@ -167,6 +167,12 @@ class Card extends Component {
     this.uploadImg = this
       .uploadImg
       .bind(this)
+    this.handleUndo = this
+      .handleUndo
+      .bind(this)
+    this.handleRedo = this
+      .handleRedo
+      .bind(this)
     const onFinishTimePicking = this
       .onFinishTimePicking
       .bind(this)
@@ -301,9 +307,7 @@ class Card extends Component {
     event.emitEvent('setReminder', pos, this.reminderHandlers)
   }
   onFinishTimePicking(time, repeat) {
-    let title = this
-        .titleInstence
-        .getText()
+    let title = (this.titleInstence && this.titleInstence.getText()) || ''
     if (title.length < 2) {
       title = this
         .textInstence
@@ -561,6 +565,12 @@ class Card extends Component {
       }
     })
   }
+  handleUndo() {
+    this.textInstence.history.undo()
+  }
+  handleRedo() {
+    this.textInstence.history.redo()
+  }
   render() {
     const {
       isMoreShow,
@@ -641,7 +651,7 @@ class Card extends Component {
             isReminder
             dataID='newNote'
             dataLable='提醒我'
-            handleDelete={:: this.onRemoveReminder}>
+            handleDelete={::this.onRemoveReminder}>
             {this.getTimeStr(date)}
           </Tag>}
           {tags.map(v => (
@@ -668,6 +678,8 @@ class Card extends Component {
             inTrash={note.deleteTime}
             uploadImg={this.uploadImg}
             editor={this.textInstence}
+            onUndo={this.handleUndo}
+            onRedo={this.handleRedo}
             onMoreClick={this.onMoreClick}
             onColorClick={this.onColorClick}
             onReminderClick={this.onReminderClick}

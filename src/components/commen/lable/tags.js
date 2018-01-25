@@ -50,8 +50,8 @@ export default ({
   children,
   isReminder,
   handleDelete = () => {},
-  handleClick = () => {}}
-) => (
+  handleClick = () => {}
+}) => (
   <Container
     data-id={dataID}
     onClick={handleClick}

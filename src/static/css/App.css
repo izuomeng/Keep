@@ -36,3 +36,13 @@ div:focus{
 .ql-tooltip {
   z-index: 1200;
 }
+.editable-card {
+  width: 600px;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(50% - 300px);
+  transition: .2s;
+  opacity: 1;
+  z-index: 999;
+}

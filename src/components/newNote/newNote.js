@@ -94,6 +94,13 @@ class NewNote extends Component {
     this.getInstence = this
       .getInstence
       .bind(this)
+    this.handleUndo = this
+      .handleUndo
+      .bind(this)
+    this.handleRedo = this
+      .handleRedo
+      .bind(this)
+    
     //set upload editorContent
       this.titleContent = {}
       this.textContent = {}
@@ -322,8 +329,11 @@ class NewNote extends Component {
     }
     this.uploadNoteStatus()
   }
-  onUndo() {
-
+  handleUndo() {
+    this.textInstence.history.undo()
+  }
+  handleRedo() {
+    this.textInstence.history.redo()
   }
   getTimeStr(date) {
     const month = date.getMonth() + 1,
@@ -386,6 +396,8 @@ class NewNote extends Component {
             uploadImg={this.uploadImg}
             editor={this.textInstence}
             bgColor={this.state.bgColor}
+            onUndo={this.handleUndo}
+            onRedo={this.handleRedo}
             onColorClick={this.handleColorChange}
             onArchiveClick={this.handleArchiveChange}
             onMoreClick={this.handleMoreClick}

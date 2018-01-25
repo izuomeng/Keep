@@ -28,8 +28,8 @@ const editableStyle = {
   width: '600px',
   position: 'fixed',
   top: '50%',
-  transform: 'translateY(-50%)',
-  left: 'calc(50% - 300px)',
+  transform: 'translate(-50%, -50%)',
+  left: '50%',
   transition: '.2s',
   opacity: '1',
   zIndex: '999'
