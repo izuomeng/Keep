@@ -36,6 +36,12 @@ div:focus{
 .ql-tooltip {
   z-index: 1200;
 }
+.ql-bubble .ql-tooltip {
+  transform: translate(75px,5px);
+}
+.ql-bubble .ql-tooltip:not(.ql-flip) .ql-tooltip-arrow {
+  transform: translateX(-75px);
+}
 .editable-card {
   width: 600px;
   position: fixed;

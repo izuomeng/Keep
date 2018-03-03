@@ -74,7 +74,7 @@ class Search extends Component {
       return -1
     }
     const delta = new Delta(content),
-      fullstr = delta.reduce((str = '', op) => str + op.insert)
+      fullstr = delta.reduce((str, op) => str + op.insert, '')
     return fullstr.indexOf(target)
   }
   hasTarget(content, target) {
